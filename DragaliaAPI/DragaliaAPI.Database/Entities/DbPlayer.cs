@@ -105,6 +105,8 @@ public class DbPlayer
 
     public List<DbPlayerFriendship> Friendships { get; set; } = [];
 
+    public List<DbPlayerGatherItem> GatherItemList { get; set; } = [];
+
     public DbSettings? Settings { get; set; }
 
     private class Configuration : IEntityTypeConfiguration<DbPlayer>

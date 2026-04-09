@@ -135,6 +135,14 @@ public partial class PaymentService(
                 quantity = ticket?.Quantity;
                 updater = () => ticket!.Quantity -= price;
                 break;
+            case EntityTypes.FafnirMedal:
+                DbPlayerGatherItem? gatherItem =
+                    await apiContext.PlayerGatherItems.FirstOrDefaultAsync(x =>
+                        x.GatherItemId == entity.Id
+                    );
+                quantity = gatherItem?.Quantity;
+                updater = () => gatherItem!.Quantity -= price;
+                break;
             case EntityTypes.FreeDiamantium:
             case EntityTypes.PaidDiamantium:
                 DbPlayerDiamondData diamondData = await apiContext.PlayerDiamondData.FirstAsync();

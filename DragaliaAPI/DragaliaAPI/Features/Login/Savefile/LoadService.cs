@@ -114,6 +114,7 @@ public partial class LoadService(
                 },
                 ServerTime = timeProvider.GetUtcNow(),
                 TreasureTradeAllList = tradeService.GetCurrentTreasureTradeList(),
+                GatherItemList = savefile.GatherItemList.ToList(),
                 MissionNotice = await missionService.GetMissionNotice(null),
                 FortBonusList = await bonusService.GetBonusList(cancellationToken),
                 PresentNotice = await presentService.GetPresentNotice(),
@@ -219,6 +220,8 @@ public class Savefile
     public DbPlayerShopInfo? ShopInfo { get; set; }
 
     public IEnumerable<BannerData> BannerData { get; set; } = [];
+
+    public IEnumerable<GatherItemList> GatherItemList { get; set; } = [];
 }
 
 public class GenericStory
@@ -318,4 +321,6 @@ public static partial class LoadMapper
     private static partial AbilityCrestList Map(DbAbilityCrest abilityCrest);
 
     private static partial WeaponBodyList Map(DbWeaponBody weaponBody);
+
+    private static partial GatherItemList Map(DbPlayerGatherItem gatherItem);
 }

@@ -70,6 +70,9 @@ internal partial class DungeonRecordService(
         IList<AtgenDropAll> essenceDrops =
             await dungeonRecordRewardService.ProcessDraconicEssenceDrops(session);
 
+        IList<AtgenDropAll> gatherItemDrops =
+            await dungeonRecordRewardService.ProcessGatherItemDrops(session);
+
         (IEnumerable<AtgenDropAll> dropList, int manaDrop, int coinDrop) =
             await dungeonRecordRewardService.ProcessEnemyDrops(playRecord, session);
 
@@ -77,6 +80,7 @@ internal partial class DungeonRecordService(
         ingameResultData.GrowRecord.TakeMana = manaDrop;
         ingameResultData.RewardRecord.DropAll.AddRange(dropList);
         ingameResultData.RewardRecord.DropAll.AddRange(essenceDrops);
+        ingameResultData.RewardRecord.DropAll.AddRange(gatherItemDrops);
 
         (
             IEnumerable<AtgenScoreMissionSuccessList> scoreMissionSuccessList,

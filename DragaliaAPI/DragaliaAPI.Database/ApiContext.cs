@@ -147,6 +147,8 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
     public DbSet<DbPlayerHelperUseDate> PlayerHelperUseDates { get; set; }
 
+    public DbSet<DbPlayerGatherItem> PlayerGatherItems { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiContext).Assembly);
@@ -237,6 +239,10 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
 
         modelBuilder
             .Entity<DbPlayerCharaHonor>()
+            .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+        modelBuilder
+            .Entity<DbPlayerGatherItem>()
             .HasQueryFilter(x => x.ViewerId == this.playerIdentityService.ViewerId);
     }
 }
