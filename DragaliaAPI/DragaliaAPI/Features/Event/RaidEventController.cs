@@ -72,7 +72,7 @@ public class RaidEventController(
 
     [HttpPost("receive_raid_point_reward")]
     public async Task<DragaliaResult> ReceiveRaidPointReward(
-        EventOverrides request,
+        RaidEventReceiveRaidPointRewardRequest request,
         CancellationToken cancellationToken
     )
     {

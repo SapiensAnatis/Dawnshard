@@ -44,10 +44,6 @@ builder
     {
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
-    })
-    .ConfigureApplicationPartManager(manager =>
-    {
-        manager.FeatureProviders.Add(new CustomControllerFeatureProvider());
     });
 
 HangfireOptions? hangfireOptions = builder

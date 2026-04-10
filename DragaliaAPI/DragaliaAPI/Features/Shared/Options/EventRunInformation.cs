@@ -8,7 +8,9 @@ public class EventRunInformation
 
     public DateTimeOffset End { get; init; }
 
-    public bool IsActive(TimeProvider timeProvider) =>
-        timeProvider.GetLastDailyReset() > this.Start
-        && timeProvider.GetLastDailyReset() < this.End;
+    public bool IsActive(TimeProvider timeProvider)
+    {
+        DateTimeOffset lastReset = timeProvider.GetLastDailyReset();
+        return lastReset >= this.Start && lastReset < this.End;
+    }
 }

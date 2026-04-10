@@ -9,7 +9,7 @@ public static class ConfigurationBuilderExtensions
     {
         return builder.AddJsonFile(
             Path.Join("Resources", fileName),
-            optional: true,
+            optional: false,
             reloadOnChange: true
         );
     }

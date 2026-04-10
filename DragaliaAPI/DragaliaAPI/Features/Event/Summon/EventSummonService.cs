@@ -15,7 +15,7 @@ namespace DragaliaAPI.Features.Event.Summon;
 
 internal class EventSummonService(
     ApiContext apiContext,
-    IOptionsMonitor<EventSummonOptions> eventSummonOptionsMonitor,
+    IOptionsSnapshot<EventSummonOptions> eventSummonOptionsMonitor,
     IRewardService rewardService,
     IPresentService presentService,
     IEnumerable<TwoStepItemGenerator> itemGenerators
@@ -23,7 +23,7 @@ internal class EventSummonService(
 {
     private const int MaxExecCount = 100;
 
-    private readonly EventSummonOptions eventSummonOptions = eventSummonOptionsMonitor.CurrentValue;
+    private readonly EventSummonOptions eventSummonOptions = eventSummonOptionsMonitor.Value;
 
     private readonly Dictionary<int, TwoStepItemGenerator> itemGeneratorLookup =
         itemGenerators.ToDictionary(x => x.Id, x => x);

@@ -30,7 +30,7 @@ public partial class RaidEventEntryRequest : IEventRequest
     int IEventRequest.EventId => this.RaidEventId;
 }
 
-public partial class EventOverrides : IEventRequest
+public partial class RaidEventReceiveRaidPointRewardRequest : IEventRequest
 {
     int IEventRequest.EventId => this.RaidEventId;
 }
