@@ -68,7 +68,10 @@ public partial class EventValidationFilter(
 
     private static partial class Log
     {
-        [LoggerMessage(LogLevel.Trace, "No IEventRequest parameter found for action {ActionName}")]
+        [LoggerMessage(
+            LogLevel.Warning,
+            "No IEventRequest parameter found for action {ActionName}"
+        )]
         public static partial void EventRequestNotFound(ILogger logger, string? actionName);
 
         [LoggerMessage(
