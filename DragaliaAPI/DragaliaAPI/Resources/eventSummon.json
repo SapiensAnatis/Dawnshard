@@ -165,7 +165,6 @@
                         "FinalCount": 19
                     }
                 }
-                // todo: the rest
             }
         },
         {
@@ -173,17 +172,17 @@
             "EventId": 20429,
             "Items": {
                 "1": {
-                    "$comment": "Humanoid Midgardsormr's Conviction",
+                    "$comment": "Sophie's Conviction",
                     "EntityType": "Material",
-                    "EntityId": 205001007,
-                    "EntityQuantity": 1,
+                    "EntityId": 205001006,
+                    "EntityQuantity": 4,
                     "PickupItemState": 1,
                     "ResetItemFlag": true,
                     "TotalCounts": {
-                        "Box1Count": 4,
-                        "Box2Count": 4,
-                        "Box3Count": 4,
-                        "Box4Count": 4,
+                        "Box1Count": 1,
+                        "Box2Count": 1,
+                        "Box3Count": 1,
+                        "Box4Count": 1,
                         "FinalCount": 0
                     }
                 },
@@ -233,20 +232,6 @@
                 "5": {
                     "EntityType": "Mana",
                     "EntityId": 0,
-                    "EntityQuantity": 5000,
-                    "PickupItemState": 0,
-                    "ResetItemFlag": false,
-                    "TotalCounts": {
-                        "Box1Count": 5,
-                        "Box2Count": 5,
-                        "Box3Count": 5,
-                        "Box4Count": 5,
-                        "FinalCount": 5
-                    }
-                },
-                "6": {
-                    "EntityType": "Mana",
-                    "EntityId": 0,
                     "EntityQuantity": 200,
                     "PickupItemState": 0,
                     "ResetItemFlag": false,
@@ -258,7 +243,7 @@
                         "FinalCount": 120
                     }
                 },
-                "7": {
+                "6": {
                     "EntityType": "Rupies",
                     "EntityId": 0,
                     "EntityQuantity": 10000,
@@ -272,7 +257,7 @@
                         "FinalCount": 120
                     }
                 },
-                "8": {
+                "7": {
                     "$comment": "Crimson Core",
                     "EntityType": "Material",
                     "EntityId": 202004003,
@@ -287,7 +272,7 @@
                         "FinalCount": 10
                     }
                 },
-                "9": {
+                "8": {
                     "$comment": "Meteorite",
                     "EntityType": "Material",
                     "EntityId": 202001003,
@@ -302,7 +287,7 @@
                         "FinalCount": 19
                     }
                 },
-                "10": {
+                "9": {
                     "$comment": "Fiend's Eye",
                     "EntityType": "Material",
                     "EntityId": 202002003,
@@ -317,7 +302,7 @@
                         "FinalCount": 19
                     }
                 },
-                "11": {
+                "10": {
                     "$comment": "Bewitching Wings",
                     "EntityType": "Material",
                     "EntityId": 202003003,
@@ -331,8 +316,323 @@
                         "Box4Count": 17,
                         "FinalCount": 19
                     }
+                },
+                "11": {
+                    "$comment": "Shadowwyrm's Darkscale",
+                    "EntityType": "Material",
+                    "EntityId": 104002052,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 1,
+                        "Box2Count": 1,
+                        "Box3Count": 1,
+                        "Box4Count": 1,
+                        "FinalCount": 1
+                    }
+                },
+                "12": {
+                    "$comment": "Shadowwyrm's Scale",
+                    "EntityType": "Material",
+                    "EntityId": 104002051,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 5,
+                        "Box2Count": 5,
+                        "Box3Count": 5,
+                        "Box4Count": 5,
+                        "FinalCount": 5
+                    }
+                },
+                "13": {
+                    "$comment": "Nether Orb",
+                    "EntityType": "Material",
+                    "EntityId": 104001053,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 2,
+                        "Box2Count": 2,
+                        "Box3Count": 2,
+                        "Box4Count": 2,
+                        "FinalCount": 2
+                    }
+                },
+                "14": {
+                    "$comment": "Nightfall Orb",
+                    "EntityType": "Material",
+                    "EntityId": 104001052,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 8,
+                        "Box2Count": 8,
+                        "Box3Count": 8,
+                        "Box4Count": 8,
+                        "FinalCount": 8
+                    }
+                },
+                "15": {
+                    "$comment": "Shadow Orb",
+                    "EntityType": "Material",
+                    "EntityId": 104001051,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 30,
+                        "Box3Count": 30,
+                        "Box4Count": 30,
+                        "FinalCount": 30
+                    }
+                },
+                "16": {
+                    "$comment": "Light Metal",
+                    "EntityType": "Material",
+                    "EntityId": 202004001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 24,
+                        "Box3Count": 27,
+                        "Box4Count": 30,
+                        "FinalCount": 34
+                    }
+                },
+                "17": {
+                    "$comment": "Granite",
+                    "EntityType": "Material",
+                    "EntityId": 202001002,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 24,
+                        "Box3Count": 27,
+                        "Box4Count": 30,
+                        "FinalCount": 34
+                    }
+                },
+                "18": {
+                    "$comment": "Iron Ore",
+                    "EntityType": "Material",
+                    "EntityId": 202001001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 30,
+                        "Box2Count": 40,
+                        "Box3Count": 50,
+                        "Box4Count": 60,
+                        "FinalCount": 70
+                    }
+                },
+                "19": {
+                    "$comment": "Fiend's Horn",
+                    "EntityType": "Material",
+                    "EntityId": 202002002,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 24,
+                        "Box3Count": 27,
+                        "Box4Count": 30,
+                        "FinalCount": 34
+                    }
+                },
+                "20": {
+                    "$comment": "Fiend's Claw",
+                    "EntityType": "Material",
+                    "EntityId": 202002001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 30,
+                        "Box2Count": 40,
+                        "Box3Count": 50,
+                        "Box4Count": 60,
+                        "FinalCount": 70
+                    }
+                },
+                "21": {
+                    "$comment": "Ancient Bird's Feather",
+                    "EntityType": "Material",
+                    "EntityId": 202003002,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 24,
+                        "Box3Count": 27,
+                        "Box4Count": 30,
+                        "FinalCount": 34
+                    }
+                },
+                "22": {
+                    "$comment": "Bat's Wing",
+                    "EntityType": "Material",
+                    "EntityId": 202003001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 30,
+                        "Box2Count": 40,
+                        "Box3Count": 50,
+                        "Box4Count": 60,
+                        "FinalCount": 70
+                    }
+                },
+                "23": {
+                    "$comment": "Void Battle Item",
+                    "EntityType": "None",
+                    "EntityId": 0,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TwoStepId": 6,
+                    "TotalCounts": {
+                        "Box1Count": 50,
+                        "Box2Count": 60,
+                        "Box3Count": 70,
+                        "Box4Count": 80,
+                        "FinalCount": 100
+                    }
+                },
+                "24": {
+                    "$comment": "Gold Crystal",
+                    "EntityType": "Material",
+                    "EntityId": 101001003,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 13,
+                        "Box2Count": 13,
+                        "Box3Count": 13,
+                        "Box4Count": 13,
+                        "FinalCount": 13
+                    }
+                },
+                "25": {
+                    "$comment": "Silver Crystal",
+                    "EntityType": "Material",
+                    "EntityId": 101001002,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 15,
+                        "Box2Count": 20,
+                        "Box3Count": 30,
+                        "Box4Count": 30,
+                        "FinalCount": 30
+                    }
+                },
+                "26": {
+                    "$comment": "Bronze Crystal",
+                    "EntityType": "Material",
+                    "EntityId": 101001001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 25,
+                        "Box3Count": 40,
+                        "Box4Count": 45,
+                        "FinalCount": 55
+                    }
+                },
+                "27": {
+                    "$comment": "Succulent Dragonfruit",
+                    "EntityType": "Material",
+                    "EntityId": 102001003,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 13,
+                        "Box2Count": 13,
+                        "Box3Count": 13,
+                        "Box4Count": 13,
+                        "FinalCount": 13
+                    }
+                },
+                "28": {
+                    "$comment": "Ripe Dragonfruit",
+                    "EntityType": "Material",
+                    "EntityId": 102001002,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 15,
+                        "Box2Count": 20,
+                        "Box3Count": 30,
+                        "Box4Count": 30,
+                        "FinalCount": 30
+                    }
+                },
+                "29": {
+                    "$comment": "Dragonfruit",
+                    "EntityType": "Material",
+                    "EntityId": 102001001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 25,
+                        "Box3Count": 40,
+                        "Box4Count": 45,
+                        "FinalCount": 55
+                    }
+                },
+                "30": {
+                    "$comment": "Bronze Whetstone",
+                    "EntityType": "Material",
+                    "EntityId": 103001001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 30,
+                        "Box3Count": 40,
+                        "Box4Count": 50,
+                        "FinalCount": 60
+                    }
+                },
+                "31": {
+                    "$comment": "Holy Water",
+                    "EntityType": "Material",
+                    "EntityId": 113001001,
+                    "EntityQuantity": 1,
+                    "PickupItemState": 0,
+                    "ResetItemFlag": false,
+                    "TotalCounts": {
+                        "Box1Count": 20,
+                        "Box2Count": 30,
+                        "Box3Count": 40,
+                        "Box4Count": 50,
+                        "FinalCount": 60
+                    }
                 }
-                // todo: the rest
             }
         }
     ]
