@@ -35,6 +35,11 @@ internal class EventSummonController(
         CancellationToken cancellationToken
     )
     {
+        if (request.Count <= 0)
+        {
+            return this.Code(ResultCode.CommonInvalidArgument, "Invalid event summon count");
+        }
+
         AtgenBoxSummonResult boxResult = await eventSummonService.ExecuteBoxSummon(
             request.EventId,
             request.Count,
