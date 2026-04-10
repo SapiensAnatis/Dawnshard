@@ -16,7 +16,6 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     ViewerId = table.Column<long>(type: "bigint", nullable: false),
                     EventId = table.Column<int>(type: "integer", nullable: false),
-                    Points = table.Column<int>(type: "integer", nullable: false),
                     BoxNumber = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

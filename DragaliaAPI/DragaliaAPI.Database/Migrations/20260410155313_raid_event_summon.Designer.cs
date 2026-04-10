@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20260409231259_remove_raid_points")]
-    partial class remove_raid_points
+    [Migration("20260410155313_raid_event_summon")]
+    partial class raid_event_summon
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
