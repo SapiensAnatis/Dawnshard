@@ -133,6 +133,14 @@ internal class EventSummonService(
             idPool.AddRange(Enumerable.Repeat(id, remainingQuantity));
         }
 
+        if (idPool.Count == 0)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonInvalidArgument,
+                "No items left in box - reset required"
+            );
+        }
+
         bool stoppedByTarget = false;
 
         for (int i = 0; ; i++)
@@ -167,6 +175,12 @@ internal class EventSummonService(
                 }
             );
 
+            if (isEnableStopByTarget && config.ResetItemFlag)
+            {
+                stoppedByTarget = true;
+                break;
+            }
+
             if (idPool.Count == 0)
             {
                 break;
@@ -174,12 +188,6 @@ internal class EventSummonService(
 
             if (points.Quantity < boxSummonData.CostNum)
             {
-                break;
-            }
-
-            if (isEnableStopByTarget && config.ResetItemFlag)
-            {
-                stoppedByTarget = true;
                 break;
             }
 
