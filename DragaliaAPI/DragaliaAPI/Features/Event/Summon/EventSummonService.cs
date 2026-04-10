@@ -191,6 +191,9 @@ internal class EventSummonService(
                 break;
             }
 
+            // The checkbox in the GUI that sets is_enable_stop_by_target is labelled 'Summon Until XXX's Conviction
+            // appears or all blazons are consumed', so the number of summons that the user has selected should only
+            // be used as a break condition if this flag is not set.
             if (!isEnableStopByTarget && i + 1 >= numSummons)
             {
                 break;
