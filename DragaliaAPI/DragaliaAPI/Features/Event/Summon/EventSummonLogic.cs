@@ -41,6 +41,7 @@ internal static class EventSummonLogic
             detailList.Add(
                 new()
                 {
+                    Id = id,
                     EntityId = itemConfig.EntityId,
                     EntityQuantity = itemConfig.EntityQuantity,
                     EntityType = itemConfig.EntityType,

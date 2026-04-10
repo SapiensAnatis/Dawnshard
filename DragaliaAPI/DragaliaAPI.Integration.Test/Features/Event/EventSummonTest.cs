@@ -1,7 +1,10 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Event.Summon;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Integration.Test.Features.Event;
 
@@ -25,6 +28,35 @@ public sealed class EventSummonTest : TestFixture, IAsyncLifetime
     public ValueTask DisposeAsync()
     {
         return ValueTask.CompletedTask;
+    }
+
+    private IEnumerable<int> GetItemIds()
+    {
+        EventSummonOptions options = this
+            .Services.GetRequiredService<IOptionsMonitor<EventSummonOptions>>()
+            .CurrentValue;
+
+        return options.EventSummons.Single(x => x.EventId == EventId).Items.Keys;
+    }
+
+    private async Task DepleteItems(params IEnumerable<int> itemIds)
+    {
+        DbPlayerEventSummonData summonData = await this
+            .ApiContext.PlayerEventSummonData.Include(x => x.Items)
+            .AsTracking()
+            .SingleAsync(
+                x => x.ViewerId == this.ViewerId && x.EventId == EventId,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        foreach (int itemId in itemIds)
+        {
+            summonData.Items.Add(
+                new DbPlayerEventSummonItem { ItemId = itemId, TimesSummoned = 9999 }
+            );
+        }
+
+        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
     }
 
     private async Task SetSummonPoints(int quantity)
@@ -82,6 +114,21 @@ public sealed class EventSummonTest : TestFixture, IAsyncLifetime
     }
 
     [Fact]
+    public async Task Exec_InsufficientPoints_ReturnsError()
+    {
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                $"{Prefix}/exec",
+                new EventSummonExecRequest(EventId, 10, false),
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.ResultCode.Should().Be(ResultCode.SummonPointShort);
+    }
+
+    [Fact]
     public async Task Exec_SufficientPoints_DrawsItemsAndDepletesCurrency()
     {
         int numSummons = 10;
@@ -114,15 +161,9 @@ public sealed class EventSummonTest : TestFixture, IAsyncLifetime
                 cancellationToken: TestContext.Current.CancellationToken
             );
 
-        List<AtgenBoxSummonDetail> afterDetails =
-            getDataResponse.Data.BoxSummonData.BoxSummonDetail.ToList();
-
-        for (int i = 0; i < afterDetails.Count; i++)
+        foreach (AtgenBoxSummonDetail detail in getDataResponse.Data.BoxSummonData.BoxSummonDetail)
         {
-            int itemKey = i + 1;
-            int drawnCount = drawCountsById.GetValueOrDefault(itemKey);
-            AtgenBoxSummonDetail detail = afterDetails[i];
-
+            int drawnCount = drawCountsById.GetValueOrDefault(detail.Id);
             detail.Limit.Should().Be(detail.TotalCount - drawnCount);
         }
     }
@@ -132,24 +173,9 @@ public sealed class EventSummonTest : TestFixture, IAsyncLifetime
     {
         await this.SetSummonPoints(50);
 
-        DbPlayerEventSummonData summonData = await this
-            .ApiContext.PlayerEventSummonData.Include(x => x.Items)
-            .AsTracking()
-            .SingleAsync(
-                x => x.ViewerId == this.ViewerId && x.EventId == EventId,
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
         // Item 1 (Sophie's Conviction) is the only ResetItemFlag item in box 1.
         // Deplete every other item so the next draw is guaranteed to be item 1.
-        for (int itemId = 2; itemId <= 31; itemId++)
-        {
-            summonData.Items.Add(
-                new DbPlayerEventSummonItem { ItemId = itemId, TimesSummoned = 9999 }
-            );
-        }
-
-        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await this.DepleteItems(this.GetItemIds().Except([1]));
 
         DragaliaResponse<EventSummonExecResponse> response =
             await this.Client.PostMsgpack<EventSummonExecResponse>(
@@ -170,29 +196,9 @@ public sealed class EventSummonTest : TestFixture, IAsyncLifetime
     {
         await this.SetSummonPoints(9999);
 
-        DbPlayerEventSummonData summonData = await this
-            .ApiContext.PlayerEventSummonData.Include(x => x.Items)
-            .AsTracking()
-            .SingleAsync(
-                x => x.ViewerId == this.ViewerId && x.EventId == EventId,
-                cancellationToken: TestContext.Current.CancellationToken
-            );
-
         // Deplete every item except item 2 (Twinkling Sand, Box1Count=1), leaving a
         // single draw available so the box empties mid-request.
-        for (int itemId = 1; itemId <= 31; itemId++)
-        {
-            if (itemId == 2)
-            {
-                continue;
-            }
-
-            summonData.Items.Add(
-                new DbPlayerEventSummonItem { ItemId = itemId, TimesSummoned = 9999 }
-            );
-        }
-
-        await this.ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+        await this.DepleteItems(this.GetItemIds().Except([2]));
 
         DragaliaResponse<EventSummonExecResponse> response =
             await this.Client.PostMsgpack<EventSummonExecResponse>(
@@ -210,8 +216,42 @@ public sealed class EventSummonTest : TestFixture, IAsyncLifetime
     }
 
     [Fact]
-    public async Task Exec_InsufficientPoints_ReturnsError()
+    public async Task Exec_DrawsLastResetItem_ResetPossibleFlipsToTrue()
     {
+        await this.SetSummonPoints(9999);
+
+        // Deplete every item except item 1 (Sophie's Conviction, the only reset item),
+        // leaving it as the sole remaining draw.
+        await this.DepleteItems(this.GetItemIds().Except([1]));
+
+        DragaliaResponse<EventSummonGetDataResponse> getDataBefore =
+            await this.Client.PostMsgpack<EventSummonGetDataResponse>(
+                $"{Prefix}/get_data",
+                new EventSummonGetDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        getDataBefore.Data.BoxSummonData.ResetPossible.Should().BeFalse();
+
+        DragaliaResponse<EventSummonExecResponse> response =
+            await this.Client.PostMsgpack<EventSummonExecResponse>(
+                $"{Prefix}/exec",
+                new EventSummonExecRequest(EventId, 1, false),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        AtgenBoxSummonResult result = response.Data.BoxSummonResult;
+
+        result.DrawDetails.Should().ContainSingle().Which.Id.Should().Be(1);
+        result.ResetPossible.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Exec_BoxFullyDepleted_ReturnsError()
+    {
+        await this.SetSummonPoints(9999);
+        await this.DepleteItems(this.GetItemIds());
+
         ResultCodeResponse response = (
             await this.Client.PostMsgpack<ResultCodeResponse>(
                 $"{Prefix}/exec",
@@ -221,6 +261,89 @@ public sealed class EventSummonTest : TestFixture, IAsyncLifetime
             )
         ).Data;
 
-        response.ResultCode.Should().Be(ResultCode.SummonPointShort);
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
+    }
+
+    [Fact]
+    public async Task Reset_ResetPossible_AdvancesBoxAndRefillsItems()
+    {
+        await this.DepleteItems(this.GetItemIds());
+
+        DragaliaResponse<EventSummonGetDataResponse> beforeReset =
+            await this.Client.PostMsgpack<EventSummonGetDataResponse>(
+                $"{Prefix}/get_data",
+                new EventSummonGetDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        beforeReset.Data.BoxSummonData.BoxSummonDetail.Single(x => x.Id == 1).Limit.Should().Be(0);
+
+        await this.Client.PostMsgpack<EventSummonResetResponse>(
+            $"{Prefix}/reset",
+            new EventSummonResetRequest(EventId),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DragaliaResponse<EventSummonGetDataResponse> afterReset =
+            await this.Client.PostMsgpack<EventSummonGetDataResponse>(
+                $"{Prefix}/get_data",
+                new EventSummonGetDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        AtgenBoxSummonData data = afterReset.Data.BoxSummonData;
+
+        data.BoxSummonSeq.Should().Be(2);
+        data.BoxSummonDetail.Single(x => x.Id == 1).Limit.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
+    public async Task Reset_ResetNotPossible_ReturnsError()
+    {
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                $"{Prefix}/reset",
+                new EventSummonResetRequest(EventId),
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.ResultCode.Should().Be(ResultCode.CommonInvalidArgument);
+    }
+
+    [Fact]
+    public async Task Reset_AdvancesThroughAllBoxes_FinalBoxHasNoConvictions()
+    {
+        // Sophie's Conviction has Box1..Box4Count = 1 but FinalCount = 0. Four
+        // resets advance box 1 -> box 5 (the final box), at which point no more
+        // convictions should be obtainable.
+        for (int i = 0; i < 4; i++)
+        {
+            await this.DepleteItems(1);
+
+            await this.Client.PostMsgpack<EventSummonResetResponse>(
+                $"{Prefix}/reset",
+                new EventSummonResetRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+            this.ApiContext.ChangeTracker.Clear();
+        }
+
+        DragaliaResponse<EventSummonGetDataResponse> response =
+            await this.Client.PostMsgpack<EventSummonGetDataResponse>(
+                $"{Prefix}/get_data",
+                new EventSummonGetDataRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        AtgenBoxSummonData data = response.Data.BoxSummonData;
+
+        data.BoxSummonSeq.Should().Be(5);
+
+        AtgenBoxSummonDetail convictions = data.BoxSummonDetail.Single(x => x.Id == 1);
+        convictions.TotalCount.Should().Be(0);
+        convictions.Limit.Should().Be(0);
     }
 }
