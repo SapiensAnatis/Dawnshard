@@ -88,4 +88,36 @@ public class RaidEventTest : TestFixture
 
         response.Data.RaidEventUserData.Should().NotBeNull();
     }
+
+    [Fact]
+    public async Task Entry_CreatesNewEventData()
+    {
+        DragaliaResponse<RaidEventEntryResponse> response =
+            await this.Client.PostMsgpack<RaidEventEntryResponse>(
+                $"{Prefix}/entry",
+                new RaidEventEntryRequest(EventId),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.Data.RaidEventUserData.Should().NotBeNull();
+        response.Data.RaidEventUserData!.RaidEventId.Should().Be(EventId);
+        response.Data.UpdateDataList.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task Entry_EventNotRunning_ReturnsError()
+    {
+        const int notRunningEventId = 20401;
+
+        ResultCodeResponse response = (
+            await this.Client.PostMsgpack<ResultCodeResponse>(
+                $"{Prefix}/entry",
+                new RaidEventEntryRequest(notRunningEventId),
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response.ResultCode.Should().Be(ResultCode.EventOutThePeriod);
+    }
 }

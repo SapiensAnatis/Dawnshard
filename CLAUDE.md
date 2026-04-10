@@ -52,10 +52,6 @@ Dawnshard/
 ```bash
 # Restore and build
 dotnet build DragaliaAPI.slnx
-
-# Run locally via Aspire (recommended — starts Postgres, Redis, API automatically)
-cd Aspire/Dawnshard.AppHost
-dotnet run
 ```
 
 ### Website
@@ -79,13 +75,19 @@ docker build -f DragaliaAPI/DragaliaAPI/Dockerfile -t dragalia-api .
 
 ```bash
 # All tests
-dotnet test DragaliaAPI.slnx -c Release
+dotnet test --solution DragaliaAPI.Linux.slnf -c Release
 
 # Single project
-dotnet test DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj -c Release
+dotnet test --project DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj -c Release
 
 # Integration tests (requires Docker for Testcontainers)
-dotnet test DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj -c Release
+dotnet test --project DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj -c Release
+
+# Run specific integration test class (accepts * as wildcard)
+dotnet test --project DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj -c Release --filter-class DragaliaAPI.Integration.Test.Features.Event.EventSummonTest
+
+# Run specific integration test method (accepts * as wildcard)
+dotnet test --project DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj -c Release --filter-method DragaliaAPI.Integration.Test.Features.Event.EventSummonTest.GetData_ReturnsBoxSummonData
 ```
 
 Test framework is **xUnit v3** using the Microsoft Testing Platform runner. Assertions use **FluentAssertions**. **Moq is no longer used** — new tests should be written as integration tests rather than unit tests.
@@ -110,7 +112,7 @@ dotnet tool restore
 dotnet csharpier check .
 
 # Auto-fix formatting
-dotnet csharpier .
+dotnet csharpier format .
 ```
 
 > Always run `dotnet csharpier .` before committing C# changes.
@@ -192,7 +194,7 @@ dotnet ef database update --project DragaliaAPI.Database --startup-project Draga
 3. Implement the business logic in `DragaliaAPI/Features/<FeatureName>/`. Controllers live in the same feature subfolder.
 4. Use `ApiContext` directly for data access; do **not** add new repository classes.
 5. Write integration tests in `DragaliaAPI.Integration.Test/` to verify the feature end-to-end.
-6. Run `dotnet csharpier .` to format and `dotnet build DragaliaAPI.slnx` to check for warnings.
+6. Run `dotnet csharpier format .` to format and `dotnet build DragaliaAPI.slnx` to check for warnings.
 
 ## CI Workflows
 
@@ -230,23 +232,26 @@ A small ASP.NET Core service that stores Photon room state in Redis. It exposes 
 # Build everything
 dotnet build DragaliaAPI.slnx
 
+# Build everything on Linux platforms (skipping Windows-only .NET Framework components)
+dotnet build DragaliaAPI.Linux.slnf
+
 # Format C# code
-dotnet tool restore && dotnet csharpier .
+dotnet tool restore && dotnet csharpier format .
 
 # Run unit tests
-dotnet test DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj
+dotnet test --project DragaliaAPI/DragaliaAPI.Test/DragaliaAPI.Test.csproj
 
 # Run integration tests
-dotnet test DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj
+dotnet test --project DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj
+
+# Run specific integration test class (accepts * as wildcard)
+dotnet test --project DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj -c Release --filter-class DragaliaAPI.Integration.Test.ExampleNamespace.ExampleClass
+
+# Run specific integration test method (accepts * as wildcard)
+dotnet test --project DragaliaAPI/DragaliaAPI.Integration.Test/DragaliaAPI.Integration.Test.csproj -c Release --filter-method DragaliaAPI.Integration.Test.ExampleNamespace.ExampleClass.ExampleMethod
 
 # Add EF migration
 cd DragaliaAPI && dotnet ef migrations add <Name> --project DragaliaAPI.Database --startup-project DragaliaAPI
-
-# Start full local stack via Aspire
-cd Aspire/Dawnshard.AppHost && dotnet run
-
-# Website dev
-cd Website && pnpm install && pnpm dev
 
 # Website lint
 cd Website && pnpm lint

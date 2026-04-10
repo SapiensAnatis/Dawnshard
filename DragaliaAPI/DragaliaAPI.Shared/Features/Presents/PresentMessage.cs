@@ -243,4 +243,11 @@ public enum PresentMessage
     /// Description: The Victor's Trove from The Mercurial Gauntlet.
     /// </summary>
     WallMonthlyReward = 2140003,
+
+    /// <summary>
+    /// Title: Blazon Summon Reward
+    /// <br/>
+    /// Description: Obtained through the blazon summon.
+    /// </summary>
+    EventSummonReward = 2200001,
 }

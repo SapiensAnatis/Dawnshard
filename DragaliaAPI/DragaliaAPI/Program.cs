@@ -23,21 +23,10 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder
-    .Configuration.AddJsonFile(
-        Path.Join("Resources", "itemSummonOdds.json"),
-        optional: false,
-        reloadOnChange: true
-    )
-    .AddJsonFile(
-        Path.Join("Resources", "dragonfruitOdds.json"),
-        optional: false,
-        reloadOnChange: true
-    )
-    .AddJsonFile(
-        Path.Join("Resources", "bannerConfig.json"),
-        optional: false,
-        reloadOnChange: true
-    );
+    .Configuration.AddResourcesJsonFile("itemSummonOdds.json")
+    .AddResourcesJsonFile("dragonfruitOdds.json")
+    .AddResourcesJsonFile("bannerConfig.json")
+    .AddResourcesJsonFile("eventSummon.json");
 
 string kpfPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 

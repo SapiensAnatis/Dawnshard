@@ -1,0 +1,79 @@
+using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Reward;
+using DragaliaAPI.Infrastructure;
+using DragaliaAPI.Models.Generated;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DragaliaAPI.Features.Event.Summon;
+
+[Route("event_summon")]
+[ServiceFilter<EventValidationFilter>]
+internal class EventSummonController(
+    EventSummonService eventSummonService,
+    IRewardService rewardService,
+    IUpdateDataService updateDataService
+) : DragaliaControllerBase
+{
+    [HttpPost("get_data")]
+    public async Task<DragaliaResult<EventSummonGetDataResponse>> GetData(
+        EventSummonGetDataRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        return new EventSummonGetDataResponse()
+        {
+            BoxSummonData = await eventSummonService.GetBoxSummonData(
+                request.EventId,
+                cancellationToken
+            ),
+        };
+    }
+
+    [HttpPost("exec")]
+    public async Task<DragaliaResult<EventSummonExecResponse>> Exec(
+        EventSummonExecRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        if (request.Count <= 0)
+        {
+            return this.Code(ResultCode.CommonInvalidArgument, "Invalid event summon count");
+        }
+
+        AtgenBoxSummonResult boxResult = await eventSummonService.ExecuteBoxSummon(
+            request.EventId,
+            request.Count,
+            request.IsEnableStopByTarget,
+            cancellationToken
+        );
+
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync(cancellationToken);
+
+        EntityResult entityResult = rewardService.GetEntityResult();
+
+        return new EventSummonExecResponse()
+        {
+            BoxSummonResult = boxResult,
+            EntityResult = entityResult,
+            UpdateDataList = updateDataList,
+        };
+    }
+
+    [HttpPost("reset")]
+    public async Task<DragaliaResult<EventSummonResetResponse>> Reset(
+        EventSummonResetRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        await eventSummonService.ResetBoxSummon(request.EventId, cancellationToken);
+        await updateDataService.SaveChangesAsync(cancellationToken);
+
+        return new EventSummonResetResponse()
+        {
+            BoxSummonData = await eventSummonService.GetBoxSummonData(
+                request.EventId,
+                cancellationToken
+            ),
+        };
+    }
+}

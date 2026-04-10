@@ -45,8 +45,22 @@ public class OddsInfoService : IOddsInfoService
             new()
             {
                 AreaIndex = 0,
-                ReactionObjCount = 1,
-                DropObj = new List<AtgenDropObj>() { },
+                ReactionObjCount = 0,
+                DropObj = new List<AtgenDropObj>()
+                {
+                    new()
+                    {
+                        DropList = [],
+                        ObjId = 1,
+                        ObjType = 2,
+                    },
+                    new()
+                    {
+                        DropList = [],
+                        ObjId = 2,
+                        ObjType = 1,
+                    },
+                },
                 Grade = new List<AtgenGrade>(),
             };
     }

@@ -1,5 +1,5 @@
 {
-    "$comment": "Solution filter that ignores the Photon plugin projects which are Windows-only"
+    "$comment": "Solution filter that ignores the Photon plugin projects which are Windows-only",
     "solution": {
         "path": "./DragaliaAPI.slnx",
         "projects": [

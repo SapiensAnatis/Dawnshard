@@ -7,11 +7,11 @@ namespace DragaliaAPI.Shared.PlayerDetails
     {
         partial class Log
         {
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "10.0.14.15411")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "42.42.42.42")]
             private static readonly global::System.Action<global::Microsoft.Extensions.Logging.ILogger, global::System.Object, global::System.Exception?> __StartingUserImpersonationCallback =
                 global::Microsoft.Extensions.Logging.LoggerMessage.Define<global::System.Object>(global::Microsoft.Extensions.Logging.LogLevel.Debug, new global::Microsoft.Extensions.Logging.EventId(187340990, nameof(StartingUserImpersonation)), "Starting user impersonation: {@context}", new global::Microsoft.Extensions.Logging.LogDefineOptions() { SkipEnabledCheck = true }); 
 
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "10.0.14.15411")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "42.42.42.42")]
             public static partial void StartingUserImpersonation(global::Microsoft.Extensions.Logging.ILogger logger, global::System.Object context)
             {
                 if (logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Debug))
@@ -19,11 +19,11 @@ namespace DragaliaAPI.Shared.PlayerDetails
                     __StartingUserImpersonationCallback(logger, context, null);
                 }
             }
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "10.0.14.15411")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "42.42.42.42")]
             private static readonly global::System.Action<global::Microsoft.Extensions.Logging.ILogger, global::System.Object, global::System.Exception?> __StoppingUserImpersonationCallback =
                 global::Microsoft.Extensions.Logging.LoggerMessage.Define<global::System.Object>(global::Microsoft.Extensions.Logging.LogLevel.Debug, new global::Microsoft.Extensions.Logging.EventId(1307607602, nameof(StoppingUserImpersonation)), "Stopping user impersonation: {@context}", new global::Microsoft.Extensions.Logging.LogDefineOptions() { SkipEnabledCheck = true }); 
 
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "10.0.14.15411")]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Extensions.Logging.Generators", "42.42.42.42")]
             public static partial void StoppingUserImpersonation(global::Microsoft.Extensions.Logging.ILogger logger, global::System.Object context)
             {
                 if (logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Debug))
