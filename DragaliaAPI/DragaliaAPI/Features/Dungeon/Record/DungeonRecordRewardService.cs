@@ -302,7 +302,7 @@ public partial class DungeonRecordRewardService(
         // We will assume that quests which take getherwings instead of stamina don't increase friendship - this also saves us from having to deal
         // with party logic i.e. whether the temporary unit was the lead/ai used in multiplayer.
         // Note that this doesn't include the actual raid event co-op quests; those use stamina and otherworld fragments.
-        
+
         int stamina = session.QuestData.PayStaminaSingle;
         if (stamina == 0)
         {
