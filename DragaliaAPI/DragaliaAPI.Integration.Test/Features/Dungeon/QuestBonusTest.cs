@@ -26,7 +26,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -96,7 +97,8 @@ public class QuestBonusTest : TestFixture
         bonusResponse.Data.UpdateDataList.MaterialList.Should().NotBeEmpty();
         bonusResponse
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -139,7 +141,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -179,7 +182,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -226,7 +230,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -261,7 +266,8 @@ public class QuestBonusTest : TestFixture
         bonusResponse.Data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
         bonusResponse
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -289,7 +295,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -324,7 +331,8 @@ public class QuestBonusTest : TestFixture
         bonusResponse.Data.UpdateDataList.MaterialList.Should().BeNullOrEmpty();
         bonusResponse
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -367,7 +375,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -401,7 +410,8 @@ public class QuestBonusTest : TestFixture
 
         bonusResponse
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -444,7 +454,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -478,7 +489,8 @@ public class QuestBonusTest : TestFixture
 
         bonusResponse
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -519,7 +531,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -561,7 +574,8 @@ public class QuestBonusTest : TestFixture
 
         response
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
@@ -595,7 +609,8 @@ public class QuestBonusTest : TestFixture
 
         bonusResponse
             .Data.UpdateDataList.QuestEventList.Should()
-            .ContainEquivalentOf(
+            .Contain(x => x.QuestEventId == questEventId)
+            .Which.Should.BeEquivalentTo(
                 new QuestEventList()
                 {
                     QuestEventId = questEventId,
