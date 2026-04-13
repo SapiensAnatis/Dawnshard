@@ -17,8 +17,6 @@ public class RaidEventController(
     ITradeService tradeService
 ) : DragaliaControllerBase
 {
-    // TODO: Friendship, passive boosts, summons
-
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(RaidEventGetEventDataRequest request)
     {
@@ -38,6 +36,10 @@ public class RaidEventController(
             );
 
             resp.EventPassiveList = [await eventService.GetEventPassiveList(request.RaidEventId)];
+
+            resp.CharaFriendshipList = await eventService.GetEventCharaFriendshipList(
+                request.RaidEventId
+            );
         }
 
         if (

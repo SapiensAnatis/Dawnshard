@@ -288,6 +288,35 @@ public partial class EventService(
             ?? throw new DragaliaException(ResultCode.CommonDbError, "No event data found");
     }
 
+    public async Task<IEnumerable<CharaFriendshipList>> GetEventCharaFriendshipList(int eventId)
+    {
+        Charas eventCharaId = MasterAsset.EventData[eventId].EventCharaId;
+        if (eventCharaId == Charas.Empty)
+        {
+            return [];
+        }
+
+        DbPlayerCharaData? charaData = await apiContext.PlayerCharaData.SingleOrDefaultAsync(x =>
+            x.CharaId == eventCharaId
+        );
+
+        if (charaData is null)
+        {
+            return [];
+        }
+
+        return
+        [
+            new CharaFriendshipList()
+            {
+                CharaId = charaData.CharaId,
+                AddPoint = 0,
+                TotalPoint = charaData.FriendshipPoint,
+                IsTemporary = charaData.IsTemporary,
+            },
+        ];
+    }
+
     #region User Data Providers
 
     private async Task<Dictionary<int, int>> GetEventItemDictionary(int eventId)

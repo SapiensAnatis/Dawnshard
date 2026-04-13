@@ -296,11 +296,7 @@ public partial class StoryService(
             Log.GrantingEventCharacter(logger, eventData.EventCharaId, isTemporary);
 
             await rewardService.GrantReward(
-                new(
-                    EntityTypes.Chara,
-                    Id: (int)eventData.EventCharaId,
-                    IsTemporary: isTemporary
-                )
+                new(EntityTypes.Chara, Id: (int)eventData.EventCharaId, IsTemporary: isTemporary)
             );
 
             rewardList.Add(

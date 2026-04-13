@@ -1,3 +1,4 @@
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -9,6 +10,7 @@ using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -19,6 +21,7 @@ public partial class DungeonRecordRewardService(
     EventDropService eventDropService,
     IMissionProgressionService missionProgressionService,
     IQuestRepository questRepository,
+    ApiContext apiContext,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
@@ -278,6 +281,62 @@ public partial class DungeonRecordRewardService(
             Headcount = connectingViewerIdList.Count,
             TotalQuantity = quantity,
         };
+    }
+
+    public async Task<IEnumerable<CharaFriendshipList>> ProcessTemporaryCharaFriendship(
+        DungeonSession session
+    )
+    {
+        if (session.IsSkipTicket)
+        {
+            return [];
+        }
+
+        ArgumentNullException.ThrowIfNull(session.QuestData);
+
+        int stamina = session.QuestData.PayStaminaSingle;
+        if (stamina == 0)
+        {
+            return [];
+        }
+
+        List<Charas> partyCharaIds = session
+            .Party.Where(x => x.CharaId != 0)
+            .Select(x => x.CharaId)
+            .ToList();
+
+        List<DbPlayerCharaData> temporaryCharas = await apiContext
+            .PlayerCharaData.Where(x => partyCharaIds.Contains(x.CharaId) && x.IsTemporary)
+            .ToListAsync();
+
+        int pointsToAdd = stamina * session.PlayCount;
+        List<CharaFriendshipList> result = [];
+
+        foreach (DbPlayerCharaData chara in temporaryCharas)
+        {
+            int maxFriendshipPoint = MasterAsset.CharaData[chara.CharaId].MaxFriendshipPoint;
+            if (maxFriendshipPoint == 0)
+            {
+                continue;
+            }
+
+            int actualPointsAdded = Math.Min(
+                pointsToAdd,
+                maxFriendshipPoint - chara.FriendshipPoint
+            );
+            chara.FriendshipPoint += actualPointsAdded;
+
+            result.Add(
+                new CharaFriendshipList(
+                    chara.CharaId,
+                    actualPointsAdded,
+                    chara.FriendshipPoint,
+                    isTemporary: true
+                )
+            );
+        }
+
+        return result;
     }
 
     public record EventRewardData(

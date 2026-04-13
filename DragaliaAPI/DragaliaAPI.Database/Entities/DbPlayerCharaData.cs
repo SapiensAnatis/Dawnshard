@@ -130,6 +130,9 @@ public class DbPlayerCharaData : DbPlayerData
     [Column("IsTemp")]
     public bool IsTemporary { get; set; }
 
+    [Column("FriendshipPoint")]
+    public int FriendshipPoint { get; set; }
+
     [Column("IsUnlockEditSkill")]
     public bool IsUnlockEditSkill { get; set; }
 

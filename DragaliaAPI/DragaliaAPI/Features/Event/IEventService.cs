@@ -23,6 +23,8 @@ public interface IEventService
 
     Task CreateEventData(int eventId);
 
+    Task<IEnumerable<CharaFriendshipList>> GetEventCharaFriendshipList(int eventId);
+
     #region User Data Providers
 
     Task<BuildEventUserList?> GetBuildEventUserData(int eventId);

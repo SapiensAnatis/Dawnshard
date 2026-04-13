@@ -60,7 +60,7 @@ public static partial class CharaMapper
             AttackNode = (ushort)attackNode,
             ExAbilityLevel = (byte)charaList.ExAbilityLevel,
             ExAbility2Level = (byte)charaList.ExAbility2Level,
-            IsTemporary = false, // Ignore characters imported with is_temporary = true; this renders them permanently inaccessible
+            IsTemporary = charaList.IsTemporary,
             IsUnlockEditSkill = charaList.IsUnlockEditSkill,
             ListViewFlag = charaList.ListViewFlag,
             GetTime = charaList.GetTime,

@@ -87,7 +87,8 @@ public record CharaData(
     int EditReleaseEntityId1,
     int EditReleaseEntityQuantity1,
     int BaseId,
-    int VariationId
+    int VariationId,
+    int MaxFriendshipPoint
 ) : IUnitData
 {
     [IgnoreMember]
