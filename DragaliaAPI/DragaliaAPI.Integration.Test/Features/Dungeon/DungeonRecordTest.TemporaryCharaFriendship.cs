@@ -343,5 +343,4 @@ public partial class DungeonRecordTest
                 && x.TotalPoint == AudricEventQuestStamina * 2
             );
     }
-
 }

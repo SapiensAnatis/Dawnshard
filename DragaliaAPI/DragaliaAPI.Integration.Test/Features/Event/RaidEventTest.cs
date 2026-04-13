@@ -85,8 +85,7 @@ public class RaidEventTest : TestFixture
             .ApiContext.PlayerCharaData.Where(x => x.CharaId == Charas.Audric)
             .ExecuteUpdateAsync(
                 x =>
-                    x.SetProperty(p => p.IsTemporary, true)
-                        .SetProperty(p => p.FriendshipPoint, 50),
+                    x.SetProperty(p => p.IsTemporary, true).SetProperty(p => p.FriendshipPoint, 50),
                 TestContext.Current.CancellationToken
             );
 

@@ -1,7 +1,8 @@
+using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
@@ -12,7 +13,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -312,7 +312,8 @@ public partial class DungeonRecordRewardService(
             .ToList();
 
         List<DbPlayerCharaData> temporaryCharas = await apiContext
-            .PlayerCharaData.Where(x => partyCharaIds.Contains(x.CharaId) && x.IsTemporary)
+            .PlayerCharaData.AsTracking()
+            .Where(x => partyCharaIds.Contains(x.CharaId) && x.IsTemporary)
             .ToListAsync();
 
         Charas? eventCharaId = MasterAsset.EventData.TryGetValue(
