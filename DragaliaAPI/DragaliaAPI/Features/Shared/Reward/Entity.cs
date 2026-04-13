@@ -10,7 +10,8 @@ public record Entity(
     int Quantity = 1,
     int? LimitBreakCount = null,
     int? BuildupCount = null,
-    int? EquipableCount = null
+    int? EquipableCount = null,
+    bool IsTemporary = false
 // TODO: int? Level = null
 )
 {
