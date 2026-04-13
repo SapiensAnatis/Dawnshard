@@ -146,6 +146,13 @@ internal sealed partial class SavefileService(
                 .CharaList.ParallelMap(playerIdentityService.ViewerId, CharaMapper.ToDbPlayerChara)
                 .ToList();
 
+            // Characters imported with is_temporary = true become permanently inaccessible
+            // when their event is not active, so clear the flag on savefile import.
+            foreach (DbPlayerCharaData chara in player.CharaList)
+            {
+                chara.IsTemporary = false;
+            }
+
             Log.MappingDbPlayerCharaDataStepDoneAfterMs(
                 logger,
                 stopwatch.Elapsed.TotalMilliseconds

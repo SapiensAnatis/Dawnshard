@@ -69,6 +69,49 @@ public class RaidEventTest : TestFixture
     }
 
     [Fact]
+    public async Task GetEventData_EventHasTemporaryChara_ReturnsCharaFriendshipList()
+    {
+        // Fractured Futures (20427) has Audric as its EventCharaId
+        const int fracturedFuturesId = 20427;
+
+        await this.Client.PostMsgpack(
+            "memory_event/activate",
+            new MemoryEventActivateRequest(fracturedFuturesId),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        this.AddCharacter(Charas.Audric);
+        await this
+            .ApiContext.PlayerCharaData.Where(x => x.CharaId == Charas.Audric)
+            .ExecuteUpdateAsync(
+                x =>
+                    x.SetProperty(p => p.IsTemporary, true).SetProperty(p => p.FriendshipPoint, 50),
+                TestContext.Current.CancellationToken
+            );
+
+        DragaliaResponse<RaidEventGetEventDataResponse> response =
+            await this.Client.PostMsgpack<RaidEventGetEventDataResponse>(
+                "raid_event/get_event_data",
+                new RaidEventGetEventDataRequest(fracturedFuturesId),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response
+            .Data.CharaFriendshipList.Should()
+            .ContainSingle(x => x.CharaId == Charas.Audric)
+            .Which.Should()
+            .BeEquivalentTo(
+                new CharaFriendshipList()
+                {
+                    CharaId = Charas.Audric,
+                    AddPoint = 0,
+                    TotalPoint = 50,
+                    IsTemporary = true,
+                }
+            );
+    }
+
+    [Fact]
     public async Task Entry_EventHasNoItems_InitializesUserData()
     {
         const int fracturedFuturesId = 20427;

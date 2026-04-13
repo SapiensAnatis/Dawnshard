@@ -102,7 +102,8 @@ public class MasterAssetTest
                     EditReleaseEntityId1: 201019011,
                     EditReleaseEntityQuantity1: 5,
                     BaseId: 100032,
-                    VariationId: 4
+                    VariationId: 4,
+                    MaxFriendshipPoint: 0
                 )
             );
     }

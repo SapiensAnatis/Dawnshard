@@ -287,14 +287,16 @@ public partial class StoryService(
 
         if (
             MasterAsset.EventData.TryGetValue(story.GroupId, out EventData? eventData)
-            && eventData.IsMemoryEvent // Real events need to set is_temporary and do friendship points
             && eventData.GuestJoinStoryId == storyId
         )
         {
-            Log.GrantingMemoryEventCharacter(logger, eventData.EventCharaId);
+            // 'Real' events grant temporary characters that need to be unlocked with friendship, whilst compendium / memory events grant the character already fully unlocked.
+            bool isTemporary = !eventData.IsMemoryEvent;
+
+            Log.GrantingEventCharacter(logger, eventData.EventCharaId, isTemporary);
 
             await rewardService.GrantReward(
-                new(EntityTypes.Chara, Id: (int)eventData.EventCharaId)
+                new(EntityTypes.Chara, Id: (int)eventData.EventCharaId, IsTemporary: isTemporary)
             );
 
             rewardList.Add(
@@ -431,8 +433,15 @@ public partial class StoryService(
             List<AtgenBuildEventRewardEntityList> rewards
         );
 
-        [LoggerMessage(LogLevel.Debug, "Granting memory event character {chara}")]
-        public static partial void GrantingMemoryEventCharacter(ILogger logger, Charas chara);
+        [LoggerMessage(
+            LogLevel.Debug,
+            "Granting event character {Chara} with temporary status {IsTemporary}"
+        )]
+        public static partial void GrantingEventCharacter(
+            ILogger logger,
+            Charas chara,
+            bool isTemporary
+        );
 
         [LoggerMessage(LogLevel.Debug, "Granting player experience for chapter 10 completion.")]
         public static partial void GrantingPlayerExperienceForChapter10Completion(ILogger logger);

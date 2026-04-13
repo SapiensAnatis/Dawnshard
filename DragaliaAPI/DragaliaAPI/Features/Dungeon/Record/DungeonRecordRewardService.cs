@@ -1,5 +1,8 @@
+using System.Diagnostics;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
@@ -9,6 +12,7 @@ using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -19,6 +23,7 @@ public partial class DungeonRecordRewardService(
     EventDropService eventDropService,
     IMissionProgressionService missionProgressionService,
     IQuestRepository questRepository,
+    ApiContext apiContext,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
@@ -278,6 +283,84 @@ public partial class DungeonRecordRewardService(
             Headcount = connectingViewerIdList.Count,
             TotalQuantity = quantity,
         };
+    }
+
+    public async Task<IEnumerable<CharaFriendshipList>> ProcessTemporaryCharaFriendship(
+        DungeonSession session
+    )
+    {
+        if (session.IsSkipTicket)
+        {
+            return [];
+        }
+
+        if (session.QuestData is null)
+        {
+            throw new UnreachableException("Wall request reached friendship calculation");
+        }
+
+        // We will assume that quests which take getherwings instead of stamina don't increase friendship - this also saves us from having to deal
+        // with party logic i.e. whether the temporary unit was the lead/ai used in multiplayer.
+        // Note that this doesn't include the actual raid event co-op quests; those use stamina and otherworld fragments.
+
+        int stamina = session.QuestData.PayStaminaSingle;
+        if (stamina == 0)
+        {
+            return [];
+        }
+
+        List<Charas> partyCharaIds = session
+            .Party.Where(x => x.CharaId != 0)
+            .Select(x => x.CharaId)
+            .ToList();
+
+        List<DbPlayerCharaData> temporaryCharas = await apiContext
+            .PlayerCharaData.AsTracking()
+            .Where(x => partyCharaIds.Contains(x.CharaId) && x.IsTemporary)
+            .ToListAsync();
+
+        Charas? eventCharaId = MasterAsset.EventData.TryGetValue(
+            session.QuestData.Gid,
+            out EventData? eventData
+        )
+            ? eventData.EventCharaId
+            : null;
+
+        List<CharaFriendshipList> result = [];
+
+        foreach (DbPlayerCharaData chara in temporaryCharas)
+        {
+            int maxFriendshipPoint = MasterAsset.CharaData[chara.CharaId].MaxFriendshipPoint;
+            if (maxFriendshipPoint == 0)
+            {
+                continue;
+            }
+
+            int multiplier = chara.CharaId == eventCharaId ? 2 : 1;
+            int pointsToAdd = stamina * session.PlayCount * multiplier;
+
+            chara.FriendshipPoint = chara.FriendshipPoint.AddWithCap(
+                pointsToAdd,
+                maxFriendshipPoint,
+                out int actualPointsAdded
+            );
+
+            if (chara.FriendshipPoint >= maxFriendshipPoint)
+            {
+                chara.IsTemporary = false;
+            }
+
+            result.Add(
+                new CharaFriendshipList(
+                    charaId: chara.CharaId,
+                    addPoint: actualPointsAdded,
+                    totalPoint: chara.FriendshipPoint,
+                    isTemporary: chara.IsTemporary
+                )
+            );
+        }
+
+        return result;
     }
 
     public record EventRewardData(

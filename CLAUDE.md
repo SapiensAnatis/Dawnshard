@@ -194,7 +194,8 @@ dotnet ef database update --project DragaliaAPI.Database --startup-project Draga
 3. Implement the business logic in `DragaliaAPI/Features/<FeatureName>/`. Controllers live in the same feature subfolder.
 4. Use `ApiContext` directly for data access; do **not** add new repository classes.
 5. Write integration tests in `DragaliaAPI.Integration.Test/` to verify the feature end-to-end.
-6. Run `dotnet csharpier format .` to format and `dotnet build DragaliaAPI.slnx` to check for warnings.
+6. Run new tests with `--filter-method` to confirm they pass before committing.
+7. Run `dotnet csharpier format .` to format.
 
 ## CI Workflows
 
@@ -232,7 +233,7 @@ A small ASP.NET Core service that stores Photon room state in Redis. It exposes 
 # Build everything
 dotnet build DragaliaAPI.slnx
 
-# Build everything on Linux platforms (skipping Windows-only .NET Framework components)
+# Build everything on Linux platforms (skipping Windows-only PhotonPlugin projects) — use this when running on Linux
 dotnet build DragaliaAPI.Linux.slnf
 
 # Format C# code

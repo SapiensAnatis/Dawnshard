@@ -127,8 +127,20 @@ public class DbPlayerCharaData : DbPlayerData
     [Column("ExAbility2Lvl")]
     public byte ExAbility2Level { get; set; } = 1;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the character is temporary.
+    /// </summary>
+    /// <remarks>
+    /// This is relevant to welfare / guest characters from raid events that need to be befriended.
+    ///
+    /// If this is set to true, and the character's event is not active, then they will be automatically hidden by the client.
+    /// This is 'good enough' so we don't validate usage of these characters outside of event windows.
+    /// </remarks>
     [Column("IsTemp")]
     public bool IsTemporary { get; set; }
+
+    [Column("FriendshipPoint")]
+    public int FriendshipPoint { get; set; }
 
     [Column("IsUnlockEditSkill")]
     public bool IsUnlockEditSkill { get; set; }

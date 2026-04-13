@@ -32,7 +32,9 @@ public partial class CharaHandler(
             return GrantReturn.Discarded();
         }
 
-        apiContext.PlayerCharaData.Add(new(playerIdentityService.ViewerId, chara));
+        apiContext.PlayerCharaData.Add(
+            new(playerIdentityService.ViewerId, chara) { IsTemporary = entity.IsTemporary }
+        );
 
         if (
             MasterAsset.CharaStories.TryGetValue((int)chara, out StoryData? storyData)
@@ -95,7 +97,9 @@ public partial class CharaHandler(
                 continue;
             }
 
-            apiContext.PlayerCharaData.Add(new(playerIdentityService.ViewerId, chara));
+            apiContext.PlayerCharaData.Add(
+                new(playerIdentityService.ViewerId, chara) { IsTemporary = entity.IsTemporary }
+            );
             result.Add(key, GrantReturn.Added());
             ownedCharacters.Add(chara);
 

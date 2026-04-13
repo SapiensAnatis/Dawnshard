@@ -63,6 +63,9 @@ internal partial class DungeonRecordService(
 
         await this.ProcessCharaHonors(playRecord, session);
 
+        ingameResultData.GrowRecord.CharaFriendshipList =
+            await dungeonRecordRewardService.ProcessTemporaryCharaFriendship(session);
+
         ingameResultData.RewardRecord.FirstClearSet = firstClearSets;
         ingameResultData.RewardRecord.MissionsClearSet = missionStatus.MissionsClearSet;
         ingameResultData.RewardRecord.MissionComplete = missionStatus.MissionCompleteSet;
