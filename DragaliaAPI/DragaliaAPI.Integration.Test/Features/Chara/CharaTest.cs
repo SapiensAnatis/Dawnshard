@@ -3,12 +3,15 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Chara;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Integration.Test.Features.Chara;
 
@@ -42,6 +45,7 @@ public class CharaTest : TestFixture
         this.AddCharacter(Charas.Gauld);
         this.AddCharacter(Charas.Valerio);
         this.AddCharacter(Charas.Cleo);
+        this.AddCharacter(Charas.SophiePersona);
     }
 
     [Fact]
@@ -784,5 +788,72 @@ public class CharaTest : TestFixture
             .UpdateDataList.CharaUnitSetList!.Where(x => (Charas)x.CharaId == Charas.Celliera)
             .First();
         responseCharaData.CharaUnitSetDetailList.ToList()[0].DragonKeyId.Should().Be(5);
+    }
+
+    [Fact]
+    public async Task CharaBuildupMana_EventCharaAndEventIsActive_UsesGrowMaterial()
+    {
+        // SophiePersona's event (20429) is configured as active in appsettings.Testing.json
+        DragaliaResponse<CharaBuildupManaResponse> response =
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(Charas.SophiePersona, [1], false),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        response
+            .Data.UpdateDataList.MaterialList.Should()
+            .Contain(x => x.MaterialId == Materials.SophiesConviction);
+    }
+
+    [Fact]
+    public async Task CharaBuildupMana_EventCharaAndEventIsInactive_DoesNotUseGrowMaterial()
+    {
+        // Create a client where SophiePersona's event (20429) is not active
+        HttpClient client = this.CreateClient(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.PostConfigure<EventOptions>(opts => opts.EventList.Clear());
+            });
+        });
+
+        DragaliaResponse<CharaBuildupManaResponse> response =
+            await client.PostMsgpack<CharaBuildupManaResponse>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(Charas.SophiePersona, [1], false),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        response.Data.UpdateDataList.MaterialList.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task CharaBuildupMana_EventCharaAndEventIsActive_FullCircleConsumesExpectedConvictions()
+    {
+        int convictionQuantity = await this
+            .ApiContext.PlayerMaterials.Where(x =>
+                x.ViewerId == this.ViewerId && x.MaterialId == Materials.SophiesConviction
+            )
+            .Select(x => x.Quantity)
+            .FirstAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        ImmutableArray<int> allNodes = [.. Enumerable.Range(1, 50)];
+
+        DragaliaResponse<CharaBuildupManaResponse> response =
+            await this.Client.PostMsgpack<CharaBuildupManaResponse>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(Charas.SophiePersona, allNodes, false),
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+        response
+            .Data.UpdateDataList.MaterialList.Should()
+            .ContainSingle(x => x.MaterialId == Materials.SophiesConviction)
+            .Which.Quantity.Should()
+            .Be(convictionQuantity - 50);
     }
 }

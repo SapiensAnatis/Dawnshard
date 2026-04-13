@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Story;
@@ -13,9 +14,11 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Chara;
 
@@ -30,7 +33,8 @@ public partial class CharaController(
     IRewardService rewardService,
     TimeProvider timeProvider,
     ICharaService charaService,
-    ApiContext apiContext
+    ApiContext apiContext,
+    IOptionsMonitor<EventOptions> eventOptions
 ) : DragaliaControllerBase
 {
     [HttpPost("awake")]
@@ -513,8 +517,6 @@ public partial class CharaController(
             return;
         }
 
-        DateTimeOffset time = timeProvider.GetUtcNow();
-
         Log.PreUpgradeCharaData(logger, playerCharData);
 
         CharaData charaData = MasterAsset.CharaData[playerCharData.CharaId];
@@ -715,9 +717,10 @@ public partial class CharaController(
                 continue;
             }
 
-            bool isOnlyUsingGrowMaterial =
-                charaData.GrowMaterialOnlyStartDate <= time
-                && charaData.GrowMaterialOnlyEndDate >= time;
+            // NOTE: The client determines which material cost to display using _GrowMaterialOnlyStartDate
+            // and _GrowMaterialOnlyEndDate in CharaData. These must be updated in the client's master
+            // asset to match the event schedule for the correct cost to be shown to the player.
+            bool isOnlyUsingGrowMaterial = this.IsCharaEventActive(charaData.Id);
 
             if (isOnlyUsingGrowMaterial || useGrowMaterial)
             {
@@ -818,6 +821,24 @@ public partial class CharaController(
         Log.NewCharaData(logger, playerCharData);
 
         Log.NewBitmask(logger, Convert.ToString(playerCharData.ManaNodeUnlockCount, 2));
+    }
+
+    private bool IsCharaEventActive(Charas charaId)
+    {
+        EventData? eventData = MasterAsset.EventData.Enumerable.FirstOrDefault(x =>
+            x.EventCharaId == charaId
+        );
+
+        if (eventData is null)
+        {
+            return false;
+        }
+
+        EventRunInformation? runInfo = eventOptions.CurrentValue.EventList.Find(x =>
+            x.Id == eventData.Id
+        );
+
+        return runInfo?.IsActive(timeProvider) == true;
     }
 
     private static AtgenCharaUnitSetDetailList ToAtgenCharaUnitSetDetailList(DbSetUnit unit)
