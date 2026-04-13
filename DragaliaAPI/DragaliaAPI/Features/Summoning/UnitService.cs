@@ -32,15 +32,15 @@ public class UnitService(
             .Select((x, index) => KeyValuePair.Create(index, new Entity(EntityTypes.Chara, (int)x)))
             .ToDictionary();
 
-        IDictionary<int, RewardGrantResult> outputRewardDict =
-            await rewardService.BatchGrantRewards(inputRewardDict);
-
         List<CharaNewCheckResult> result = [];
 
-        foreach ((int key, RewardGrantResult grantResult) in outputRewardDict)
-        {
-            result.Add(((Charas)inputRewardDict[key].Id, grantResult == RewardGrantResult.Added));
-        }
+        await rewardService.BatchGrantRewards(
+            inputRewardDict,
+            (_, entity, grantResult) =>
+            {
+                result.Add(((Charas)entity.Id, grantResult == RewardGrantResult.Added));
+            }
+        );
 
         return result;
     }
@@ -53,18 +53,18 @@ public class UnitService(
             )
             .ToDictionary();
 
-        IDictionary<int, RewardGrantResult> outputRewardDict =
-            await rewardService.BatchGrantRewards(inputRewardDict);
-
-        IEnumerable<Present.Present> presentsToAdd = outputRewardDict
-            .Where(kvp => kvp.Value == RewardGrantResult.Limit)
-            .Select(x => new Present.Present(
-                PresentMessage.SummonShowcase,
-                EntityTypes.Dragon,
-                inputRewardDict[x.Key].Id
-            ));
-
-        presentService.AddPresent(presentsToAdd);
+        await rewardService.BatchGrantRewards(
+            inputRewardDict,
+            (_, entity, grantResult) =>
+            {
+                if (grantResult == RewardGrantResult.Limit)
+                {
+                    presentService.AddPresent(
+                        new Present.Present(PresentMessage.SummonShowcase, entity.Type, entity.Id)
+                    );
+                }
+            }
+        );
 
         List<DragonId> ownedDragons = await apiContext
             .PlayerDragonData.Select(x => x.DragonId)

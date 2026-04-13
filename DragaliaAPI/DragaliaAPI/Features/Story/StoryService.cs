@@ -296,6 +296,7 @@ public partial class StoryService(
             await rewardService.GrantReward(
                 new(EntityTypes.Chara, Id: (int)eventData.EventCharaId)
             );
+
             rewardList.Add(
                 new()
                 {

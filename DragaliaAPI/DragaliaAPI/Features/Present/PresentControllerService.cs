@@ -95,43 +95,40 @@ public partial class PresentControllerService(
         List<long> notReceivedIds = [];
         List<long> removedIds = [];
 
-        IDictionary<long, RewardGrantResult> result = await rewardService.BatchGrantRewards(
-            presentEntities
+        await rewardService.BatchGrantRewards(
+            presentEntities,
+            (presentId, _, grantResult) =>
+            {
+                DbPlayerPresent present = presents[presentId];
+
+                switch (grantResult)
+                {
+                    case RewardGrantResult.Added:
+                    case RewardGrantResult.Converted:
+                        receivedIds.Add(present.PresentId);
+                        break;
+                    case RewardGrantResult.Limit:
+                        notReceivedIds.Add(present.PresentId);
+                        break;
+                    case RewardGrantResult.Discarded:
+                        removedIds.Add(present.PresentId);
+                        break;
+                }
+
+                Log.ClaimedPresent(logger, present);
+
+                if (
+                    grantResult
+                    is RewardGrantResult.Added
+                        or RewardGrantResult.Converted
+                        or RewardGrantResult.Discarded
+                )
+                {
+                    apiContext.PlayerPresents.Remove(present);
+                    apiContext.PlayerPresentHistory.Add(present.MapToPresentHistory());
+                }
+            }
         );
-
-        foreach ((long presentId, RewardGrantResult grantResult) in result)
-        {
-            DbPlayerPresent present = presents[presentId];
-
-            switch (grantResult)
-            {
-                case RewardGrantResult.Added:
-                    receivedIds.Add(present.PresentId);
-                    break;
-                case RewardGrantResult.Converted:
-                    receivedIds.Add(present.PresentId);
-                    break;
-                case RewardGrantResult.Limit:
-                    notReceivedIds.Add(present.PresentId);
-                    break;
-                case RewardGrantResult.Discarded:
-                    removedIds.Add(present.PresentId);
-                    break;
-            }
-
-            Log.ClaimedPresent(logger, present);
-
-            if (
-                grantResult
-                is RewardGrantResult.Added
-                    or RewardGrantResult.Converted
-                    or RewardGrantResult.Discarded
-            )
-            {
-                apiContext.PlayerPresents.Remove(present);
-                apiContext.PlayerPresentHistory.Add(present.MapToPresentHistory());
-            }
-        }
 
         return new(receivedIds, notReceivedIds, removedIds);
     }
