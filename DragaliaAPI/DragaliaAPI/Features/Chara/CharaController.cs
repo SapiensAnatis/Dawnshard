@@ -574,6 +574,11 @@ public partial class CharaController(
 
         Log.UnlockingNodes(logger, manaNodes);
 
+        // NOTE: The client determines which material cost to display using _GrowMaterialOnlyStartDate
+        // and _GrowMaterialOnlyEndDate in CharaData. These must be updated in the client's master
+        // asset to match the event schedule for the correct cost to be shown to the player.
+        bool isOnlyUsingGrowMaterial = this.IsCharaEventActive(charaData.Id);
+
         foreach (int nodeNr in manaNodes)
         {
             Log.Node(logger, nodeNr);
@@ -716,11 +721,6 @@ public partial class CharaController(
             {
                 continue;
             }
-
-            // NOTE: The client determines which material cost to display using _GrowMaterialOnlyStartDate
-            // and _GrowMaterialOnlyEndDate in CharaData. These must be updated in the client's master
-            // asset to match the event schedule for the correct cost to be shown to the player.
-            bool isOnlyUsingGrowMaterial = this.IsCharaEventActive(charaData.Id);
 
             if (isOnlyUsingGrowMaterial || useGrowMaterial)
             {
