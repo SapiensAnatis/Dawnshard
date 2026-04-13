@@ -825,20 +825,22 @@ public partial class CharaController(
 
     private bool IsCharaEventActive(Charas charaId)
     {
-        EventData? eventData = MasterAsset.EventData.Enumerable.FirstOrDefault(x =>
-            x.EventCharaId == charaId
+        IEnumerable<EventRunInformation> events = eventOptions.CurrentValue.EventList.Where(x =>
+            x.IsActive(timeProvider)
         );
 
-        if (eventData is null)
+        foreach (EventRunInformation activeEvent in events)
         {
-            return false;
+            if (
+                MasterAsset.EventData.TryGetValue(activeEvent.Id, out EventData? eventData)
+                && eventData.EventCharaId == charaId
+            )
+            {
+                return true;
+            }
         }
 
-        EventRunInformation? runInfo = eventOptions.CurrentValue.EventList.Find(x =>
-            x.Id == eventData.Id
-        );
-
-        return runInfo?.IsActive(timeProvider) == true;
+        return false;
     }
 
     private static AtgenCharaUnitSetDetailList ToAtgenCharaUnitSetDetailList(DbSetUnit unit)
