@@ -16,12 +16,12 @@ public static class NumberExtensions
         /// <returns>The lower of <paramref name="cap"/> or the addition result.</returns>
         public T AddWithCap(T amount, T cap, out T amountAdded)
         {
-            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            ArgumentOutOfRangeException.ThrowIfNegative(amount);
 
             if (value >= cap)
             {
                 amountAdded = T.Zero;
-                return value;
+                return cap;
             }
 
             amountAdded = T.Min(amount, cap - value);
