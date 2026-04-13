@@ -9,7 +9,6 @@ appsettings.Development.json
 test_coverage.json
 .run
 PhotonServer
-.claude
 
 # CMake
 cmake-build-*/
