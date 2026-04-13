@@ -200,19 +200,18 @@ internal class EventSummonService(
             }
         }
 
-        IDictionary<int, RewardGrantResult> resultDict = await rewardService.BatchGrantRewards(
-            rewards
-        );
-
-        foreach ((int rewardId, RewardGrantResult grantResult) in resultDict)
-        {
-            if (grantResult == RewardGrantResult.Limit)
+        await rewardService.BatchGrantRewards(
+            rewards,
+            (_, entity, grantResult) =>
             {
-                presentService.AddPresent(
-                    new Present.Present(PresentMessage.EventSummonReward, rewards[rewardId])
-                );
+                if (grantResult == RewardGrantResult.Limit)
+                {
+                    presentService.AddPresent(
+                        new Present.Present(PresentMessage.EventSummonReward, entity)
+                    );
+                }
             }
-        }
+        );
 
         BoxSummonInfo newBoxSummonInfo = EventSummonLogic.GetBoxSummonInfo(
             userData.BoxNumber,

@@ -49,13 +49,12 @@ public partial class RewardService(
         }
     }
 
-    public async Task<IDictionary<TKey, RewardGrantResult>> BatchGrantRewards<TKey>(
-        IDictionary<TKey, Entity> entities
+    public async Task BatchGrantRewards<TKey>(
+        IDictionary<TKey, Entity> entities,
+        Action<TKey, Entity, RewardGrantResult> onResult
     )
         where TKey : struct
     {
-        Dictionary<TKey, RewardGrantResult> result = [];
-
         IEnumerable<(EntityTypes type, Dictionary<TKey, Entity>)> grouping = entities.GroupBy(
             x => x.Value.Type,
             (type, group) => (type, group.ToDictionary())
@@ -79,8 +78,9 @@ public partial class RewardService(
 
                 foreach ((TKey key, GrantReturn grantReturn) in batchResult)
                 {
-                    await this.ProcessGrantResult(grantReturn, dictionary[key]);
-                    result.Add(key, grantReturn.Result);
+                    Entity entity = dictionary[key];
+                    await this.ProcessGrantResult(grantReturn, entity);
+                    onResult(key, entity, grantReturn.Result);
                 }
             }
             else
@@ -91,12 +91,10 @@ public partial class RewardService(
                 {
                     GrantReturn grantReturn = await handler.Grant(entity);
                     await this.ProcessGrantResult(grantReturn, entity);
-                    result.Add(key, grantReturn.Result);
+                    onResult(key, entity, grantReturn.Result);
                 }
             }
         }
-
-        return result;
     }
 
     private async Task ProcessGrantResult(GrantReturn grantReturn, Entity entity)

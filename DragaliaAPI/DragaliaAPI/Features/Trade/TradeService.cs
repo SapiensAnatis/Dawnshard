@@ -193,23 +193,18 @@ public partial class TradeService(
             };
         }
 
-        IDictionary<int, RewardGrantResult> batchResult = await rewardService.BatchGrantRewards(
-            entities
-        );
-
-        foreach ((_, RewardGrantResult result) in batchResult)
-        {
-            if (result == RewardGrantResult.Limit)
+        await rewardService.BatchGrantRewards(
+            entities,
+            (_, entity, result) =>
             {
-                presentService.AddPresent(
-                    new Present.Present(
-                        PresentMessage.TreasureTrade,
-                        trade.DestinationEntityType,
-                        trade.DestinationEntityId
-                    )
-                );
+                if (result == RewardGrantResult.Limit)
+                {
+                    presentService.AddPresent(
+                        new Present.Present(PresentMessage.TreasureTrade, entity.Type, entity.Id)
+                    );
+                }
             }
-        }
+        );
 
         await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
 
