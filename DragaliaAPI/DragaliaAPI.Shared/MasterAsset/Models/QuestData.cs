@@ -87,6 +87,7 @@ public record QuestData(
         {
             EventKindType.Build => this.IdSuffix is 701 or 702,
             EventKindType.Earn => this.IdSuffix is 301 or 302 or 303,
+            EventKindType.Raid => this.IdSuffix is >= 801 and <= 899,
             _ => false,
         };
 

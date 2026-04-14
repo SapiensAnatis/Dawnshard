@@ -383,7 +383,11 @@ public partial class QuestService(
         }
         else if (questData.IsEventTrial)
         {
-            missionProgressionService.OnEventTrialCleared(questData.Gid, questData.VariationType);
+            missionProgressionService.OnEventTrialCleared(
+                questData.Gid,
+                questData.VariationType,
+                questData.Id
+            );
         }
     }
 

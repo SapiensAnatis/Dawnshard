@@ -1,5 +1,9 @@
 namespace DragaliaAPI.MissionDesigner.Models.EventMission;
 
+/// <summary>
+/// Mission completed by collecting a certain amount of event points within a single run.
+/// Example: "Collect 4,000 Hype in One Go".
+/// </summary>
 public class EventPointCollectionRecordMission : Mission
 {
     public int EventId { get; set; }
