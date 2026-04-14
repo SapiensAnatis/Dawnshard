@@ -1304,15 +1304,6 @@
     "_Parameter": 20429
   },
   {
-    "_Id": 1133020102,
-    "_MissionType": "Period",
-    "_MissionId": 11330201,
-    "_CompleteType": "EventParticipation",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 20429
-  },
-  {
     "_Id": 1133030102,
     "_MissionType": "Period",
     "_MissionId": 11330301,
