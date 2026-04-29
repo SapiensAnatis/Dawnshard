@@ -78,6 +78,7 @@ public record QuestData(
         this.EventKindType switch
         {
             EventKindType.Build => this.IdSuffix is 501 or 502,
+            EventKindType.Raid => this.IdSuffix is >= 301 and <= 699,
             _ => false,
         };
 

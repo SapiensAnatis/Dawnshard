@@ -67,116 +67,36 @@ public static class CagedDesire
             VariationType = VariationTypes.Hell,
         },
         // Clear Joker's Trial: Standard (Solo)
-        new EventTrialClearMission()
-        {
-            MissionId = 11330701,
-            VariationType = VariationTypes.Hard,
-            QuestId = 204290809,
-        },
+        new ClearQuestMission() { MissionId = 11330701, QuestId = 204290809 },
         // Clear Joker's Trial: Expert (Solo)
-        new EventTrialClearMission()
-        {
-            MissionId = 11330801,
-            VariationType = VariationTypes.VeryHard,
-            QuestId = 204290801,
-        },
+        new ClearQuestMission() { MissionId = 11330801, QuestId = 204290801 },
         // Clear Joker's Trial: Expert (Co-op)
-        new EventTrialClearMission()
-        {
-            MissionId = 11330901,
-            VariationType = VariationTypes.VeryHard,
-            QuestId = 204290805,
-        },
+        new ClearQuestMission() { MissionId = 11330901, QuestId = 204290805 },
         // Clear Joker's Trial: Master (Solo)
-        new EventTrialClearMission()
-        {
-            MissionId = 11331001,
-            VariationType = VariationTypes.Extreme,
-            QuestId = 204290802,
-        },
+        new ClearQuestMission() { MissionId = 11331001, QuestId = 204290802 },
         // Clear Joker's Trial: Master (Co-op)
-        new EventTrialClearMission()
-        {
-            MissionId = 11331101,
-            VariationType = VariationTypes.Extreme,
-            QuestId = 204290806,
-        },
+        new ClearQuestMission() { MissionId = 11331101, QuestId = 204290806 },
         // Clear Sophie's Trial: Standard (Solo)
-        new EventTrialClearMission()
-        {
-            MissionId = 11331201,
-            VariationType = VariationTypes.Hard,
-            QuestId = 204290810,
-        },
+        new ClearQuestMission() { MissionId = 11331201, QuestId = 204290810 },
         // Clear Sophie's Trial: Expert (Solo)
-        new EventTrialClearMission()
-        {
-            MissionId = 11331301,
-            VariationType = VariationTypes.VeryHard,
-            QuestId = 204290803,
-        },
+        new ClearQuestMission() { MissionId = 11331301, QuestId = 204290803 },
         // Clear Sophie's Trial: Expert (Co-op)
-        new EventTrialClearMission()
-        {
-            MissionId = 11331401,
-            VariationType = VariationTypes.VeryHard,
-            QuestId = 204290807,
-        },
+        new ClearQuestMission() { MissionId = 11331401, QuestId = 204290807 },
         // Clear Sophie's Trial: Master (Solo)
-        new EventTrialClearMission()
-        {
-            MissionId = 11331501,
-            VariationType = VariationTypes.Extreme,
-            QuestId = 204290804,
-        },
+        new ClearQuestMission() { MissionId = 11331501, QuestId = 204290804 },
         // Clear Sophie's Trial: Master (Co-op)
-        new EventTrialClearMission()
-        {
-            MissionId = 11331601,
-            VariationType = VariationTypes.Extreme,
-            QuestId = 204290808,
-        },
+        new ClearQuestMission() { MissionId = 11331601, QuestId = 204290808 },
         // Clear Monarch Emile Clash: Omega Level 1 (Raid)
-        new EventChallengeBattleClearMission()
-        {
-            MissionId = 11331701,
-            VariationType = VariationTypes.Variation6,
-            QuestId = 204290602,
-        },
+        new ClearQuestMission() { MissionId = 11331701, QuestId = 204290602 },
         // Clear Monarch Emile Clash: Omega Level 2 (Raid)
-        new EventChallengeBattleClearMission()
-        {
-            MissionId = 11331801,
-            VariationType = VariationTypes.Variation7,
-            QuestId = 204290604,
-        },
+        new ClearQuestMission() { MissionId = 11331801, QuestId = 204290604 },
         // Clear Monarch Emile Clash: Omega Level 3 (Raid)
-        new EventChallengeBattleClearMission()
-        {
-            MissionId = 11331901,
-            VariationType = VariationTypes.Variation8,
-            QuestId = 204290606,
-        },
+        new ClearQuestMission() { MissionId = 11331901, QuestId = 204290606 },
         // Clear Monarch Emile Clash: Omega Level 1 (Solo)
-        new EventChallengeBattleClearMission()
-        {
-            MissionId = 11332001,
-            VariationType = VariationTypes.Variation6,
-            QuestId = 204290601,
-        },
+        new ClearQuestMission() { MissionId = 11332001, QuestId = 204290601 },
         // Clear Monarch Emile Clash: Omega Level 2 (Solo)
-        new EventChallengeBattleClearMission()
-        {
-            MissionId = 11332101,
-            VariationType = VariationTypes.Variation7,
-            QuestId = 204290603,
-        },
+        new ClearQuestMission() { MissionId = 11332101, QuestId = 204290603 },
         // Clear Monarch Emile Clash: Omega Level 3 (Solo)
-        new EventChallengeBattleClearMission()
-        {
-            MissionId = 11332201,
-            VariationType = VariationTypes.Variation8,
-            QuestId = 204290605,
-        },
+        new ClearQuestMission() { MissionId = 11332201, QuestId = 204290605 },
     ];
 }

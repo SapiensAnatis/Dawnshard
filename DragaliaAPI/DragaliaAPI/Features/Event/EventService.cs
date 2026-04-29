@@ -296,11 +296,14 @@ public partial class EventService(
             return [];
         }
 
-        DbPlayerCharaData? charaData = await apiContext.PlayerCharaData.SingleOrDefaultAsync(x =>
-            x.CharaId == eventCharaId
-        );
+        int maxFriendshipPoint = MasterAsset.CharaData[eventCharaId].MaxFriendshipPoint;
 
-        if (charaData is null)
+        var dbChara = await apiContext
+            .PlayerCharaData.Where(x => x.CharaId == eventCharaId)
+            .Select(x => new { x.IsTemporary, x.FriendshipPoint })
+            .FirstOrDefaultAsync();
+
+        if (dbChara is null)
         {
             return [];
         }
@@ -309,10 +312,10 @@ public partial class EventService(
         [
             new CharaFriendshipList()
             {
-                CharaId = charaData.CharaId,
+                CharaId = eventCharaId,
                 AddPoint = 0,
-                TotalPoint = charaData.FriendshipPoint,
-                IsTemporary = charaData.IsTemporary,
+                TotalPoint = dbChara.IsTemporary ? dbChara.FriendshipPoint : maxFriendshipPoint,
+                IsTemporary = dbChara.IsTemporary,
             },
         ];
     }
@@ -349,16 +352,16 @@ public partial class EventService(
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new(
-            eventId,
-            itemDict.GetValueOrDefault((int)RaidEventItemType.SummonPoint, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint1, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint2, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint3, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.AdventItem1, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.AdventItem2, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.UltimateItem1, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.ExchangeItem1, 0),
-            itemDict.GetValueOrDefault((int)RaidEventItemType.ExchangeItem2, 0)
+            raidEventId: eventId,
+            boxSummonPoint: itemDict.GetValueOrDefault((int)RaidEventItemType.SummonPoint, 0),
+            raidPoint1: itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint1, 0),
+            raidPoint2: itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint2, 0),
+            raidPoint3: itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint3, 0),
+            adventItemQuantity1: itemDict.GetValueOrDefault((int)RaidEventItemType.AdventItem1, 0),
+            adventItemQuantity2: itemDict.GetValueOrDefault((int)RaidEventItemType.AdventItem2, 0),
+            ultimateKeyCount: itemDict.GetValueOrDefault((int)RaidEventItemType.UltimateItem1, 0),
+            exchangeItemCount: itemDict.GetValueOrDefault((int)RaidEventItemType.ExchangeItem1, 0),
+            exchangeItemCount2: itemDict.GetValueOrDefault((int)RaidEventItemType.ExchangeItem2, 0)
         );
     }
 
