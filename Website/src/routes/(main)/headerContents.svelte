@@ -31,4 +31,4 @@
     aria-hidden />
   <span class="sr-only">Toggle theme</span>
 </Button>
-<LogInOrOutButton {hasValidJwt} />
+<div class="hidden md:block"><LogInOrOutButton {hasValidJwt} /></div>
