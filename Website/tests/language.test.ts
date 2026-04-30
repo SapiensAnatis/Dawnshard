@@ -52,7 +52,20 @@ test('Accept-Language header drives locale detection', async ({ page, context })
 
   await page.goto('/');
 
-  await page.waitForTimeout(500);
+  await expect(page.getByRole('combobox', { name: 'Language' })).toHaveValue('zh-CN');
+});
+
+test('Accept-Language header uses fallback', async ({ page, context }) => {
+  await context.route('**/*', (route, request) => {
+    route.continue({
+      headers: {
+        ...request.headers(),
+        'accept-language': 'zh-TW'
+      }
+    });
+  });
+
+  await page.goto('/');
 
   await expect(page.getByRole('combobox', { name: 'Language' })).toHaveValue('zh-CN');
 });

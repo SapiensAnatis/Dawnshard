@@ -7,15 +7,18 @@ interface Params {
   weaponType: number;
 }
 
-export const defaultLocale = 'en';
+export const translations: Partial<Record<string, string>> = Object.freeze({
+  en: 'English',
+  'zh-CN': '中文 (partial)'
+});
 
 const config: Config<Params> = {
   log: {
     level: dev ? 'warn' : 'error'
   },
   translations: {
-    en: { en: 'English' },
-    'zh-CN': { 'zh-CN': '中文' }
+    en: translations,
+    'zh-CN': translations
   },
   loaders: [
     {

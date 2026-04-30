@@ -20,7 +20,7 @@
   };
 
   const getAbilityCrestNameKey = (abilityCrest: AbilityCrest) =>
-    abilityCrest ? `entity.wyrmprint.item.${abilityCrest.id}` : '';
+    `entity.wyrmprint.item.${abilityCrest.id}`;
 
   const getAbilityCrestName = (abilityCrest: AbilityCrest) =>
     $t(getAbilityCrestNameKey(abilityCrest));

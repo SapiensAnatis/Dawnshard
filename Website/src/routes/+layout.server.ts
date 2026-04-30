@@ -13,7 +13,8 @@ function detectLocale(available: string[], request: Request, cookie: string | un
     .split(',')
     .map((p) => {
       const [lang, q] = p.trim().split(';q=');
-      return { lang: lang.trim(), q: q ? parseFloat(q) : 1.0 };
+      const qFloat = parseFloat(q);
+      return { lang: lang.trim(), q: Number.isFinite(qFloat) ? qFloat : 1.0 };
     })
     .sort((a, b) => b.q - a.q);
 
