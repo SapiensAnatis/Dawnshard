@@ -47,7 +47,7 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: Website/
-        run: pnpm exec playwright test ${{ inputs.update-snapshots && '--update-snapshots changed' || '' }}
+        run: pnpm exec playwright test ${{ inputs.update-snapshots && '--update-snapshots all' || '' }}
 
       - name: Upload report
         uses: actions/upload-artifact@v7
