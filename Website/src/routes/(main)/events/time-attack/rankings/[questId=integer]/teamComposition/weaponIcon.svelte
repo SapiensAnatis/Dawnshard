@@ -4,14 +4,14 @@
   import { PUBLIC_CDN_URL } from '$env/static/public';
   import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
 
-  export let weapon: TimeAttackUnit['weapon'];
-
-  import { t } from '$lib/translations';
+  import { l, t } from '$lib/translations';
   import * as Popover from '$shadcn/components/ui/popover';
 
   import WikiLink from './wikiLink.svelte';
 
   type Weapon = TimeAttackUnit['weapon'];
+
+  const { weapon }: { weapon: Weapon } = $props();
 
   const getWeaponImagePath = (weapon: Weapon) => {
     const { baseId, formId } = weapon;
@@ -20,7 +20,8 @@
       .href;
   };
 
-  const weaponName = $t(`entity.weaponBody.item.${weapon.id}`);
+  const weaponName = $derived($t(`entity.weaponBody.item.${weapon.id}`));
+  const weaponWikiName = $derived($l('en', `entity.weaponBody.item.${weapon.id}`));
 </script>
 
 <Popover.Root>
@@ -34,6 +35,6 @@
   </Popover.Trigger>
   <Popover.Content class="flex h-fit w-fit flex-col items-center pt-2 pb-3" side="bottom">
     {weaponName}
-    <WikiLink pageName={weaponName} />
+    <WikiLink pageName={weaponWikiName} />
   </Popover.Content>
 </Popover.Root>

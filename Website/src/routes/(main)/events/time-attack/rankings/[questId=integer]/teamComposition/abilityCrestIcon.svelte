@@ -2,13 +2,12 @@
   import { Image } from '@unpic/svelte';
 
   import { PUBLIC_CDN_URL } from '$env/static/public';
+  import { l, t } from '$lib/translations';
   import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
-
-  export let abilityCrest: TimeAttackUnit['crests'][0];
-  export let rarity: number;
-
-  import { t } from '$lib/translations';
   import * as Popover from '$shadcn/components/ui/popover';
+
+  let { abilityCrest, rarity }: { abilityCrest: TimeAttackUnit['crests'][0]; rarity: number } =
+    $props();
 
   import WikiLink from './wikiLink.svelte';
 
@@ -20,8 +19,14 @@
     return new URL(`images/icon/amulet/m/${baseId}_${imageNum}.webp`, PUBLIC_CDN_URL).href;
   };
 
+  const getAbilityCrestNameKey = (abilityCrest: AbilityCrest) =>
+    abilityCrest ? `entity.wyrmprint.item.${abilityCrest.id}` : '';
+
   const getAbilityCrestName = (abilityCrest: AbilityCrest) =>
-    $t(`entity.wyrmprint.item.${abilityCrest.id}`);
+    $t(getAbilityCrestNameKey(abilityCrest));
+
+  const getAbilityCrestWikiName = (abilityCrest: AbilityCrest) =>
+    $l('en', getAbilityCrestNameKey(abilityCrest));
 
   const emptyIconRarityLookup: Partial<Record<number, string>> = {
     5: 'Icon_Blank_07_A.webp',
@@ -42,7 +47,7 @@
     </Popover.Trigger>
     <Popover.Content class="flex h-fit w-fit flex-col items-center pt-2 pb-3" side="bottom">
       {getAbilityCrestName(abilityCrest)}
-      <WikiLink pageName={getAbilityCrestName(abilityCrest)} />
+      <WikiLink pageName={getAbilityCrestWikiName(abilityCrest)} />
     </Popover.Content>
   </Popover.Root>
 {:else}

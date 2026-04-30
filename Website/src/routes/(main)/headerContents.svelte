@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
 
   import { page } from '$app/state';
+  import LanguageSelector from '$lib/components/languageSelector.svelte';
   import { Button } from '$shadcn/components/ui/button';
 
   const getOriginalPage = () => {
@@ -29,6 +30,7 @@
 
 <h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
 <div class="flex-grow"></div>
+<div class="hidden md:block"><LanguageSelector /></div>
 <Button onclick={toggleMode} variant="outline" size="icon" data-loaded={initialized}>
   <Sun
     class="absolute size-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"
@@ -41,9 +43,13 @@
 </Button>
 
 {#if hasValidJwt}
-  <Button href="/logout" variant="destructive" data-sveltekit-reload>Log out</Button>
+  <Button href="/logout" variant="destructive" data-sveltekit-reload class="hidden md:inline-flex"
+    >Log out</Button>
 {:else}
-  <Button href={`/login?originalPage=${originalPage}`} data-sveltekit-preload-data="off">
+  <Button
+    href={`/login?originalPage=${originalPage}`}
+    data-sveltekit-preload-data="off"
+    class="hidden md:inline-flex">
     Login
   </Button>
 {/if}

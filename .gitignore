@@ -421,3 +421,5 @@ DragaliaAPI.sln.startup.json
 !Website/.env
 !Website/tests/.env
 .env*local
+
+**/.claude/*.local.json

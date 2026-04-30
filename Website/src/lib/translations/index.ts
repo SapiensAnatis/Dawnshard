@@ -14,7 +14,8 @@ const config: Config<Params> = {
     level: dev ? 'warn' : 'error'
   },
   translations: {
-    en: { en: 'English' }
+    en: { en: 'English' },
+    'zh-CN': { 'zh-CN': '中文' }
   },
   loaders: [
     {
@@ -28,9 +29,15 @@ const config: Config<Params> = {
       key: 'entity',
       routes: [/\/events\/time-attack\/rankings\/.*/, '/account/save-editor'],
       loader: async () => (await import('./en/entity.json')).default
+    },
+    {
+      locale: 'zh-CN',
+      key: 'entity',
+      routes: [/\/events\/time-attack\/rankings\/.*/, '/account/save-editor'],
+      loader: async () => (await import('./zh-CN/entity.json')).default
     }
   ],
   fallbackLocale: 'en'
 };
 
-export const { t, locale, locales, loading, loadTranslations } = new i18n(config);
+export const { t, l, locale, locales, loading, loadTranslations } = new i18n(config);

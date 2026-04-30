@@ -3,9 +3,12 @@
   import Close from '@lucide/svelte/icons/x';
   import { onMount } from 'svelte';
 
+  import { page } from '$app/state';
+  import LanguageSelector from '$lib/components/languageSelector.svelte';
   import Routes from '$main/routes.svelte';
   import { Button, buttonVariants } from '$shadcn/components/ui/button';
   import * as Drawer from '$shadcn/components/ui/drawer';
+  import { Separator } from '$shadcn/components/ui/separator';
   import { cn } from '$shadcn/utils.ts';
 
   import HeaderContents from './headerContents.svelte';
@@ -33,7 +36,7 @@
           <Drawer.Content
             id="drawer-content"
             class="bg-background fixed top-0 bottom-0 left-0 mt-0 w-[75%] pt-2 pr-2 pl-4">
-            <div id="my-content">
+            <div id="my-content" class="flex h-full flex-col">
               <Drawer.Close class="flex w-full flex-col pl-0">
                 <Button variant="ghost" class="w-[7rem] self-end">
                   Close
@@ -41,6 +44,21 @@
                 </Button>
               </Drawer.Close>
               <Routes {hasValidJwt} {isAdmin} drawer={true} />
+              <div class="grow"></div>
+              <Separator />
+              <div class="mt-4 flex flex-col gap-2 px-2 pb-4">
+                <LanguageSelector />
+                {#if hasValidJwt}
+                  <Button href="/logout" variant="destructive" data-sveltekit-reload
+                    >Log out</Button>
+                {:else}
+                  <Button
+                    href={`/login?originalPage=${encodeURIComponent(page.url.pathname)}`}
+                    data-sveltekit-preload-data="off">
+                    Login
+                  </Button>
+                {/if}
+              </div>
             </div>
           </Drawer.Content>
         </Drawer.Portal>
