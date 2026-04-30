@@ -7,14 +7,18 @@ interface Params {
   weaponType: number;
 }
 
-export const defaultLocale = 'en';
+export const translations: Partial<Record<string, string>> = Object.freeze({
+  en: 'English',
+  'zh-CN': '中文 (partial)'
+});
 
 const config: Config<Params> = {
   log: {
     level: dev ? 'warn' : 'error'
   },
   translations: {
-    en: { en: 'English' }
+    en: translations,
+    'zh-CN': translations
   },
   loaders: [
     {
@@ -28,9 +32,15 @@ const config: Config<Params> = {
       key: 'entity',
       routes: [/\/events\/time-attack\/rankings\/.*/, '/account/save-editor'],
       loader: async () => (await import('./en/entity.json')).default
+    },
+    {
+      locale: 'zh-CN',
+      key: 'entity',
+      routes: [/\/events\/time-attack\/rankings\/.*/, '/account/save-editor'],
+      loader: async () => (await import('./zh-CN/entity.json')).default
     }
   ],
   fallbackLocale: 'en'
 };
 
-export const { t, locale, locales, loading, loadTranslations } = new i18n(config);
+export const { t, l, locale, locales, loading, loadTranslations } = new i18n(config);
