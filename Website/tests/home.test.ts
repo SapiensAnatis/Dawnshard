@@ -5,6 +5,7 @@ test('displays correctly', async ({ page }) => {
 
   await expect(page.getByRole('heading', { name: 'Dawnshard', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Welcome to Dawnshard' })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Language' })).toBeVisible();
 
   await expect(page).toHaveScreenshot({ fullPage: true });
 });
