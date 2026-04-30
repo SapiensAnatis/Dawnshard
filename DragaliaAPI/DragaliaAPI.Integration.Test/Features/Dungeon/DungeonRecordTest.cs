@@ -744,6 +744,60 @@ public partial class DungeonRecordTest : TestFixture
     }
 
     [Fact]
+    public async Task Record_Event_Trial_QuestIdSpecific_OnlyCompletesMatchingMission()
+    {
+        // Joker's Trial: Expert (Co-op) and Expert (Solo) share the same VariationType (VeryHard).
+        // Completing the Co-op quest should only complete the Co-op mission, not the Solo mission.
+        int questId = 204290805; // Joker's Trial: Expert (Co-op)
+        int eventId = 20429; // Caged Desire
+
+        await Client.PostMsgpack<RaidEventEntryResponse>(
+            "raid_event/entry",
+            new RaidEventEntryRequest(eventId),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new() { { 1, [] } },
+        };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new()
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>(),
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new(),
+                        Wave = 3,
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        AtgenNormalMissionNotice? missionNotice = response
+            .UpdateDataList
+            .MissionNotice
+            ?.PeriodMissionNotice;
+
+        missionNotice.Should().NotBeNull();
+        missionNotice!.NewCompleteMissionIdList.Should().Contain(11330901); // Clear Joker's Trial: Expert (Co-op)
+        missionNotice!.NewCompleteMissionIdList.Should().NotContain(11330801); // Clear Joker's Trial: Expert (Solo) — same VariationType, different QuestId
+    }
+
+    [Fact]
     public async Task Record_EarnEvent_GrantsEnemyScore()
     {
         int questId = 229031201; // Repelling the Frosty Fiends: Standard (Solo)

@@ -278,8 +278,15 @@ public partial class MissionProgressionService(
             questId
         );
 
-    public void OnEventTrialCleared(int eventId, VariationTypes variationType) =>
-        EnqueueEvent(MissionCompleteType.EventTrialClear, 1, 1, eventId, (int)variationType);
+    public void OnEventTrialCleared(int eventId, VariationTypes variationType, int questId) =>
+        EnqueueEvent(
+            MissionCompleteType.EventTrialClear,
+            1,
+            1,
+            eventId,
+            (int)variationType,
+            questId
+        );
 
     public void EnqueueEvent(
         MissionCompleteType type,

@@ -82,7 +82,7 @@ public interface IMissionProgressionService
         bool fullClear,
         int questId
     );
-    void OnEventTrialCleared(int eventId, VariationTypes variationType);
+    void OnEventTrialCleared(int eventId, VariationTypes variationType, int questId);
 
     void EnqueueEvent(
         MissionCompleteType type,

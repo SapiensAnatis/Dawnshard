@@ -1,5 +1,11 @@
 namespace DragaliaAPI.MissionDesigner.Models.EventMission;
 
+/// <summary>
+/// Mission completed by clearing the event's challenge battle or raid.
+/// Supports targeting a specific difficulty via <see cref="VariationType"/>, requiring a full clear
+/// via <see cref="FullClear"/>, and targeting a specific quest via <see cref="QuestId"/>.
+/// Example: "Completely Clear a Challenge Battle on Master".
+/// </summary>
 public class EventChallengeBattleClearMission : Mission
 {
     protected override MissionCompleteType CompleteType =>
