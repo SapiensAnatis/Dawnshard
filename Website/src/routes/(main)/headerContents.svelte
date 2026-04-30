@@ -4,21 +4,11 @@
   import { toggleMode } from 'mode-watcher';
   import { onMount } from 'svelte';
 
-  import { page } from '$app/state';
-  import LanguageSelector from '$lib/components/languageSelector.svelte';
+  import LanguageSelector from '$main/languageSelector.svelte';
+  import LogInOrOutButton from '$main/logInOrOutButton.svelte';
   import { Button } from '$shadcn/components/ui/button';
 
-  const getOriginalPage = () => {
-    const searchParam = page.url.searchParams.get('originalPage');
-    if (searchParam) {
-      return searchParam; // already URL encoded
-    }
-
-    return encodeURIComponent(page.url.pathname);
-  };
-
   let initialized = $state(false);
-  let originalPage = getOriginalPage();
   let { hasValidJwt }: { hasValidJwt: boolean } = $props();
 
   onMount(() => {
@@ -29,7 +19,7 @@
 </script>
 
 <h1 class="scroll-m-20 text-2xl font-bold tracking-tight md:text-3xl">Dawnshard</h1>
-<div class="flex-grow"></div>
+<div class="grow"></div>
 <div class="hidden md:block"><LanguageSelector /></div>
 <Button onclick={toggleMode} variant="outline" size="icon" data-loaded={initialized}>
   <Sun
@@ -41,15 +31,4 @@
     aria-hidden />
   <span class="sr-only">Toggle theme</span>
 </Button>
-
-{#if hasValidJwt}
-  <Button href="/logout" variant="destructive" data-sveltekit-reload class="hidden md:inline-flex"
-    >Log out</Button>
-{:else}
-  <Button
-    href={`/login?originalPage=${originalPage}`}
-    data-sveltekit-preload-data="off"
-    class="hidden md:inline-flex">
-    Login
-  </Button>
-{/if}
+<LogInOrOutButton {hasValidJwt} />

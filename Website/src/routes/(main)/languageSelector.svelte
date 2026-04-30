@@ -12,6 +12,7 @@
 </script>
 
 <select
+  aria-label="Language"
   bind:value={$locale}
   onchange={change}
   class="border-input bg-background rounded-md border px-2 text-sm">

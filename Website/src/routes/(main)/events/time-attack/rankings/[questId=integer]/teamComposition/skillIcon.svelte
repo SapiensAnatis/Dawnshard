@@ -2,9 +2,8 @@
   import { Image } from '@unpic/svelte';
 
   import { PUBLIC_CDN_URL } from '$env/static/public';
-  import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
-
   import { l, t } from '$lib/translations';
+  import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Popover from '$shadcn/components/ui/popover';
 
   import WikiLink from './wikiLink.svelte';

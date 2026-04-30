@@ -3,8 +3,8 @@
   import Close from '@lucide/svelte/icons/x';
   import { onMount } from 'svelte';
 
-  import { page } from '$app/state';
-  import LanguageSelector from '$lib/components/languageSelector.svelte';
+  import LanguageSelector from '$main/languageSelector.svelte';
+  import LogInOrOutButton from '$main/logInOrOutButton.svelte';
   import Routes from '$main/routes.svelte';
   import { Button, buttonVariants } from '$shadcn/components/ui/button';
   import * as Drawer from '$shadcn/components/ui/drawer';
@@ -48,16 +48,7 @@
               <Separator />
               <div class="mt-4 flex flex-col gap-2 px-2 pb-4">
                 <LanguageSelector />
-                {#if hasValidJwt}
-                  <Button href="/logout" variant="destructive" data-sveltekit-reload
-                    >Log out</Button>
-                {:else}
-                  <Button
-                    href={`/login?originalPage=${encodeURIComponent(page.url.pathname)}`}
-                    data-sveltekit-preload-data="off">
-                    Login
-                  </Button>
-                {/if}
+                <LogInOrOutButton {hasValidJwt} />
               </div>
             </div>
           </Drawer.Content>

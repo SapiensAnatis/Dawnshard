@@ -7,7 +7,8 @@ import type { LayoutServerLoad } from './$types';
 function detectLocale(available: string[], request: Request, cookie: string | undefined): string {
   if (cookie && available.includes(cookie)) return cookie;
 
-  const header = request.headers.get('accept-language') ?? '';
+  const header = request.headers.get('Accept-Language') ?? '';
+
   const preferred = header
     .split(',')
     .map((p) => {
