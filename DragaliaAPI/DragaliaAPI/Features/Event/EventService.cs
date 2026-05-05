@@ -157,13 +157,14 @@ public partial class EventService(
         return rewardEntities;
     }
 
-    private static readonly Dictionary<int, List<QuestData>> CombatEventQuestLookup = MasterAsset
-        .EventData.Enumerable.Where(x => x.EventKindType == EventKindType.Combat)
-        .Select(x => x.Id)
-        .ToDictionary(
-            x => x,
-            x => MasterAsset.QuestData.Enumerable.Where(y => y.Gid == x).ToList()
-        );
+    private static readonly Dictionary<int, QuestData[]> EventQuestLookup = MasterAsset
+        .EventData.Enumerable.GroupJoin(
+            MasterAsset.QuestData.Enumerable,
+            evt => evt.Id,
+            quest => quest.Gid,
+            (evt, quests) => new { EventId = evt.Id, Quests = quests.ToArray() }
+        )
+        .ToDictionary(x => x.EventId, x => x.Quests);
 
     public async Task CreateEventData(int eventId)
     {
@@ -187,6 +188,43 @@ public partial class EventService(
             }
 
             firstEventEnter = true;
+        }
+
+        if (
+            firstEventEnter
+            && !data.IsMemoryEvent
+            && EventQuestLookup.TryGetValue(eventId, out QuestData[]? eventQuests)
+            && eventQuests.Length > 0
+        )
+        {
+            List<int> questIds = eventQuests.Select(x => x.Id).ToList();
+
+            List<DbQuest> staleQuests = await apiContext
+                .PlayerQuests.Where(q => questIds.Contains(q.QuestId))
+                .ToListAsync();
+
+            // We shouldn't do this with an ExecuteUpdate because it is important the client receives
+            // these entries in an update_data_list
+
+            if (staleQuests.Count > 0)
+            {
+                foreach (DbQuest quest in staleQuests)
+                {
+                    quest.State = 0;
+                    quest.IsMissionClear1 = false;
+                    quest.IsMissionClear2 = false;
+                    quest.IsMissionClear3 = false;
+                    quest.PlayCount = 0;
+                    quest.DailyPlayCount = 0;
+                    quest.WeeklyPlayCount = 0;
+                    quest.LastDailyResetTime = DateTimeOffset.UnixEpoch;
+                    quest.LastWeeklyResetTime = DateTimeOffset.UnixEpoch;
+                    quest.IsAppear = true;
+                    quest.BestClearTime = -1.0f;
+                }
+
+                Log.ResetQuestRecordsForEvent(logger, eventId, staleQuests.Count);
+            }
         }
 
         IEnumerable<int> items = await eventRepository
@@ -233,9 +271,7 @@ public partial class EventService(
 
     private async Task GrantAlreadyEarnedLocationRewards(int eventId)
     {
-        HashSet<int> relevantQuestIds = CombatEventQuestLookup[eventId]
-            .Select(x => x.Id)
-            .ToHashSet();
+        HashSet<int> relevantQuestIds = EventQuestLookup[eventId].Select(x => x.Id).ToHashSet();
 
         List<int> completedQuestIds = await apiContext
             .PlayerQuests.Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
@@ -243,7 +279,7 @@ public partial class EventService(
             .ToListAsync();
 
         foreach (
-            (int entityId, int entityQuantity) in CombatEventQuestLookup[eventId]
+            (int entityId, int entityQuantity) in EventQuestLookup[eventId]
                 .Where(x =>
                     completedQuestIds.Contains(x.Id)
                     && x is { HoldEntityType: EntityTypes.CombatEventItem, HoldEntityQuantity: > 0 }
@@ -519,6 +555,16 @@ public partial class EventService(
 
         [LoggerMessage(LogLevel.Information, "Creating event data for event {eventId}")]
         public static partial void CreatingEventDataForEvent(ILogger logger, int eventId);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Reset {count} stale quest record(s) for re-activated event {eventId}"
+        )]
+        public static partial void ResetQuestRecordsForEvent(
+            ILogger logger,
+            int eventId,
+            int count
+        );
 
         [LoggerMessage(
             LogLevel.Debug,
