@@ -165,6 +165,14 @@ public partial class EventService(
             x => MasterAsset.QuestData.Enumerable.Where(y => y.Gid == x).ToList()
         );
 
+    private static readonly Dictionary<int, int[]> NonMemoryEventQuestIdLookup = MasterAsset
+        .EventData.Enumerable.Where(x => !x.IsMemoryEvent)
+        .Select(x => x.Id)
+        .ToDictionary(
+            x => x,
+            x => MasterAsset.QuestData.Enumerable.Where(y => y.Gid == x).Select(y => y.Id).ToArray()
+        );
+
     public async Task CreateEventData(int eventId)
     {
         missionProgressionService.OnEventParticipation(eventId);
@@ -187,6 +195,41 @@ public partial class EventService(
             }
 
             firstEventEnter = true;
+        }
+
+        if (
+            firstEventEnter
+            && !data.IsMemoryEvent
+            && NonMemoryEventQuestIdLookup.TryGetValue(eventId, out int[]? eventQuestIds)
+            && eventQuestIds.Length > 0
+        )
+        {
+            List<DbQuest> staleQuests = await apiContext
+                .PlayerQuests.Where(q => eventQuestIds.Contains(q.QuestId))
+                .ToListAsync();
+
+            // We shouldn't do this with an ExecuteUpdate because it is important the client receives
+            // these entries in an update_data_list
+
+            if (staleQuests.Count > 0)
+            {
+                foreach (DbQuest quest in staleQuests)
+                {
+                    quest.State = 0;
+                    quest.IsMissionClear1 = false;
+                    quest.IsMissionClear2 = false;
+                    quest.IsMissionClear3 = false;
+                    quest.PlayCount = 0;
+                    quest.DailyPlayCount = 0;
+                    quest.WeeklyPlayCount = 0;
+                    quest.LastDailyResetTime = DateTimeOffset.UnixEpoch;
+                    quest.LastWeeklyResetTime = DateTimeOffset.UnixEpoch;
+                    quest.IsAppear = true;
+                    quest.BestClearTime = -1.0f;
+                }
+
+                Log.ResetQuestRecordsForEvent(logger, eventId, staleQuests.Count);
+            }
         }
 
         IEnumerable<int> items = await eventRepository
@@ -519,6 +562,16 @@ public partial class EventService(
 
         [LoggerMessage(LogLevel.Information, "Creating event data for event {eventId}")]
         public static partial void CreatingEventDataForEvent(ILogger logger, int eventId);
+
+        [LoggerMessage(
+            LogLevel.Information,
+            "Reset {count} stale quest record(s) for re-activated event {eventId}"
+        )]
+        public static partial void ResetQuestRecordsForEvent(
+            ILogger logger,
+            int eventId,
+            int count
+        );
 
         [LoggerMessage(
             LogLevel.Debug,
