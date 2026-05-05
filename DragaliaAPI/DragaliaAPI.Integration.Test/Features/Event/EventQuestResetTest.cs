@@ -89,6 +89,8 @@ public class EventQuestResetTest : TestFixture
             cancellationToken: TestContext.Current.CancellationToken
         );
 
+        ApiContext.ChangeTracker.Clear();
+
         DbQuest preserved = await ApiContext
             .PlayerQuests.AsNoTracking()
             .SingleAsync(
