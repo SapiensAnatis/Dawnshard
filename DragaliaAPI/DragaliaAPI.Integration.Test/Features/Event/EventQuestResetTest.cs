@@ -8,17 +8,17 @@ public class EventQuestResetTest : TestFixture
     public EventQuestResetTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
-    private const int CombatEventId = 22213;
-    private const int CombatEventQuestId = 222130103;
+    private const int RaidEventId = 20429;
+    private const int RaidEventQuestId = 204290101;
 
     [Fact]
-    public async Task Activate_FirstEntry_ResetsStaleQuestRecords()
+    public async Task Entry_FirstEntry_ResetsStaleQuestRecords()
     {
         ApiContext.PlayerQuests.Add(
             new DbQuest
             {
                 ViewerId = ViewerId,
-                QuestId = CombatEventQuestId,
+                QuestId = RaidEventQuestId,
                 State = 3,
                 IsMissionClear1 = true,
                 IsMissionClear2 = true,
@@ -33,15 +33,15 @@ public class EventQuestResetTest : TestFixture
         await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(CombatEventId),
+            "raid_event/entry",
+            new RaidEventEntryRequest(RaidEventId),
             cancellationToken: TestContext.Current.CancellationToken
         );
 
         DbQuest reset = await ApiContext
             .PlayerQuests.AsNoTracking()
             .SingleAsync(
-                x => x.ViewerId == ViewerId && x.QuestId == CombatEventQuestId,
+                x => x.ViewerId == ViewerId && x.QuestId == RaidEventQuestId,
                 cancellationToken: TestContext.Current.CancellationToken
             );
 
@@ -56,24 +56,24 @@ public class EventQuestResetTest : TestFixture
     }
 
     [Fact]
-    public async Task Activate_SubsequentEntry_PreservesQuestRecords()
+    public async Task Entry_SubsequentEntry_PreservesQuestRecords()
     {
         await Client.PostMsgpack<MemoryEventActivateResponse>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(CombatEventId),
+            "raid_event/entry",
+            new RaidEventEntryRequest(RaidEventId),
             cancellationToken: TestContext.Current.CancellationToken
         );
 
         ApiContext.PlayerQuests.RemoveRange(
             ApiContext.PlayerQuests.Where(x =>
-                x.ViewerId == ViewerId && x.QuestId == CombatEventQuestId
+                x.ViewerId == ViewerId && x.QuestId == RaidEventQuestId
             )
         );
         ApiContext.PlayerQuests.Add(
             new DbQuest
             {
                 ViewerId = ViewerId,
-                QuestId = CombatEventQuestId,
+                QuestId = RaidEventQuestId,
                 State = 3,
                 IsMissionClear1 = true,
                 PlayCount = 2,
@@ -84,15 +84,15 @@ public class EventQuestResetTest : TestFixture
         await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(CombatEventId),
+            "raid_event/entry",
+            new RaidEventEntryRequest(RaidEventId),
             cancellationToken: TestContext.Current.CancellationToken
         );
 
         DbQuest preserved = await ApiContext
             .PlayerQuests.AsNoTracking()
             .SingleAsync(
-                x => x.ViewerId == ViewerId && x.QuestId == CombatEventQuestId,
+                x => x.ViewerId == ViewerId && x.QuestId == RaidEventQuestId,
                 cancellationToken: TestContext.Current.CancellationToken
             );
 
@@ -103,7 +103,7 @@ public class EventQuestResetTest : TestFixture
     }
 
     [Fact]
-    public async Task Activate_FirstEntry_DoesNotResetUnrelatedQuestRecords()
+    public async Task Entry_FirstEntry_DoesNotResetUnrelatedQuestRecords()
     {
         const int unrelatedQuestId = 100010101;
 
@@ -122,8 +122,8 @@ public class EventQuestResetTest : TestFixture
         await ApiContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         await Client.PostMsgpack<MemoryEventActivateResponse>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(CombatEventId),
+            "raid_event/entry",
+            new RaidEventEntryRequest(RaidEventId),
             cancellationToken: TestContext.Current.CancellationToken
         );
 

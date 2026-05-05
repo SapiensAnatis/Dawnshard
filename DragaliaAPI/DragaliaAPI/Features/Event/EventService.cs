@@ -157,21 +157,14 @@ public partial class EventService(
         return rewardEntities;
     }
 
-    private static readonly Dictionary<int, List<QuestData>> CombatEventQuestLookup = MasterAsset
-        .EventData.Enumerable.Where(x => x.EventKindType == EventKindType.Combat)
-        .Select(x => x.Id)
-        .ToDictionary(
-            x => x,
-            x => MasterAsset.QuestData.Enumerable.Where(y => y.Gid == x).ToList()
-        );
-
-    private static readonly Dictionary<int, int[]> NonMemoryEventQuestIdLookup = MasterAsset
-        .EventData.Enumerable.Where(x => !x.IsMemoryEvent)
-        .Select(x => x.Id)
-        .ToDictionary(
-            x => x,
-            x => MasterAsset.QuestData.Enumerable.Where(y => y.Gid == x).Select(y => y.Id).ToArray()
-        );
+    private static readonly Dictionary<int, QuestData[]> EventQuestLookup = MasterAsset
+        .EventData.Enumerable.GroupJoin(
+            MasterAsset.QuestData.Enumerable,
+            evt => evt.Id,
+            quest => quest.Gid,
+            (evt, quests) => new { EventId = evt.Id, Quests = quests.ToArray() }
+        )
+        .ToDictionary(x => x.EventId, x => x.Quests);
 
     public async Task CreateEventData(int eventId)
     {
@@ -200,12 +193,14 @@ public partial class EventService(
         if (
             firstEventEnter
             && !data.IsMemoryEvent
-            && NonMemoryEventQuestIdLookup.TryGetValue(eventId, out int[]? eventQuestIds)
-            && eventQuestIds.Length > 0
+            && EventQuestLookup.TryGetValue(eventId, out QuestData[]? eventQuests)
+            && eventQuests.Length > 0
         )
         {
+            List<int> questIds = eventQuests.Select(x => x.Id).ToList();
+
             List<DbQuest> staleQuests = await apiContext
-                .PlayerQuests.Where(q => eventQuestIds.Contains(q.QuestId))
+                .PlayerQuests.Where(q => questIds.Contains(q.QuestId))
                 .ToListAsync();
 
             // We shouldn't do this with an ExecuteUpdate because it is important the client receives
@@ -276,9 +271,7 @@ public partial class EventService(
 
     private async Task GrantAlreadyEarnedLocationRewards(int eventId)
     {
-        HashSet<int> relevantQuestIds = CombatEventQuestLookup[eventId]
-            .Select(x => x.Id)
-            .ToHashSet();
+        HashSet<int> relevantQuestIds = EventQuestLookup[eventId].Select(x => x.Id).ToHashSet();
 
         List<int> completedQuestIds = await apiContext
             .PlayerQuests.Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
@@ -286,7 +279,7 @@ public partial class EventService(
             .ToListAsync();
 
         foreach (
-            (int entityId, int entityQuantity) in CombatEventQuestLookup[eventId]
+            (int entityId, int entityQuantity) in EventQuestLookup[eventId]
                 .Where(x =>
                     completedQuestIds.Contains(x.Id)
                     && x is { HoldEntityType: EntityTypes.CombatEventItem, HoldEntityQuantity: > 0 }
