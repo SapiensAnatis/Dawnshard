@@ -609,6 +609,12 @@ internal sealed partial class SavefileService(
         await apiContext
             .PlayerSummonHistory.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
+        await apiContext
+            .PlayerEventSummonItems.Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await apiContext
+            .PlayerEventSummonData.Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
     }
 
     public async Task<DbPlayer> Create()
