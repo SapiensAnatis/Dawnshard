@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
 namespace DragaliaAPI.Features.Quest;
 
@@ -369,17 +370,24 @@ public partial class QuestService(
                 questData.VariationType
             );
         }
-        else if (questData.IsEventChallengeBattle)
+        else if (questData.IsEventChallengeBattle && questData.EventKindType != EventKindType.Raid)
         {
             int questScoreMissionId = MasterAsset.QuestRewardData[questData.Id].QuestScoreMissionId;
-            int waveCount = MasterAsset.QuestScoreMissionData[questScoreMissionId].WaveCount;
 
-            missionProgressionService.OnEventChallengeBattleCleared(
-                questData.Gid,
-                questData.VariationType,
-                playRecord.Wave >= waveCount,
-                questData.Id
-            );
+            if (
+                MasterAsset.QuestScoreMissionData.TryGetValue(
+                    questScoreMissionId,
+                    out QuestScoreMissionData? questScoreMission
+                )
+            )
+            {
+                missionProgressionService.OnEventChallengeBattleCleared(
+                    questData.Gid,
+                    questData.VariationType,
+                    playRecord.Wave >= questScoreMission.WaveCount,
+                    questData.Id
+                );
+            }
         }
         else if (questData.IsEventTrial)
         {
