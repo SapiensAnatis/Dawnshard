@@ -1913,6 +1913,51 @@ public partial class DungeonRecordTest : TestFixture
         response.IngameResultData.GrowRecord.TakePlayerExp.Should().NotBe(0);
     }
 
+    [Fact]
+    public async Task Record_ChronosClash_DoesNotThrow()
+    {
+        const int eventId = 20427; // Fractured Futures
+        const int questId = 204270302; // Chronos Clash
+
+        await AddToDatabase(new DbQuest() { QuestId = questId, State = 0 });
+
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        string key = await this.StartDungeon(
+            new DungeonStartStartRequest()
+            {
+                QuestId = questId,
+                PartyNoList = new List<int>() { 1 },
+            }
+        );
+
+        DragaliaResponse<DungeonRecordRecordResponse> response =
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new()
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>(),
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new(),
+                    },
+                },
+                ensureSuccessHeader: false,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        response.DataHeaders.ResultCode.Should().Be(ResultCode.Success);
+    }
+
     private async Task<string> StartDungeon(DungeonSession session)
     {
         string key = this.DungeonService.CreateSession(session);
@@ -1926,6 +1971,18 @@ public partial class DungeonRecordTest : TestFixture
         DragaliaResponse<DungeonStartStartAssignUnitResponse> response =
             await this.Client.PostMsgpack<DungeonStartStartAssignUnitResponse>(
                 "/dungeon_start/start_assign_unit",
+                request,
+                cancellationToken: TestContext.Current.CancellationToken
+            );
+
+        return response.Data.IngameData.DungeonKey;
+    }
+
+    private async Task<string> StartDungeon(DungeonStartStartRequest request)
+    {
+        DragaliaResponse<DungeonStartStartResponse> response =
+            await this.Client.PostMsgpack<DungeonStartStartResponse>(
+                "/dungeon_start/start",
                 request,
                 cancellationToken: TestContext.Current.CancellationToken
             );
