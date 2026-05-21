@@ -22,7 +22,7 @@
     "@playwright/test": "1.59.1",
     "@sveltejs/adapter-node": "5.5.4",
     "@sveltejs/enhanced-img": "0.10.4",
-    "@sveltejs/kit": "2.59.0",
+    "@sveltejs/kit": "2.60.1",
     "@sveltejs/vite-plugin-svelte": "7.0.0",
     "@tailwindcss/vite": "4.2.4",
     "@types/bunyan": "1.8.11",
