@@ -370,7 +370,11 @@ public partial class QuestService(
                 questData.VariationType
             );
         }
-        else if (questData.IsEventChallengeBattle && questData.EventKindType != EventKindType.Raid)
+        else if (questData.IsEventChallengeBattle && questData.EventKindType == EventKindType.Raid)
+        {
+            missionProgressionService.OnEventRaidCleared(questData.Gid);
+        }
+        else if (questData.IsEventChallengeBattle)
         {
             int questScoreMissionId = MasterAsset.QuestRewardData[questData.Id].QuestScoreMissionId;
 
