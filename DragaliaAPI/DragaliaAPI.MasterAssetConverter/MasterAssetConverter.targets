@@ -27,13 +27,13 @@
   <PropertyGroup>
     <_InvokeConverterCommand>"$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter"</_InvokeConverterCommand>
     <!-- For Docker builds, where we pass /p:UseAppHost=false -->
-    <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'">
-      dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll"
-    </_InvokeConverterCommand>
+    <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'"
+      >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll"</_InvokeConverterCommand
+    >
     <MasterAssetConverterOutputImportance>low</MasterAssetConverterOutputImportance>
-    <MasterAssetConverterOutputImportance Condition="$(BuildToolsVerbose) == 'true'">
-      high 
-    </MasterAssetConverterOutputImportance>
+    <MasterAssetConverterOutputImportance Condition="$(BuildToolsVerbose) == 'true'"
+      >high</MasterAssetConverterOutputImportance
+    >
   </PropertyGroup>
   <!--
     $(IntermediateOutputPath) is only defined once the SDK's .targets are imported, which happens
@@ -61,7 +61,6 @@
   >
     <Exec
       Command="$(_InvokeConverterCommand) &quot;$(_MasterAssetOutputDirectory)&quot; &quot;$(MasterAssetResources)&quot; @(_MasterAssetJsonFiles-&gt;'&quot;%(FullPath)&quot;', ' ')"
-      ConsoleToMSBuild="true"
       StandardOutputImportance="$(MasterAssetConverterOutputImportance)"
     />
   </Target>
@@ -73,11 +72,12 @@
     Name="IncludeMasterAssetOutputs"
     DependsOnTargets="ConvertMasterAssets"
     BeforeTargets="AssignTargetPaths"
+    Condition="'$(DesignTimeBuild)' != 'true'"
   >
     <ItemGroup>
       <_MasterAssetMsgpackFiles
         Visible="false"
-        Include="$(_MasterAssetOutputDirectory)**/*.msgpack"
+        Include="$(_MasterAssetOutputDirectory)/**/*.msgpack"
       />
     </ItemGroup>
     <!--
