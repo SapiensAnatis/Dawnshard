@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Build-time master asset conversion. Imported by DragaliaAPI.csproj.
+
+  Converts the master data JSON files under $(MasterAssetResources) (defined in Directory.Build.props)
+  into binary MessagePack files using the DragaliaAPI.MasterAssetConverter tool. The tool itself is
+  built first because DragaliaAPI.csproj declares a ProjectReference (with ReferenceOutputAssembly=false)
+  to it, and ResolveProjectReferences runs before the targets in this file.
+
+  How it fits into the build (see README.md in this directory for the full picture):
+
+    1. ConvertMasterAssets runs early in DragaliaAPI's build and writes .msgpack files into
+       obj/ ($(IntermediateOutputPath)masterassets/). It is incremental: MSBuild compares JSON
+       timestamps against the corresponding .msgpack outputs and only passes out-of-date files
+       to the tool ("partial incremental build").
+
+    2. IncludeMasterAssetOutputs registers the generated files as Content items with
+       CopyToOutputDirectory, just before AssignTargetPaths (the start of the SDK's content
+       pipeline). From there the standard build machinery takes over:
+         - copies them to $(OutDir)Resources/ for DragaliaAPI itself,
+         - flows them transitively to the output directory of every project that references
+           DragaliaAPI (e.g. the test projects) — no manual copy targets needed,
+         - includes them in `dotnet publish` output,
+         - tracks them for Clean/IncrementalClean via FileWrites.
+-->
 <Project>
   <PropertyGroup>
     <_InvokeConverterCommand>"$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter"</_InvokeConverterCommand>
@@ -6,8 +30,20 @@
     <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'"
       >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll"</_InvokeConverterCommand
     >
+    <MasterAssetConverterOutputImportance>low</MasterAssetConverterOutputImportance>
+    <MasterAssetConverterOutputImportance Condition="$(BuildToolsVerbose) == 'true'"
+      >high</MasterAssetConverterOutputImportance
+    >
   </PropertyGroup>
+  <!--
+    $(IntermediateOutputPath) is only defined once the SDK's .targets are imported, which happens
+    after this file — so the paths below live in targets (execution time) rather than in a
+    top-level PropertyGroup/ItemGroup (evaluation time).
+  -->
   <Target Name="_PrepareForMasterAssetConverter">
+    <PropertyGroup>
+      <_MasterAssetOutputDirectory>$(IntermediateOutputPath)masterassets/</_MasterAssetOutputDirectory>
+    </PropertyGroup>
     <ItemGroup>
       <_MasterAssetJsonFiles
         Visible="false"
@@ -16,31 +52,46 @@
       />
     </ItemGroup>
   </Target>
-  <!-- Hook into build before CopyFilesToOutputDirectory so that we update FileWrites before FileListAbsolute.txt gets written -->
   <Target
-    Name="MasterAssetConverter"
+    Name="ConvertMasterAssets"
     DependsOnTargets="_PrepareForMasterAssetConverter"
-    BeforeTargets="CopyFilesToOutputDirectory"
+    Condition="'$(DesignTimeBuild)' != 'true'"
     Inputs="@(_MasterAssetJsonFiles)"
-    Outputs="@(_MasterAssetJsonFiles-&gt;'$(OutDir)Resources/%(RecursiveDir)%(Filename).msgpack')"
+    Outputs="@(_MasterAssetJsonFiles-&gt;'$(_MasterAssetOutputDirectory)%(RecursiveDir)%(Filename).msgpack')"
   >
     <Exec
-      Command="$(_InvokeConverterCommand) &quot;$(OutDir)Resources&quot; &quot;$(MasterAssetResources)&quot; @(_MasterAssetJsonFiles-&gt;'&quot;%(FullPath)&quot;', ' ')"
-      ConsoleToMSBuild="true"
+      Command="$(_InvokeConverterCommand) &quot;$(_MasterAssetOutputDirectory)&quot; &quot;$(MasterAssetResources)&quot; @(_MasterAssetJsonFiles-&gt;'&quot;%(FullPath)&quot;', ' ')"
+      StandardOutputImportance="$(MasterAssetConverterOutputImportance)"
     />
-    <ItemGroup>
-      <MasterAssetMessagePackFiles Include="$(OutDir)Resources/**/*.msgpack" />
-      <FileWrites Include="@(MasterAssetMessagePackFiles)" />
-    </ItemGroup>
   </Target>
+  <!--
+    Hands the generated files to the SDK's content pipeline. This target must run on every
+    build (it has no Inputs/Outputs) because ItemGroups inside a skipped target do not execute.
+  -->
   <Target
-    Name="CopyMsgpackToPublish"
-    AfterTargets="Publish"
-    DependsOnTargets="MasterAssetConverter"
+    Name="IncludeMasterAssetOutputs"
+    DependsOnTargets="ConvertMasterAssets"
+    BeforeTargets="AssignTargetPaths"
+    Condition="'$(DesignTimeBuild)' != 'true'"
   >
-    <Copy
-      SourceFiles="@(MasterAssetMessagePackFiles)"
-      DestinationFolder="$(PublishDir)Resources/%(RecursiveDir)"
-    />
+    <ItemGroup>
+      <_MasterAssetMsgpackFiles
+        Visible="false"
+        Include="$(_MasterAssetOutputDirectory)/**/*.msgpack"
+      />
+    </ItemGroup>
+    <!--
+      The metadata references below must be qualified (%(_MasterAssetMsgpackFiles.*)): unqualified
+      %(RecursiveDir) inside a target batches over pre-existing Content items instead (MSB4120).
+    -->
+    <ItemGroup>
+      <Content
+        Include="@(_MasterAssetMsgpackFiles)"
+        TargetPath="Resources/%(_MasterAssetMsgpackFiles.RecursiveDir)%(_MasterAssetMsgpackFiles.Filename)%(_MasterAssetMsgpackFiles.Extension)"
+        CopyToOutputDirectory="PreserveNewest"
+        Visible="false"
+      />
+      <FileWrites Include="@(_MasterAssetMsgpackFiles)" />
+    </ItemGroup>
   </Target>
 </Project>

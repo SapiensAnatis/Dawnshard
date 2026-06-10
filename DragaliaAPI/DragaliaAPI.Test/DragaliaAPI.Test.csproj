@@ -2,7 +2,6 @@
   <PropertyGroup>
     <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     <OutputType>Exe</OutputType>
-    <DependsOnApiMsgpackFiles>true</DependsOnApiMsgpackFiles>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" />

@@ -13,28 +13,10 @@
   </ItemGroup>
   <PropertyGroup>
     <MasterAssetResources>$(MSBuildThisFileDirectory)DragaliaAPI.Shared/Resources/</MasterAssetResources>
-    <ApiOutputDirectory>$(MSBuildThisFileDirectory)DragaliaAPI\bin\$(Configuration)\$(TargetFramework)\</ApiOutputDirectory>
+    <BuildToolsVerbose>false</BuildToolsVerbose>
   </PropertyGroup>
-  <Target
-    Name="CopyApiMsgpackFiles"
-    AfterTargets="Build"
-    Condition="$(DependsOnApiMsgpackFiles) == 'true'"
-  >
-    <ItemGroup>
-      <MasterAssetMsgpackFiles Include="$(ApiOutputDirectory)Resources\**\*.msgpack" />
-    </ItemGroup>
-    <Copy
-      SourceFiles="@(MasterAssetMsgpackFiles)"
-      DestinationFolder="$(OutDir)Resources\%(RecursiveDir)"
-    />
-    <ItemGroup>
-      <FileWrites Include="@(MasterAssetMessagePackFiles-&gt;'$(OutDir)Resources\%(RecursiveDir)%(Filename).msgpack')" />
-    </ItemGroup>
-  </Target>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <!-- NuGet security vulnerabilities -->
-    <WarningsNotAsErrors>NU1902;NU1903;NU1904</WarningsNotAsErrors>
   </PropertyGroup>
 </Project>

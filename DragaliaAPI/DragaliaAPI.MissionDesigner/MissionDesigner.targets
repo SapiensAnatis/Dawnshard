@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Build-time mission data generation. Imported by DragaliaAPI.MissionDesigner.csproj itself, so
+  building this project also runs the tool.
+
+  Ordering: DragaliaAPI.csproj has a ProjectReference (ReferenceOutputAssembly=false) to this
+  project, so this runs before DragaliaAPI's MasterAssetConverter targets see the JSON.
+
+  The target is incremental: the freshly built assembly ($(TargetPath)) stands in for all DSL
+  code, so the tool only reruns when the mission DSL (or MissionNormalData.json, used to resolve
+  prerequisite chains) has changed. The output is deliberately NOT added to FileWrites — it is a
+  checked-in source file and must survive Clean.
+-->
 <Project>
   <PropertyGroup>
     <_InvokeMissionDesignerCommand>"$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner"</_InvokeMissionDesignerCommand>
@@ -6,11 +18,15 @@
     <_InvokeMissionDesignerCommand Condition="$(UseAppHost) == 'false'"
       >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner.dll"</_InvokeMissionDesignerCommand
     >
+    <MissionDesignerOutputImportance>low</MissionDesignerOutputImportance>
+    <MissionDesignerOutputImportance Condition="$(BuildToolsVerbose) == 'true'"
+      >high</MissionDesignerOutputImportance
+    >
   </PropertyGroup>
-  <Target Name="MissionDesigner" AfterTargets="Build">
+  <Target Name="MissionDesigner" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
     <Exec
       Command="$(_InvokeMissionDesignerCommand) &quot;$(MasterAssetResources)&quot;"
-      ConsoleToMSBuild="true"
+      StandardOutputImportance="$(MissionDesignerOutputImportance)"
     />
   </Target>
 </Project>
