@@ -13,6 +13,7 @@
   </ItemGroup>
   <PropertyGroup>
     <MasterAssetResources>$(MSBuildThisFileDirectory)DragaliaAPI.Shared/Resources/</MasterAssetResources>
+    <BuildToolsVerbose>false</BuildToolsVerbose>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

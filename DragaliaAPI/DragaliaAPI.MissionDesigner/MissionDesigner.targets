@@ -3,11 +3,6 @@
   Build-time mission data generation. Imported by DragaliaAPI.MissionDesigner.csproj itself, so
   building this project also runs the tool.
 
-  The tool reflects over the [ContainsMissionList] DSL classes in this project and writes
-  MissionProgressionInfo.json into the source tree ($(MasterAssetResources)Missions/). That file
-  is checked into git (so mission changes are reviewable in diffs) and is later converted to
-  .msgpack by MasterAssetConverter like any other master asset JSON.
-
   Ordering: DragaliaAPI.csproj has a ProjectReference (ReferenceOutputAssembly=false) to this
   project, so this runs before DragaliaAPI's MasterAssetConverter targets see the JSON.
 
@@ -20,9 +15,13 @@
   <PropertyGroup>
     <_InvokeMissionDesignerCommand>"$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner"</_InvokeMissionDesignerCommand>
     <!-- For Docker builds, where we pass /p:UseAppHost=false -->
-    <_InvokeMissionDesignerCommand Condition="$(UseAppHost) == 'false'"
-      >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner.dll"</_InvokeMissionDesignerCommand
-    >
+    <_InvokeMissionDesignerCommand Condition="$(UseAppHost) == 'false'">
+      dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner.dll"
+    </_InvokeMissionDesignerCommand>
+    <MissionDesignerOutputImportance>low</MissionDesignerOutputImportance>
+    <MissionDesignerOutputImportance Condition="$(BuildToolsVerbose) == 'true'">
+      high
+    </MissionDesignerOutputImportance>
   </PropertyGroup>
   <Target
     Name="MissionDesigner"
@@ -33,6 +32,7 @@
     <Exec
       Command="$(_InvokeMissionDesignerCommand) &quot;$(MasterAssetResources)&quot;"
       ConsoleToMSBuild="true"
+      StandardOutputImportance="$(MissionDesignerOutputImportance)"
     />
   </Target>
 </Project>
