@@ -1,5 +1,8 @@
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +50,9 @@ public partial class DragonHandler(
             && !await apiContext.PlayerDragonReliability.AnyAsync(x => x.DragonId == dragon)
         )
         {
-            apiContext.PlayerDragonReliability.Add(new(playerIdentityService.ViewerId, dragon));
+            DbPlayerDragonReliability reliability = new(playerIdentityService.ViewerId, dragon);
+            apiContext.PlayerDragonReliability.Add(reliability);
+            this.AddDefaultLevelStories(dragon, reliability.Level);
         }
 
         return GrantReturn.Added();
@@ -99,8 +104,10 @@ public partial class DragonHandler(
                 && !apiContext.PlayerDragonReliability.Local.Any(x => x.DragonId == dragon)
             )
             {
-                apiContext.PlayerDragonReliability.Add(new(playerIdentityService.ViewerId, dragon));
+                DbPlayerDragonReliability reliability = new(playerIdentityService.ViewerId, dragon);
+                apiContext.PlayerDragonReliability.Add(reliability);
                 ownedReliabilities.Add(dragon);
+                this.AddDefaultLevelStories(dragon, reliability.Level);
             }
 
             resultDict.Add(key, GrantReturn.Added());
@@ -108,6 +115,33 @@ public partial class DragonHandler(
         }
 
         return resultDict;
+    }
+
+    private void AddDefaultLevelStories(DragonId dragon, int reliabilityLevel)
+    {
+        if (
+            reliabilityLevel < 5
+            || !MasterAsset.DragonStories.TryGetValue((int)dragon, out StoryData? storyData)
+        )
+        {
+            return;
+        }
+
+        int storiesToUnlock = reliabilityLevel >= 15
+            ? Math.Min(2, storyData.StoryIds.Length)
+            : 1;
+
+        for (int i = 0; i < storiesToUnlock; i++)
+        {
+            apiContext.PlayerStoryState.Add(
+                new DbPlayerStoryState()
+                {
+                    ViewerId = playerIdentityService.ViewerId,
+                    StoryType = StoryTypes.Dragon,
+                    StoryId = storyData.StoryIds[i],
+                }
+            );
+        }
     }
 
     private static partial class Log
