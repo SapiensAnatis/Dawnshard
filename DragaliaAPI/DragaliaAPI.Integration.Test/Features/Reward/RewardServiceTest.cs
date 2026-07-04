@@ -1,6 +1,9 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Shared.Reward.Handlers;
 using DragaliaAPI.Shared.Definitions.Enums.Summon;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Reward;
@@ -98,5 +101,58 @@ public class RewardServiceTest : TestFixture
             .SelectMany(x => x.SupportedTypes);
 
         supportedTypes.Should().OnlyHaveUniqueItems();
+    }
+
+    [Fact]
+    public async Task GrantArsene_AddsDragonStories()
+    {
+        (
+            await this.ApiContext.PlayerStoryState.CountAsync(
+                x => x.StoryType == StoryTypes.Dragon,
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        )
+            .Should()
+            .Be(0);
+
+        DbPlayerPresent present = new()
+        {
+            EntityType = EntityTypes.Dragon,
+            EntityQuantity = 1,
+            EntityId = (int)DragonId.Arsene,
+        };
+
+        await this.AddToDatabase(present);
+
+        await this.Client.PostMsgpack(
+            "/present/receive",
+            new PresentReceiveRequest() { PresentIdList = [(ulong)present.PresentId] },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        StoryData arseneStories = MasterAsset.DragonStories[(int)DragonId.Arsene];
+
+        List<DbPlayerStoryState> dragonStories = await this
+            .ApiContext.PlayerStoryState.Where(x => x.StoryType == StoryTypes.Dragon)
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        dragonStories
+            .Should()
+            .BeEquivalentTo([
+                new DbPlayerStoryState()
+                {
+                    ViewerId = this.ViewerId,
+                    StoryType = StoryTypes.Dragon,
+                    State = 0,
+                    StoryId = arseneStories.StoryIds[0],
+                },
+                new DbPlayerStoryState()
+                {
+                    ViewerId = this.ViewerId,
+                    StoryType = StoryTypes.Dragon,
+                    State = 0,
+                    StoryId = arseneStories.StoryIds[1],
+                },
+            ]);
     }
 }
