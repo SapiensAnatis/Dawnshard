@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -127,9 +128,12 @@ public partial class DragonHandler(
             return;
         }
 
-        int storiesToUnlock = reliabilityLevel >= 15
-            ? Math.Min(2, storyData.StoryIds.Length)
-            : 1;
+        Debug.Assert(
+            storyData.StoryIds.Length == 2,
+            "Expected all dragons to have exactly two stories"
+        );
+
+        int storiesToUnlock = reliabilityLevel >= 15 ? 2 : 1;
 
         for (int i = 0; i < storiesToUnlock; i++)
         {

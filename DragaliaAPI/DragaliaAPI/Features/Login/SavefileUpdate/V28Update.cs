@@ -10,7 +10,8 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.Login.SavefileUpdate;
 
 /// <summary>
-/// Fixes missing dragon stories for dragons whose default reliability level is >= 5 (e.g. Arsene).
+/// Fixes missing dragon stories for Arsene, whose default reliability level of 30 meant that
+/// stories were not unlocked on receipt (unlike level-up, which is handled by <see cref="V25Update"/>).
 /// </summary>
 public partial class V28Update(
     ApiContext apiContext,
@@ -22,21 +23,25 @@ public partial class V28Update(
 
     public async Task Apply()
     {
-        var dragonsAtOrOver5Bond = await apiContext
-            .PlayerDragonReliability.Where(x => x.Level >= 5)
-            .Select(x => new { x.DragonId, x.Level })
+        List<int> arseneLevels = await apiContext
+            .PlayerDragonReliability.Where(x => x.DragonId == DragonId.Arsene && x.Level >= 5)
+            .Select(x => x.Level)
             .ToListAsync();
 
-        List<DbPlayerStoryState> intendedStoryStates = new(dragonsAtOrOver5Bond.Count * 2);
-
-        foreach (var info in dragonsAtOrOver5Bond)
+        if (
+            arseneLevels.Count == 0
+            || !MasterAsset.DragonStories.TryGetValue((int)DragonId.Arsene, out StoryData? data)
+        )
         {
-            if (!MasterAsset.DragonStories.TryGetValue((int)info.DragonId, out StoryData? data))
-            {
-                continue;
-            }
+            Log.AddedNewStories(logger, 0);
+            return;
+        }
 
-            int storiesToUnlock = info.Level >= 15 ? Math.Min(2, data.StoryIds.Length) : 1;
+        List<DbPlayerStoryState> intendedStoryStates = new(arseneLevels.Count * 2);
+
+        foreach (int level in arseneLevels)
+        {
+            int storiesToUnlock = level >= 15 ? 2 : 1;
 
             for (int i = 0; i < storiesToUnlock; i++)
             {
