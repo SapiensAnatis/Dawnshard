@@ -16,12 +16,10 @@
     <_InvokeMissionDesignerCommand>"$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner"</_InvokeMissionDesignerCommand>
     <!-- For Docker builds, where we pass /p:UseAppHost=false -->
     <_InvokeMissionDesignerCommand Condition="$(UseAppHost) == 'false'"
-      >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner.dll"</_InvokeMissionDesignerCommand
-    >
+      >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MissionDesigner.dll"</_InvokeMissionDesignerCommand>
     <MissionDesignerOutputImportance>low</MissionDesignerOutputImportance>
     <MissionDesignerOutputImportance Condition="$(BuildToolsVerbose) == 'true'"
-      >high</MissionDesignerOutputImportance
-    >
+      >high</MissionDesignerOutputImportance>
   </PropertyGroup>
   <Target Name="MissionDesigner" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
     <Exec
