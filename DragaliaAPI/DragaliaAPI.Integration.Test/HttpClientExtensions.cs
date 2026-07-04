@@ -110,6 +110,7 @@ public static class HttpClientExtensions
     {
         ByteArrayContent result = new(MessagePackSerializer.Serialize(content));
         result.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+
         return result;
     }
 }

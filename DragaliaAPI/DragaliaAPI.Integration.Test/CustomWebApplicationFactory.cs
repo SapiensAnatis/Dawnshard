@@ -1,10 +1,12 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.CoOp;
 using DragaliaAPI.Features.Shared;
+using DragaliaAPI.Integration.Test.Other;
 using DragaliaAPI.Shared.MasterAsset;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -52,6 +54,29 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             services.AddScoped(_ => this.MockBaasApi.Object);
             services.AddScoped(_ => this.MockPhotonStateApi.Object);
+
+            // Replace the production Serilog configuration for the test host: route all log events to
+            // the currently-running test's output rather than to the console. Registered here (after
+            // the app's own UseSerilog) so this factory wins. The HttpContextAccessor lets the sink
+            // correlate request-thread logs back to the originating test via the Xunit-Test-Id header.
+            services.AddHttpContextAccessor();
+            services.AddSerilog(
+                (serviceProvider, loggerConfiguration) =>
+                    loggerConfiguration
+                        .MinimumLevel.Verbose()
+                        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                        .MinimumLevel.Override(
+                            "Microsoft.EntityFrameworkCore",
+                            LogEventLevel.Warning
+                        )
+                        .MinimumLevel.Override("LinqToDB", LogEventLevel.Warning)
+                        .Enrich.FromLogContext()
+                        .WriteTo.Sink(
+                            new TestOutputSink(
+                                serviceProvider.GetRequiredService<IHttpContextAccessor>()
+                            )
+                        )
+            );
 
             services.RemoveAll<DbContextOptions<ApiContext>>();
             services.RemoveAll<IDistributedCache>();
