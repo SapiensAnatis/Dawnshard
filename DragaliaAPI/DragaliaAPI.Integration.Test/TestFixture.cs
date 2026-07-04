@@ -10,6 +10,7 @@ using DragaliaAPI.Features.Login.Savefile;
 using DragaliaAPI.Features.Shared;
 using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Integration.Test.Other;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Shared.Serialization;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,14 @@ public class TestFixture
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
         this.TestOutputHelper = testOutputHelper;
+
+        // Register this test's output so the shared server's Serilog sink can route request-thread
+        // logs back to it via the Xunit-Test-Id header (see TestOutputSink).
+        if (TestContext.Current.Test is { } test)
+        {
+            TestOutputSink.Register(test.UniqueID, testOutputHelper);
+        }
+
         this.MockBaasApi = factory.MockBaasApi;
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
 

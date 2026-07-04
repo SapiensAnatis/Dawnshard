@@ -110,6 +110,12 @@ public static class HttpClientExtensions
     {
         ByteArrayContent result = new(MessagePackSerializer.Serialize(content));
         result.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+
+        if (TestContext.Current.Test is not null)
+        {
+            result.Headers.Add("Xunit-Test-Id", TestContext.Current.Test.UniqueID);
+        }
+
         return result;
     }
 }
