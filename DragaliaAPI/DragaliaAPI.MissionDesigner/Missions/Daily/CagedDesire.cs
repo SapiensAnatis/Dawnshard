@@ -30,27 +30,32 @@ public static class CagedDesireDaily
         new EventPointCollectionMission() { MissionId = 10830404 },
         // Collect 300 Blazons
         new EventPointCollectionMission() { MissionId = 10830405 },
+        // The real event rotated which days it ran missions on, so there are 5 missions for each task - we give them
+        // all each day, so only implement one of them to avoid getting 5 missions for the same task every day
         // Clear Joker's Trial: Expert (Co-op)
         new ClearQuestMission() { MissionId = 10830503, QuestId = 204290805 },
-        new ClearQuestMission() { MissionId = 10830504, QuestId = 204290805 },
-        new ClearQuestMission() { MissionId = 10830505, QuestId = 204290805 },
-        new ClearQuestMission() { MissionId = 10830506, QuestId = 204290805 },
-        new ClearQuestMission() { MissionId = 10830507, QuestId = 204290805 },
+        // new ClearQuestMission() { MissionId = 10830504, QuestId = 204290805 },
+        // new ClearQuestMission() { MissionId = 10830505, QuestId = 204290805 },
+        // new ClearQuestMission() { MissionId = 10830506, QuestId = 204290805 },
+        // new ClearQuestMission() { MissionId = 10830507, QuestId = 204290805 },
+
         // Clear Joker's Trial: Master (Co-op)
         new ClearQuestMission() { MissionId = 10830601, QuestId = 204290806 },
-        new ClearQuestMission() { MissionId = 10830602, QuestId = 204290806 },
-        new ClearQuestMission() { MissionId = 10830603, QuestId = 204290806 },
-        new ClearQuestMission() { MissionId = 10830604, QuestId = 204290806 },
+        // new ClearQuestMission() { MissionId = 10830602, QuestId = 204290806 },
+        // new ClearQuestMission() { MissionId = 10830603, QuestId = 204290806 },
+        // new ClearQuestMission() { MissionId = 10830604, QuestId = 204290806 },
+
         // Clear Sophie's Trial: Expert (Co-op)
         new ClearQuestMission() { MissionId = 10830703, QuestId = 204290807 },
-        new ClearQuestMission() { MissionId = 10830704, QuestId = 204290807 },
-        new ClearQuestMission() { MissionId = 10830705, QuestId = 204290807 },
-        new ClearQuestMission() { MissionId = 10830706, QuestId = 204290807 },
-        new ClearQuestMission() { MissionId = 10830707, QuestId = 204290807 },
+        // new ClearQuestMission() { MissionId = 10830704, QuestId = 204290807 },
+        // new ClearQuestMission() { MissionId = 10830705, QuestId = 204290807 },
+        // new ClearQuestMission() { MissionId = 10830706, QuestId = 204290807 },
+        // new ClearQuestMission() { MissionId = 10830707, QuestId = 204290807 },
+
         // Clear Sophie's Trial: Master (Co-op)
         new ClearQuestMission() { MissionId = 10830801, QuestId = 204290808 },
-        new ClearQuestMission() { MissionId = 10830802, QuestId = 204290808 },
-        new ClearQuestMission() { MissionId = 10830803, QuestId = 204290808 },
-        new ClearQuestMission() { MissionId = 10830804, QuestId = 204290808 },
+        // new ClearQuestMission() { MissionId = 10830802, QuestId = 204290808 },
+        // new ClearQuestMission() { MissionId = 10830803, QuestId = 204290808 },
+        // new ClearQuestMission() { MissionId = 10830804, QuestId = 204290808 },
     ];
 }

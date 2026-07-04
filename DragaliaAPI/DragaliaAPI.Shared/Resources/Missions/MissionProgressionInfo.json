@@ -1406,7 +1406,7 @@
     "_Id": 1133050102,
     "_MissionType": "Period",
     "_MissionId": 11330501,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1415,7 +1415,7 @@
     "_Id": 1133050202,
     "_MissionType": "Period",
     "_MissionId": 11330502,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1424,7 +1424,7 @@
     "_Id": 1133050302,
     "_MissionType": "Period",
     "_MissionId": 11330503,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1433,7 +1433,7 @@
     "_Id": 1133050402,
     "_MissionType": "Period",
     "_MissionId": 11330504,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1442,7 +1442,7 @@
     "_Id": 1133050502,
     "_MissionType": "Period",
     "_MissionId": 11330505,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1451,7 +1451,7 @@
     "_Id": 1133050602,
     "_MissionType": "Period",
     "_MissionId": 11330506,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1460,7 +1460,7 @@
     "_Id": 1133050702,
     "_MissionType": "Period",
     "_MissionId": 11330507,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1469,7 +1469,7 @@
     "_Id": 1133050802,
     "_MissionType": "Period",
     "_MissionId": 11330508,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1478,7 +1478,7 @@
     "_Id": 1133050902,
     "_MissionType": "Period",
     "_MissionId": 11330509,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1487,7 +1487,7 @@
     "_Id": 1133051002,
     "_MissionType": "Period",
     "_MissionId": 11330510,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1496,7 +1496,7 @@
     "_Id": 1133051102,
     "_MissionType": "Period",
     "_MissionId": 11330511,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "EventRaidClear",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
     "_Parameter": 20429
@@ -1505,11 +1505,10 @@
     "_Id": 1133060102,
     "_MissionType": "Period",
     "_MissionId": 11330601,
-    "_CompleteType": "EventChallengeBattleClear",
+    "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
-    "_Parameter": 20429,
-    "_Parameter2": 5
+    "_Parameter": 204290501
   },
   {
     "_Id": 1133070102,
@@ -10973,72 +10972,9 @@
     "_Parameter": 204290805
   },
   {
-    "_Id": 1083050401,
-    "_MissionType": "Daily",
-    "_MissionId": 10830504,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290805
-  },
-  {
-    "_Id": 1083050501,
-    "_MissionType": "Daily",
-    "_MissionId": 10830505,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290805
-  },
-  {
-    "_Id": 1083050601,
-    "_MissionType": "Daily",
-    "_MissionId": 10830506,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290805
-  },
-  {
-    "_Id": 1083050701,
-    "_MissionType": "Daily",
-    "_MissionId": 10830507,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290805
-  },
-  {
     "_Id": 1083060101,
     "_MissionType": "Daily",
     "_MissionId": 10830601,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290806
-  },
-  {
-    "_Id": 1083060201,
-    "_MissionType": "Daily",
-    "_MissionId": 10830602,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290806
-  },
-  {
-    "_Id": 1083060301,
-    "_MissionType": "Daily",
-    "_MissionId": 10830603,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290806
-  },
-  {
-    "_Id": 1083060401,
-    "_MissionType": "Daily",
-    "_MissionId": 10830604,
     "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
@@ -11054,72 +10990,9 @@
     "_Parameter": 204290807
   },
   {
-    "_Id": 1083070401,
-    "_MissionType": "Daily",
-    "_MissionId": 10830704,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290807
-  },
-  {
-    "_Id": 1083070501,
-    "_MissionType": "Daily",
-    "_MissionId": 10830705,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290807
-  },
-  {
-    "_Id": 1083070601,
-    "_MissionType": "Daily",
-    "_MissionId": 10830706,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290807
-  },
-  {
-    "_Id": 1083070701,
-    "_MissionType": "Daily",
-    "_MissionId": 10830707,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290807
-  },
-  {
     "_Id": 1083080101,
     "_MissionType": "Daily",
     "_MissionId": 10830801,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290808
-  },
-  {
-    "_Id": 1083080201,
-    "_MissionType": "Daily",
-    "_MissionId": 10830802,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290808
-  },
-  {
-    "_Id": 1083080301,
-    "_MissionType": "Daily",
-    "_MissionId": 10830803,
-    "_CompleteType": "QuestCleared",
-    "_UseTotalValue": 0,
-    "_UnlockedOnComplete": [],
-    "_Parameter": 204290808
-  },
-  {
-    "_Id": 1083080401,
-    "_MissionType": "Daily",
-    "_MissionId": 10830804,
     "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
     "_UnlockedOnComplete": [],
