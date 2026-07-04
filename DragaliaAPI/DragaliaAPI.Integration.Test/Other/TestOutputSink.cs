@@ -15,8 +15,8 @@ namespace DragaliaAPI.Integration.Test.Other;
 /// A single web server is shared across all tests, which may run in parallel, so
 /// <see cref="TestContext.Current"/> is not reliable when a log is emitted on a request-handling
 /// thread. Tests register their output helper via <see cref="Register"/> and tag their requests
-/// with an <c>Xunit-Test-Id</c> header (see <see cref="HttpClientExtensions"/>); the sink uses that
-/// header to resolve the correct helper for each event.
+/// with an <c>Xunit-Test-Id</c> header (see <see cref="TestFixture.CreateClient"/>); the sink uses that
+/// header to resolve the correct output helper for each event.
 /// </remarks>
 internal sealed class TestOutputSink : ILogEventSink
 {
@@ -38,28 +38,34 @@ internal sealed class TestOutputSink : ILogEventSink
     /// Associates a test's unique ID with its output helper so that logs emitted while handling that
     /// test's requests can be routed back to it.
     /// </summary>
-    public static void Register(string testId, ITestOutputHelper outputHelper) =>
+    public static void Register(string testId, ITestOutputHelper outputHelper)
+    {
         OutputHelpers[testId] = outputHelper;
+    }
+
+    /// <summary>
+    /// Removes a test's ITestOutputHelper from the global logger store.
+    /// </summary>
+    /// <param name="testId">The test ID to remove.</param>
+    public static void Deregister(string testId)
+    {
+        OutputHelpers.TryRemove(testId, out _);
+    }
 
     public void Emit(LogEvent logEvent)
     {
-        ITestOutputHelper? outputHelper = this.ResolveOutputHelper();
-        if (outputHelper is null)
-        {
-            return;
-        }
-
         using StringWriter writer = new();
         this.formatter.Format(logEvent, writer);
 
-        try
+        ITestOutputHelper? outputHelper = this.ResolveOutputHelper();
+        if (outputHelper is not null)
         {
             outputHelper.Write(writer.ToString());
         }
-        catch (InvalidOperationException)
+        else
         {
-            // The test owning this output helper has already finished; drop the late log rather than
-            // crashing the shared server.
+            // Background output may not be associated with a test - these can be written as diagnostic messages
+            TestContext.Current.SendDiagnosticMessage(writer.ToString());
         }
     }
 

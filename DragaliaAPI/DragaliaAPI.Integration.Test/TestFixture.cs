@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database;
+﻿using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Extensions;
@@ -19,12 +20,11 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Time.Testing;
 using static DragaliaAPI.Infrastructure.DragaliaHttpConstants;
 
 namespace DragaliaAPI.Integration.Test;
 
-public class TestFixture
+public class TestFixture : IDisposable
 {
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
@@ -198,6 +198,11 @@ public class TestFixture
         client.DefaultRequestHeaders.Add("Platform", "2");
         client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 
+        if (TestContext.Current.Test is not null)
+        {
+            client.DefaultRequestHeaders.Add("Xunit-Test-Id", TestContext.Current.Test.UniqueID);
+        }
+
         return client;
     }
 
@@ -330,5 +335,22 @@ public class TestFixture
         );
         cache.SetString($":session:session_id:{sessionId}", JsonSerializer.Serialize(session));
         cache.SetString($":session_id:device_account_id:{deviceAccountId}", sessionId);
+    }
+
+    [SuppressMessage(
+        "Microsoft.Usage",
+        "CA1816:CallGCSuppressFinalizeCorrectly",
+        Justification = "Derived test classes are unlikely to implement finalizers"
+    )]
+    public void Dispose()
+    {
+        this.factory.Dispose();
+        this.Client.Dispose();
+        this.ApiContext.Dispose();
+
+        if (TestContext.Current.Test is { } test)
+        {
+            TestOutputSink.Deregister(test.UniqueID);
+        }
     }
 }
