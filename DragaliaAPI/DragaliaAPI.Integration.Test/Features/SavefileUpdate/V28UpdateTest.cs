@@ -87,8 +87,7 @@ public class V28UpdateTest : SavefileUpdateTestFixture
             .PlayerStoryState.Where(x =>
                 x.StoryType == StoryTypes.Dragon
                 && (
-                    x.StoryId == arseneStories.StoryIds[0]
-                    || x.StoryId == arseneStories.StoryIds[1]
+                    x.StoryId == arseneStories.StoryIds[0] || x.StoryId == arseneStories.StoryIds[1]
                 )
             )
             .Should()

@@ -23,8 +23,10 @@ public partial class V28Update(
 
     public async Task Apply()
     {
-        DbPlayerDragonReliability? arsene = await apiContext
-            .PlayerDragonReliability.FirstOrDefaultAsync(x => x.DragonId == DragonId.Arsene);
+        DbPlayerDragonReliability? arsene =
+            await apiContext.PlayerDragonReliability.FirstOrDefaultAsync(x =>
+                x.DragonId == DragonId.Arsene
+            );
 
         if (
             arsene is null
