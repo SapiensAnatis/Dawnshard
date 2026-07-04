@@ -12,7 +12,10 @@ on:
 
 jobs:
   claude-review:
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    # Don't run on PRs that can't access the secret
+    if: | 
+      github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
 
     runs-on: ubuntu-latest
     permissions:
