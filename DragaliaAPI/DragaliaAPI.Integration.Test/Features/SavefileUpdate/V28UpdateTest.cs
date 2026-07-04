@@ -14,6 +14,10 @@ public class V28UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V28Update_UnlocksBothStoriesForDragonAtLevel30()
     {
+        this.ApiContext.PlayerStoryState.Count(x => x.StoryType == StoryTypes.Dragon)
+            .Should()
+            .Be(0);
+
         await this.AddRangeToDatabase([
             new DbPlayerDragonReliability() { DragonId = DragonId.Arsene, Level = 30 },
         ]);
