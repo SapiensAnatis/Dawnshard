@@ -28,12 +28,10 @@
     <_InvokeConverterCommand>"$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter"</_InvokeConverterCommand>
     <!-- For Docker builds, where we pass /p:UseAppHost=false -->
     <_InvokeConverterCommand Condition="$(UseAppHost) == 'false'"
-      >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll"</_InvokeConverterCommand
-    >
+      >dotnet "$(MSBuildThisFileDirectory)bin/$(Configuration)/DragaliaAPI.MasterAssetConverter.dll"</_InvokeConverterCommand>
     <MasterAssetConverterOutputImportance>low</MasterAssetConverterOutputImportance>
     <MasterAssetConverterOutputImportance Condition="$(BuildToolsVerbose) == 'true'"
-      >high</MasterAssetConverterOutputImportance
-    >
+      >high</MasterAssetConverterOutputImportance>
   </PropertyGroup>
   <!--
     $(IntermediateOutputPath) is only defined once the SDK's .targets are imported, which happens
