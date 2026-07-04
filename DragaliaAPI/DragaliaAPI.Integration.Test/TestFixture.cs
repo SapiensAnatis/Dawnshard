@@ -344,9 +344,10 @@ public class TestFixture : IDisposable
     )]
     public void Dispose()
     {
-        this.factory.Dispose();
         this.Client.Dispose();
         this.ApiContext.Dispose();
+
+        // Do _not_ dispose this.factory - that is shared by the entire assembly
 
         if (TestContext.Current.Test is { } test)
         {
