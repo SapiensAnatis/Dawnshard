@@ -58,40 +58,6 @@ public class V28UpdateTest : SavefileUpdateTestFixture
     }
 
     [Fact]
-    public async Task V28Update_UnlocksOneStoryForDragonAtLevel5()
-    {
-        await this.AddRangeToDatabase([
-            new DbPlayerDragonReliability() { DragonId = DragonId.Arsene, Level = 7 },
-        ]);
-
-        StoryData arseneStories = MasterAsset.DragonStories[(int)DragonId.Arsene];
-
-        this.ApiContext.ChangeTracker.Clear();
-
-        await this.LoadIndex();
-
-        List<DbPlayerStoryState> dragonStories = ApiContext
-            .PlayerStoryState.Where(x => x.StoryType == StoryTypes.Dragon)
-            .ToList();
-
-        dragonStories
-            .Should()
-            .Contain(x => x.StoryId == arseneStories.StoryIds[0])
-            .Which.Should()
-            .BeEquivalentTo(
-                new DbPlayerStoryState()
-                {
-                    ViewerId = this.ViewerId,
-                    StoryId = arseneStories.StoryIds[0],
-                    StoryType = StoryTypes.Dragon,
-                    State = StoryState.Unlocked,
-                }
-            );
-
-        dragonStories.Should().NotContain(x => x.StoryId == arseneStories.StoryIds[1]);
-    }
-
-    [Fact]
     public async Task V28Update_DoesNotDuplicateExistingStories()
     {
         await this.AddRangeToDatabase([

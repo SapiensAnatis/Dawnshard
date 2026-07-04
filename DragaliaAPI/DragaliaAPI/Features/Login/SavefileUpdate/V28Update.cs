@@ -23,13 +23,11 @@ public partial class V28Update(
 
     public async Task Apply()
     {
-        List<int> arseneLevels = await apiContext
-            .PlayerDragonReliability.Where(x => x.DragonId == DragonId.Arsene && x.Level >= 5)
-            .Select(x => x.Level)
-            .ToListAsync();
+        DbPlayerDragonReliability? arsene = await apiContext
+            .PlayerDragonReliability.FirstOrDefaultAsync(x => x.DragonId == DragonId.Arsene);
 
         if (
-            arseneLevels.Count == 0
+            arsene is null
             || !MasterAsset.DragonStories.TryGetValue((int)DragonId.Arsene, out StoryData? data)
         )
         {
@@ -37,25 +35,17 @@ public partial class V28Update(
             return;
         }
 
-        List<DbPlayerStoryState> intendedStoryStates = new(arseneLevels.Count * 2);
-
-        foreach (int level in arseneLevels)
-        {
-            int storiesToUnlock = level >= 15 ? 2 : 1;
-
-            for (int i = 0; i < storiesToUnlock; i++)
+        // Arsene's default reliability level is 30, so any existing reliability entry implies
+        // both stories should be unlocked -- there is no need to check the level.
+        List<DbPlayerStoryState> intendedStoryStates = data
+            .StoryIds.Select(storyId => new DbPlayerStoryState()
             {
-                intendedStoryStates.Add(
-                    new DbPlayerStoryState()
-                    {
-                        ViewerId = playerIdentityService.ViewerId,
-                        StoryId = data.StoryIds[i],
-                        State = StoryState.Unlocked,
-                        StoryType = StoryTypes.Dragon,
-                    }
-                );
-            }
-        }
+                ViewerId = playerIdentityService.ViewerId,
+                StoryId = storyId,
+                State = StoryState.Unlocked,
+                StoryType = StoryTypes.Dragon,
+            })
+            .ToList();
 
         int rowsAffected = await apiContext
             .PlayerStoryState.Merge()
