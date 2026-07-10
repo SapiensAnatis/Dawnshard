@@ -111,8 +111,8 @@
         </li>
         <li>
           Leave the CDN address field blank. You can try entering
-          <a rel="external" class="link" href="https://minty.sbs">https://minty.sbs</a> if this
-          is not accepted.
+          <a rel="external" class="link" href="https://minty.sbs">https://minty.sbs</a> if this is
+          not accepted.
         </li>
         <li>Press the &apos;Patch App&apos; button in the lower right corner.</li>
         <li>
