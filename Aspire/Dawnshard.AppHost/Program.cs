@@ -48,32 +48,19 @@ if (builder.Configuration.GetValue<bool>("EnablePhoton"))
         .WithEnvironment("PhotonOptions__StateManagerUrl", stateManager.GetEndpoint("http"))
         .WithEnvironment("PhotonOptions__Token", bearerToken);
 
-    // Corresponds to PhotonServer/ directory in repo root
-    string photonServerDirectory = Path.Combine(
-        AppContext.BaseDirectory,
-        "..",
-        "..",
-        "..",
-        "..",
-        "..",
-        "PhotonServer",
-        "deploy",
-        "bin_Win64"
-    );
-
-    IResourceBuilder<ExecutableResource> photonServer = builder
-        .AddExecutable(
-            "photon-server",
-            Path.Combine(photonServerDirectory, "PhotonSocketServer.exe"),
-            photonServerDirectory,
-            "/run",
-            "LoadBalancing",
-            "/configPath",
-            photonServerDirectory
+    builder
+        .AddDockerfile(
+            "luxon",
+            "/home/jay/Projects/LuxonServerIntegration",
+            "/home/jay/Projects/LuxonServerIntegration/Dockerfile"
         )
-        .WithEnvironment("ApiServerUrl", dragaliaApi.GetEndpoint("http"))
-        .WithEnvironment("StateManagerUrl", stateManager.GetEndpoint("http"))
-        .WithEnvironment("BearerToken", bearerToken)
+        .WithBuildArg("LUXON_BUILD_TYPE", "Debug")
+        .WithEnvironment("Plugins__0__Configuration__ApiServerUrl", dragaliaApi.GetEndpoint("http"))
+        .WithEnvironment(
+            "Plugins__0__Configuration__StateManagerUrl",
+            stateManager.GetEndpoint("http")
+        )
+        .WithEnvironment("Plugins__0__Configuration__BearerToken", bearerToken)
         .WithEndpoint(
             "gs-to-ms", // https://doc.photonengine.com/server/current/operations/tcp-and-udp-port-numbers
             e =>
@@ -88,6 +75,7 @@ if (builder.Configuration.GetValue<bool>("EnablePhoton"))
             "client-to-ms",
             e =>
             {
+                e.TargetHost = "0.0.0.0";
                 e.Port = 5055;
                 e.IsProxied = false;
                 e.IsExternal = true;
@@ -98,6 +86,7 @@ if (builder.Configuration.GetValue<bool>("EnablePhoton"))
             "client-to-gs",
             e =>
             {
+                e.TargetHost = "0.0.0.0";
                 e.Port = 5056;
                 e.IsProxied = false;
                 e.IsExternal = true;
