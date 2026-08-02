@@ -41,7 +41,7 @@
     "globals": "17.7.0",
     "mode-watcher": "1.1.0",
     "msw": "2.14.6",
-    "postcss": "8.5.16",
+    "postcss": "8.5.18",
     "postcss-load-config": "6.0.1",
     "prettier": "3.9.4",
     "prettier-plugin-svelte": "4.1.1",
