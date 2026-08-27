@@ -34,15 +34,17 @@ public partial class QuestEnemyService : IQuestEnemyService
             return enemyList;
         }
 
-        questDropInfo.Drops.AddRange(eventDropService.GenerateEventMaterialDrops(questData));
+        List<DropEntity> drops = new(questDropInfo.Drops);
 
-        if (questDropInfo.Drops.Count == 0 || enemyList.Length == 0)
+        drops.AddRange(eventDropService.GenerateEventMaterialDrops(questData));
+
+        if (drops.Count == 0 || enemyList.Length == 0)
         {
             return enemyList;
         }
 
         int areaCount = MasterAsset.QuestData[questId].AreaInfo.Count;
-        int totalQuantity = (int)Math.Round(questDropInfo.Drops.Sum(x => x.Quantity) / areaCount);
+        int totalQuantity = (int)Math.Round(drops.Sum(x => x.Quantity) / areaCount);
 
         int totalRupies = AddVariance(questDropInfo.Rupies) / areaCount;
         int rupieSlice = totalRupies / totalQuantity;
@@ -50,7 +52,7 @@ public partial class QuestEnemyService : IQuestEnemyService
         int totalMana = AddVariance(questDropInfo.Mana) / areaCount;
         int manaSlice = totalMana / totalQuantity;
 
-        IPick<DropEntity> dropPicker = GetDropPicker(questDropInfo);
+        IPick<DropEntity> dropPicker = GetPicker(drops, entity => entity.Weight);
         IPick<AtgenEnemy> enemyPicker = GetEnemyPicker(enemyList);
 
         for (int i = 0; i < totalQuantity; i++)
@@ -146,10 +148,7 @@ public partial class QuestEnemyService : IQuestEnemyService
         );
     }
 
-    private static IPick<DropEntity> GetDropPicker(QuestDropInfo questDropInfo) =>
-        GetPicker(questDropInfo.Drops, entity => entity.Weight);
-
-    private static IPick<T> GetPicker<T>(IList<T> elements, Func<T, int> weight) =>
+    private static IPick<T> GetPicker<T>(IReadOnlyList<T> elements, Func<T, int> weight) =>
         // Workaround for FluentRandomPicker throwing when passing in single-element collections
         elements.Count switch
         {
