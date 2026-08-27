@@ -14,7 +14,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using Hangfire;
 using LinqToDB.Data;
 using LinqToDB.EntityFrameworkCore;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Serilog;
