@@ -65,8 +65,6 @@ if (hangfireOptions is { Enabled: true })
     builder.Services.ConfigureHangfire();
 }
 
-builder.Services.AddDataProtection().PersistKeysToDbContext<ApiContext>();
-
 builder
     .Services.AddAuthorization()
     .ConfigureAuthentication()

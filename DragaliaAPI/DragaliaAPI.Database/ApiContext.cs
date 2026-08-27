@@ -1,6 +1,5 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database;
@@ -8,7 +7,7 @@ namespace DragaliaAPI.Database;
 /// <summary>
 /// Base database context.
 /// </summary>
-public class ApiContext : DbContext, IDataProtectionKeyContext
+public class ApiContext : DbContext
 {
     private readonly IPlayerIdentityService playerIdentityService;
 
@@ -130,8 +129,6 @@ public class ApiContext : DbContext, IDataProtectionKeyContext
     public DbSet<DbQuestTreasureList> QuestTreasureList { get; set; } = null!;
 
     public DbSet<DbPlayerQuestWall> PlayerQuestWalls { get; set; } = null!;
-
-    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
     public DbSet<DbWallRewardDate> WallRewardDates { get; set; } = null!;
 
