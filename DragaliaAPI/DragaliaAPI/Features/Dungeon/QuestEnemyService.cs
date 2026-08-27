@@ -148,11 +148,11 @@ public partial class QuestEnemyService : IQuestEnemyService
         );
     }
 
-    private static IPick<T> GetPicker<T>(IReadOnlyCollection<T> elements, Func<T, int> weight) =>
+    private static IPick<T> GetPicker<T>(IReadOnlyList<T> elements, Func<T, int> weight) =>
         // Workaround for FluentRandomPicker throwing when passing in single-element collections
         elements.Count switch
         {
-            1 => new SingleValuePicker<T>(elements.First()),
+            1 => new SingleValuePicker<T>(elements[0]),
             > 1 => Out.Of().PrioritizedElements(elements).WithWeightSelector(weight),
             _ => throw new ArgumentException("Invalid value count", nameof(elements)),
         };
