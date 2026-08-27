@@ -4,7 +4,7 @@ using MessagePack;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
-public record QuestDropInfo(int QuestId, int Rupies, int Mana, FrozenSet<DropEntity> Drops);
+public record QuestDropInfo(int QuestId, int Rupies, int Mana, IReadOnlyList<DropEntity> Drops);
 
 public record DropEntity(int Id, EntityTypes EntityType, double Quantity)
 {
