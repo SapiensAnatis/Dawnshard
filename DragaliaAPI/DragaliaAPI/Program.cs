@@ -14,7 +14,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using Hangfire;
 using LinqToDB.Data;
 using LinqToDB.EntityFrameworkCore;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Serilog;
@@ -64,8 +63,6 @@ if (hangfireOptions is { Enabled: true })
 {
     builder.Services.ConfigureHangfire();
 }
-
-builder.Services.AddDataProtection().PersistKeysToDbContext<ApiContext>();
 
 builder
     .Services.AddAuthorization()
