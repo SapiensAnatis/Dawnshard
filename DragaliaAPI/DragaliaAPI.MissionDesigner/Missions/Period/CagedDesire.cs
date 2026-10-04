@@ -39,33 +39,29 @@ public static class CagedDesire
         // Clear Warden Assault 25 Times
         new EventRegularBattleClearMission() { MissionId = 11330406 },
         // Clear Monarch Emile Clash
-        new EventChallengeBattleClearMission() { MissionId = 11330501 },
+        new ClearRaidMission() { MissionId = 11330501 },
         // Clear Monarch Emile Clash Five Times
-        new EventChallengeBattleClearMission() { MissionId = 11330502 },
+        new ClearRaidMission() { MissionId = 11330502 },
         // Clear Monarch Emile Clash 10 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330503 },
+        new ClearRaidMission() { MissionId = 11330503 },
         // Clear Monarch Emile Clash 15 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330504 },
+        new ClearRaidMission() { MissionId = 11330504 },
         // Clear Monarch Emile Clash 20 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330505 },
+        new ClearRaidMission() { MissionId = 11330505 },
         // Clear Monarch Emile Clash 25 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330506 },
+        new ClearRaidMission() { MissionId = 11330506 },
         // Clear Monarch Emile Clash 30 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330507 },
+        new ClearRaidMission() { MissionId = 11330507 },
         // Clear Monarch Emile Clash 35 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330508 },
+        new ClearRaidMission() { MissionId = 11330508 },
         // Clear Monarch Emile Clash 40 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330509 },
+        new ClearRaidMission() { MissionId = 11330509 },
         // Clear Monarch Emile Clash 45 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330510 },
+        new ClearRaidMission() { MissionId = 11330510 },
         // Clear Monarch Emile Clash 50 Times
-        new EventChallengeBattleClearMission() { MissionId = 11330511 },
+        new ClearRaidMission() { MissionId = 11330511 },
         // Clear Monarch Emile Clash: Nightmare
-        new EventChallengeBattleClearMission()
-        {
-            MissionId = 11330601,
-            VariationType = VariationTypes.Hell,
-        },
+        new ClearQuestMission() { MissionId = 11330601, QuestId = 204290501 },
         // Clear Joker's Trial: Standard (Solo)
         new ClearQuestMission() { MissionId = 11330701, QuestId = 204290809 },
         // Clear Joker's Trial: Expert (Solo)

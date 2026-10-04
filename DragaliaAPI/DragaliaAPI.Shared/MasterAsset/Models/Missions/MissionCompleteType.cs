@@ -184,6 +184,11 @@ public enum MissionCompleteType
     EventTrialClear,
 
     /// <summary>
+    /// int eventId
+    /// </summary>
+    EventRaidClear,
+
+    /// <summary>
     /// int progressionGroupId
     /// </summary>
     ProgressionGroupCleared,

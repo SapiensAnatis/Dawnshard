@@ -578,6 +578,59 @@ public partial class DungeonRecordTest : TestFixture
     }
 
     [Fact]
+    public async Task Record_Event_RaidBattle_CompletesDailyMission()
+    {
+        int questId = 204290601; // Monarch Emile Clash: Omega Level 1 (Solo) (raid)
+        int eventId = 20429; // Caged Desire
+
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new() { { 1, [] } },
+        };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordResponse response = (
+            await Client.PostMsgpack<DungeonRecordRecordResponse>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    DungeonKey = key,
+                    PlayRecord = new()
+                    {
+                        Time = 10,
+                        TreasureRecord = new List<AtgenTreasureRecord>(),
+                        LiveUnitNoList = new List<int>(),
+                        DamageRecord = new List<AtgenDamageRecord>(),
+                        DragonDamageRecord = new List<AtgenDamageRecord>(),
+                        BattleRoyalRecord = new(),
+                        Wave = 1,
+                    },
+                },
+                cancellationToken: TestContext.Current.CancellationToken
+            )
+        ).Data;
+
+        response
+            .UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
+            .Contain(10830201); // Clear a Raid Battle
+
+        // Clear a Raid Battle
+        this.ApiContext.PlayerMissions.Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.Id == 10830201)
+            .Progress.Should()
+            .Be(1);
+    }
+
+    [Fact]
     public async Task Record_Event_ChallengeBattle_Coop_CompletesMissions()
     {
         int questId = 229030201; // Repelling the Frosty Fiends: Standard (Co-Op)

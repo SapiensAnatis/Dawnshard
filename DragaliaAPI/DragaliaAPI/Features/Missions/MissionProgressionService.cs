@@ -288,6 +288,9 @@ public partial class MissionProgressionService(
             questId
         );
 
+    public void OnEventRaidCleared(int eventId) =>
+        EnqueueEvent(MissionCompleteType.EventRaidClear, 1, 1, eventId);
+
     public void EnqueueEvent(
         MissionCompleteType type,
         int value = 1,

@@ -197,6 +197,7 @@ public partial class MissionInitialProgressionService(
                 MissionCompleteType.ProgressionGroupCleared => 0,
                 MissionCompleteType.FortIncomeCollected => 0,
                 MissionCompleteType.EarnEnemiesKilled => 0,
+                MissionCompleteType.EventRaidClear => 0,
                 MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
                 _ => throw new UnreachableException(
                     $"Invalid MissionProgressType {progressionInfo.CompleteType} in initial progress handling"
