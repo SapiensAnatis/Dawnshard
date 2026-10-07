@@ -1,3 +1,5 @@
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
@@ -18,7 +20,8 @@ public partial class TradeService(
     ILogger<TradeService> logger,
     IPaymentService paymentService,
     IPresentService presentService,
-    IMissionProgressionService missionProgressionService
+    IMissionProgressionService missionProgressionService,
+    TimeProvider timeProvider
 ) : ITradeService
 {
     public IEnumerable<TreasureTradeList> GetCurrentTreasureTradeList()
@@ -116,9 +119,29 @@ public partial class TradeService(
 
     public async Task<IEnumerable<UserTreasureTradeList>> GetUserTreasureTradeList()
     {
+        // Counts are not reset here: the client determines for itself whether a trade's count has reset, based on
+        // its reset type and last trade time. The stored count is only reset when an actual trade is made.
         return (await tradeRepository.GetTradesByTypeAsync(TradeType.Treasure)).Select(
             x => new UserTreasureTradeList(x.Id, x.Count, x.LastTradeTime)
         );
+    }
+
+    /// <summary>
+    /// Determines whether a trade's reset boundary has passed since it was last made.
+    /// </summary>
+    /// <param name="resetType">The reset type of the trade.</param>
+    /// <param name="lastTradeTime">The time the trade was last made.</param>
+    private bool HasResetSinceLastTrade(TradeResetType resetType, DateTimeOffset lastTradeTime)
+    {
+        DateTimeOffset? lastReset = resetType switch
+        {
+            TradeResetType.Daily => timeProvider.GetLastDailyReset(),
+            TradeResetType.Weekly => timeProvider.GetLastWeeklyReset(),
+            TradeResetType.Monthly => timeProvider.GetLastMonthlyReset(),
+            _ => null,
+        };
+
+        return lastReset is not null && lastTradeTime < lastReset;
     }
 
     public async Task DoTrade(
@@ -206,7 +229,19 @@ public partial class TradeService(
             }
         );
 
-        await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
+        DbPlayerTrade? existingTrade = await tradeRepository.FindTrade(tradeId);
+        if (
+            existingTrade is not null
+            && this.HasResetSinceLastTrade(
+                (TradeResetType)trade.ResetType,
+                existingTrade.LastTradeTime
+            )
+        )
+        {
+            existingTrade.Count = 0;
+        }
+
+        await tradeRepository.AddTrade(tradeType, tradeId, count, timeProvider.GetUtcNow());
 
         int totalCount = (await tradeRepository.FindTrade(tradeId))?.Count ?? 0;
 
