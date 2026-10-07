@@ -119,28 +119,25 @@ public partial class TradeService(
 
     public async Task<IEnumerable<UserTreasureTradeList>> GetUserTreasureTradeList()
     {
-        return (await tradeRepository.GetTradesByTypeAsync(TradeType.Treasure)).Select(x =>
-        {
-            bool wasReset =
-                MasterAsset.TreasureTrade.TryGetValue(x.Id, out TreasureTrade? trade)
-                && this.HasResetSinceLastTrade(trade.ResetType, x.LastTradeTime);
-
-            return new UserTreasureTradeList(x.Id, wasReset ? 0 : x.Count, x.LastTradeTime);
-        });
+        // Counts are not reset here: the client determines for itself whether a trade's count has reset, based on
+        // its reset type and last trade time. The stored count is only reset when an actual trade is made.
+        return (await tradeRepository.GetTradesByTypeAsync(TradeType.Treasure)).Select(
+            x => new UserTreasureTradeList(x.Id, x.Count, x.LastTradeTime)
+        );
     }
 
     /// <summary>
     /// Determines whether a trade's reset boundary has passed since it was last made.
     /// </summary>
-    /// <param name="resetType">The reset type: 0 = none, 1 = daily, 2 = weekly, 3 = monthly.</param>
+    /// <param name="resetType">The reset type of the trade.</param>
     /// <param name="lastTradeTime">The time the trade was last made.</param>
-    private bool HasResetSinceLastTrade(int resetType, DateTimeOffset lastTradeTime)
+    private bool HasResetSinceLastTrade(TradeResetType resetType, DateTimeOffset lastTradeTime)
     {
         DateTimeOffset? lastReset = resetType switch
         {
-            1 => timeProvider.GetLastDailyReset(),
-            2 => timeProvider.GetLastWeeklyReset(),
-            3 => timeProvider.GetLastMonthlyReset(),
+            TradeResetType.Daily => timeProvider.GetLastDailyReset(),
+            TradeResetType.Weekly => timeProvider.GetLastWeeklyReset(),
+            TradeResetType.Monthly => timeProvider.GetLastMonthlyReset(),
             _ => null,
         };
 
@@ -235,7 +232,10 @@ public partial class TradeService(
         DbPlayerTrade? existingTrade = await tradeRepository.FindTrade(tradeId);
         if (
             existingTrade is not null
-            && this.HasResetSinceLastTrade(trade.ResetType, existingTrade.LastTradeTime)
+            && this.HasResetSinceLastTrade(
+                (TradeResetType)trade.ResetType,
+                existingTrade.LastTradeTime
+            )
         )
         {
             existingTrade.Count = 0;

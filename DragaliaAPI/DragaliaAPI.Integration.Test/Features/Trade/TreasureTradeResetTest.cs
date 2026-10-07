@@ -21,8 +21,9 @@ public class TreasureTradeResetTest : FakeTimeProviderTestFixture
         : base(factory, outputHelper) { }
 
     [Fact]
-    public async Task GetListAll_MonthlyTradeBeforeLastReset_ReturnsZeroCount()
+    public async Task GetListAll_MonthlyTradeBeforeLastReset_ReturnsStoredCount()
     {
+        // The client works out for itself that the count has reset; the stored count is only reset on a trade.
         await this.AddToDatabase(
             new DbPlayerTrade()
             {
@@ -45,35 +46,7 @@ public class TreasureTradeResetTest : FakeTimeProviderTestFixture
             .UserTreasureTradeList.Should()
             .ContainSingle(x => x.TreasureTradeId == MonthlyTradeId)
             .Which.TradeCount.Should()
-            .Be(0);
-    }
-
-    [Fact]
-    public async Task GetListAll_MonthlyTradeAfterLastReset_ReturnsCount()
-    {
-        await this.AddToDatabase(
-            new DbPlayerTrade()
-            {
-                ViewerId = this.ViewerId,
-                Id = MonthlyTradeId,
-                Type = TradeType.Treasure,
-                Count = 5,
-                LastTradeTime = this.FakeTimeProvider.GetLastMonthlyReset().AddSeconds(1),
-            }
-        );
-
-        TreasureTradeGetListAllResponse response = (
-            await this.Client.PostMsgpack<TreasureTradeGetListAllResponse>(
-                "treasure_trade/get_list_all",
-                cancellationToken: TestContext.Current.CancellationToken
-            )
-        ).Data;
-
-        response
-            .UserTreasureTradeList.Should()
-            .ContainSingle(x => x.TreasureTradeId == MonthlyTradeId)
-            .Which.TradeCount.Should()
-            .Be(5);
+            .Be(50);
     }
 
     [Fact]
@@ -163,18 +136,6 @@ public class TreasureTradeResetTest : FakeTimeProviderTestFixture
             .Be(2);
 
         this.FakeTimeProvider.Advance(TimeSpan.FromDays(32));
-
-        TreasureTradeGetListAllResponse list = (
-            await this.Client.PostMsgpack<TreasureTradeGetListAllResponse>(
-                "treasure_trade/get_list_all",
-                cancellationToken: TestContext.Current.CancellationToken
-            )
-        ).Data;
-
-        list.UserTreasureTradeList.Should()
-            .ContainSingle(x => x.TreasureTradeId == MonthlyTradeId)
-            .Which.TradeCount.Should()
-            .Be(0);
 
         TreasureTradeTradeResponse second = (
             await this.Client.PostMsgpack<TreasureTradeTradeResponse>(
