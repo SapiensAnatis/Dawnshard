@@ -33,11 +33,22 @@ public static partial class DungeonStartMapper
         this AtgenSupportWeaponBody supportWeaponBody
     );
 
-    [MapperIgnoreTarget(nameof(GameAbilityCrest.Ability1Level))]
-    [MapperIgnoreTarget(nameof(GameAbilityCrest.Ability2Level))]
+    [MapProperty(
+        nameof(AtgenSupportCrestSlotType1List.LimitBreakCount),
+        nameof(GameAbilityCrest.Ability1Level),
+        Use = nameof(GetCrestAbilityLevel)
+    )]
+    [MapProperty(
+        nameof(AtgenSupportCrestSlotType1List.LimitBreakCount),
+        nameof(GameAbilityCrest.Ability2Level),
+        Use = nameof(GetCrestAbilityLevel)
+    )]
     public static partial GameAbilityCrest ToGameAbilityCrest(
         this AtgenSupportCrestSlotType1List supportCrest
     );
+
+    // Matches DbAbilityCrest.AbilityLevel
+    private static int GetCrestAbilityLevel(int limitBreakCount) => (limitBreakCount / 2) + 1;
 
     [MapperIgnoreTarget(nameof(TalismanList.IsNew))]
     [MapperIgnoreTarget(nameof(TalismanList.IsLock))]
