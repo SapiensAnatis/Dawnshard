@@ -47,7 +47,7 @@ public static partial class DungeonStartMapper
         this AtgenSupportCrestSlotType1List supportCrest
     );
 
-    // Matches DbAbilityCrest.AbilityLevel
+    [UserMapping(Default = false)]
     private static int GetCrestAbilityLevel(int limitBreakCount) => (limitBreakCount / 2) + 1;
 
     [MapperIgnoreTarget(nameof(TalismanList.IsNew))]
