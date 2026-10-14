@@ -26,7 +26,30 @@ public static class Extensions
 
         first.ConvertedEntityList = first
             .ConvertedEntityList.Concat(second.ConvertedEntityList)
-            .Merge();
+            .Merge()
+            .ToList();
+
+        first.ScoreMissionSuccessList = first
+            .ScoreMissionSuccessList.Concat(second.ScoreMissionSuccessList)
+            .ToList();
+        first.BonusFactorList = first.BonusFactorList.Concat(second.BonusFactorList).ToList();
+
+        first.ScoringEnemyPointList = first
+            .ScoringEnemyPointList.Concat(second.ScoringEnemyPointList)
+            .GroupBy(x => x.ScoringEnemyId)
+            .Select(g => new AtgenScoringEnemyPointList
+            {
+                ScoringEnemyId = g.Key,
+                SmashCount = g.Sum(x => x.SmashCount),
+                Point = g.Sum(x => x.Point),
+            })
+            .ToList();
+
+        first.EventPassiveUpList = first
+            .EventPassiveUpList.Concat(second.EventPassiveUpList)
+            .GroupBy(x => x.PassiveId)
+            .Select(g => new AtgenEventPassiveUpList(g.Key, g.Sum(x => x.Progress)))
+            .ToList();
 
         return first;
     }
@@ -141,7 +164,29 @@ public static class Extensions
         first.TakeCoin += second.TakeCoin;
         first.DropAll = first.DropAll.Concat(second.DropAll).Merge().ToList();
 
-        first.QuestBonusList = first.QuestBonusList.Concat(second.QuestBonusList);
+        first.FirstClearSet = first.FirstClearSet.Concat(second.FirstClearSet).ToList();
+        first.MissionComplete = first.MissionComplete.Concat(second.MissionComplete).ToList();
+        first.MissionsClearSet = first.MissionsClearSet.Concat(second.MissionsClearSet).ToList();
+        first.QuestBonusList = first.QuestBonusList.Concat(second.QuestBonusList).ToList();
+        first.ChallengeQuestBonusList = first
+            .ChallengeQuestBonusList.Concat(second.ChallengeQuestBonusList)
+            .ToList();
+        first.CampaignExtraRewardList = first
+            .CampaignExtraRewardList.Concat(second.CampaignExtraRewardList)
+            .ToList();
+        first.CarryBonus = first.CarryBonus.Concat(second.CarryBonus).ToList();
+        first.RebornBonus = first.RebornBonus.Concat(second.RebornBonus).ToList();
+        first.WeeklyLimitRewardList = first
+            .WeeklyLimitRewardList.Concat(second.WeeklyLimitRewardList)
+            .ToList();
+
+        first.EnemyPiece = first
+            .EnemyPiece.Concat(second.EnemyPiece)
+            .GroupBy(x => x.Id)
+            .Select(g => new AtgenEnemyPiece { Id = g.Key, Quantity = g.Sum(x => x.Quantity) })
+            .ToList();
+
+        first.TakeAstralItemQuantity += second.TakeAstralItemQuantity;
 
         first.TakeAccumulatePoint += second.TakeAccumulatePoint;
         first.TakeBoostAccumulatePoint += second.TakeBoostAccumulatePoint;

@@ -244,36 +244,64 @@ public class EventDropService(IEventRepository eventRepository)
             {
                 // Otherworld Gems are a resource that can be used to challenge EX-difficulty Raid battles.
                 // They can be obtained as drops from Expert or Nightmare-difficulty raid battles.
-                if (variation is VariationTypes.Extreme or >= VariationTypes.Hell)
+                if (variation is VariationTypes.VeryHard or VariationTypes.Hell)
                 {
-                    int quantity = this.GenerateDropAmount(
-                        10d * (int)variation * (variation == VariationTypes.Hell ? 1.5 : 1)
+                    int gemQuantity = this.GenerateDropAmount(
+                        variation == VariationTypes.Hell ? 3d : 2d
                     );
                     yield return new(
                         itemDict[RaidEventItemType.AdventItem2],
                         EntityTypes.RaidEventItem,
-                        quantity
+                        gemQuantity
                     );
                 }
 
                 // Beginner-difficulty raid battles are the primary source of Silver Emblems,
-                // while Expert difficulty gives Gold Emblems.
-                int itemId = itemDict[
-                    variation >= VariationTypes.Extreme
-                        ? RaidEventItemType.RaidPoint3
-                        : RaidEventItemType.RaidPoint2
-                ];
-
+                // while Expert difficulty and above gives Gold Emblems.
                 // Many raid events provide access to an EX Raid that can be accessed with Otherworld Gems after clearing the Expert-difficulty raid battle.
                 // Rewards primarily include a significantly larger amount of Gold Emblems than Expert difficulty offers.
-                int emblem2Quantity = this.GenerateDropAmount(
-                    10d
-                        * (int)variation
-                        * (variation >= VariationTypes.Hell ? 5 * (int)variation : 1)
+                (RaidEventItemType emblemType, double emblemAverage) = variation switch
+                {
+                    VariationTypes.Normal => (RaidEventItemType.RaidPoint2, 10d),
+                    VariationTypes.Extreme => (RaidEventItemType.RaidPoint3, 250d),
+                    VariationTypes.Hell => (RaidEventItemType.RaidPoint3, 100d),
+                    // Expert is the main farming quest. Omega raids are challenge quests that are not meant to be farmed,
+                    // so they give the same as Expert.
+                    _ => (RaidEventItemType.RaidPoint3, 50d),
+                };
+
+                yield return new(
+                    itemDict[emblemType],
+                    EntityTypes.RaidEventItem,
+                    this.GenerateDropAmount(emblemAverage)
                 );
-                yield return new(itemId, EntityTypes.RaidEventItem, emblem2Quantity);
+
+                // Exchange item 2 is the rarer treasure trade currency, only present in some events,
+                // and only drops from Expert difficulty and above.
+                if (
+                    variation >= VariationTypes.VeryHard
+                    && itemDict.TryGetValue(RaidEventItemType.ExchangeItem2, out int exchange2Id)
+                )
+                {
+                    yield return new(
+                        exchange2Id,
+                        EntityTypes.RaidEventItem,
+                        this.GenerateDropAmount((int)variation)
+                    );
+                }
+
                 break;
             }
+        }
+
+        // Exchange item 1 is the common treasure trade currency (only present in some events).
+        if (itemDict.TryGetValue(RaidEventItemType.ExchangeItem1, out int exchange1Id))
+        {
+            yield return new(
+                exchange1Id,
+                EntityTypes.RaidEventItem,
+                this.GenerateDropAmount(5d * (int)variation)
+            );
         }
 
         // Participating in the raid event will award Peregrine Blazons.

@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Tutorial;
 using DragaliaAPI.Infrastructure.Results;
+using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
@@ -628,6 +629,87 @@ public partial class DungeonRecordTest : TestFixture
             .First(x => x.Id == 10830201)
             .Progress.Should()
             .Be(1);
+    }
+
+    [Fact]
+    public async Task Record_Event_RaidBattle_BlazonDrops_ProgressesEventPointCollectionMissions()
+    {
+        int questId = 204290201; // Caged Desire: Warden Assault
+        int eventId = 20429;
+        int collect10BlazonsMission = 10830401;
+
+        await Client.PostMsgpack<MemoryEventActivateResponse>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        int blazonItemId = MasterAsset
+            .RaidEventItem.Enumerable.First(x =>
+                x.RaidEventId == eventId && x.RaidEventItemType == RaidEventItemType.SummonPoint
+            )
+            .Id;
+
+        DungeonSession mockSession = new()
+        {
+            Party = new List<PartySettingList>() { new() { CharaId = Charas.ThePrince } },
+            QuestData = MasterAsset.QuestData.Get(questId),
+            EnemyList = new()
+            {
+                {
+                    1,
+                    [
+                        new AtgenEnemy()
+                        {
+                            EnemyDropList =
+                            [
+                                new EnemyDropList()
+                                {
+                                    DropList =
+                                    [
+                                        new AtgenDropList()
+                                        {
+                                            Type = EntityTypes.RaidEventItem,
+                                            Id = blazonItemId,
+                                            Quantity = 15,
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ]
+                },
+            },
+        };
+
+        string key = await this.StartDungeon(mockSession);
+
+        await Client.PostMsgpack<DungeonRecordRecordResponse>(
+            "/dungeon_record/record",
+            new DungeonRecordRecordRequest()
+            {
+                DungeonKey = key,
+                PlayRecord = new()
+                {
+                    Time = 10,
+                    TreasureRecord = new List<AtgenTreasureRecord>()
+                    {
+                        new() { AreaIdx = 1, Enemy = [1] },
+                    },
+                    LiveUnitNoList = new List<int>(),
+                    DamageRecord = new List<AtgenDamageRecord>(),
+                    DragonDamageRecord = new List<AtgenDamageRecord>(),
+                    BattleRoyalRecord = new(),
+                    Wave = 1,
+                },
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        this.ApiContext.PlayerMissions.AsNoTracking()
+            .First(x => x.ViewerId == this.ViewerId && x.Id == collect10BlazonsMission)
+            .Progress.Should()
+            .Be(15);
     }
 
     [Fact]

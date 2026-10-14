@@ -359,7 +359,11 @@ public partial class QuestService(
                     .Distinct()
             )
             {
-                missionProgressionService.OnEventQuestClearedWithCrest(questData.Gid, crest);
+                missionProgressionService.OnEventQuestClearedWithCrest(
+                    questData.Gid,
+                    crest,
+                    session.PlayCount
+                );
             }
         }
 
@@ -367,12 +371,13 @@ public partial class QuestService(
         {
             missionProgressionService.OnEventRegularBattleCleared(
                 questData.Gid,
-                questData.VariationType
+                questData.VariationType,
+                session.PlayCount
             );
         }
         else if (questData.IsEventChallengeBattle && questData.EventKindType == EventKindType.Raid)
         {
-            missionProgressionService.OnEventRaidCleared(questData.Gid);
+            missionProgressionService.OnEventRaidCleared(questData.Gid, session.PlayCount);
         }
         else if (questData.IsEventChallengeBattle)
         {
