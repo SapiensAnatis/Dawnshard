@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 
@@ -376,5 +377,40 @@ public class AutoRepeatTest : TestFixture
         ).Data;
 
         mypageResponse.RepeatData.Should().BeEquivalentTo(recordResponse.RepeatData);
+    }
+
+    [Fact]
+    public void CombineWith_AccumulatesEventBonuses()
+    {
+        static IngameResultData Create(int passiveProgress) =>
+            new()
+            {
+                RewardRecord = new()
+                {
+                    EnemyPiece = [new AtgenEnemyPiece(Materials.Dragonfruit, 2)],
+                    TakeAstralItemQuantity = 1,
+                },
+                GrowRecord = new(),
+                EventPassiveUpList = [new AtgenEventPassiveUpList(101, passiveProgress)],
+                ScoringEnemyPointList =
+                [
+                    new AtgenScoringEnemyPointList
+                    {
+                        ScoringEnemyId = 5,
+                        SmashCount = 1,
+                        Point = 10,
+                    },
+                ],
+                BonusFactorList = [new AtgenBonusFactorList { FactorType = 1, FactorValue = 1.5f }],
+            };
+
+        IngameResultData result = Create(1).CombineWith(Create(2));
+
+        result.EventPassiveUpList.Should().ContainSingle().Which.Progress.Should().Be(3);
+        result.ScoringEnemyPointList.Should().ContainSingle().Which.Point.Should().Be(20);
+        result.ScoringEnemyPointList.Single().SmashCount.Should().Be(2);
+        result.BonusFactorList.Should().HaveCount(2);
+        result.RewardRecord.EnemyPiece.Should().ContainSingle().Which.Quantity.Should().Be(4);
+        result.RewardRecord.TakeAstralItemQuantity.Should().Be(2);
     }
 }
