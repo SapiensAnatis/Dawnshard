@@ -6,6 +6,7 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 public class EventDropServiceTest
 {
+    private const int SilverEmblemId = 2042903; // RaidPoint2
     private const int GoldEmblemId = 2042904; // RaidPoint3
     private const int ExchangeItem1Id = 2042908;
     private const int ExchangeItem2Id = 2042909;
@@ -14,6 +15,8 @@ public class EventDropServiceTest
     [InlineData(204290302, 37, 62)] // Expert: ~50
     [InlineData(204290401, 187, 312)] // EX: ~250
     [InlineData(204290501, 75, 125)] // Nightmare: ~100
+    [InlineData(204290602, 37, 62)] // Omega: ~50
+    [InlineData(204290606, 37, 62)] // Omega: ~50
     public void GenerateEventMaterialDrops_RaidEvent_DropsExpectedGoldEmblems(
         int questId,
         int min,
@@ -44,5 +47,18 @@ public class EventDropServiceTest
 
         drops.Should().Contain(x => x.Id == ExchangeItem1Id && x.Quantity > 0);
         drops.Should().Contain(x => x.Id == ExchangeItem2Id && x.Quantity > 0);
+    }
+
+    [Fact]
+    public void GenerateEventMaterialDrops_RaidEventBeginner_DropsSilverEmblems()
+    {
+        EventDropService service = new(null!);
+
+        List<DropEntity> drops = service
+            .GenerateEventMaterialDrops(MasterAsset.QuestData[204290301])
+            .ToList();
+
+        drops.Should().NotContain(x => x.Id == GoldEmblemId);
+        drops.Single(x => x.Id == SilverEmblemId).Quantity.Should().BeInRange(7, 13);
     }
 }

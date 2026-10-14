@@ -262,10 +262,12 @@ public class EventDropService(IEventRepository eventRepository)
                 // Rewards primarily include a significantly larger amount of Gold Emblems than Expert difficulty offers.
                 (RaidEventItemType emblemType, double emblemAverage) = variation switch
                 {
-                    VariationTypes.VeryHard => (RaidEventItemType.RaidPoint3, 50d),
+                    VariationTypes.Normal => (RaidEventItemType.RaidPoint2, 10d),
                     VariationTypes.Extreme => (RaidEventItemType.RaidPoint3, 250d),
                     VariationTypes.Hell => (RaidEventItemType.RaidPoint3, 100d),
-                    _ => (RaidEventItemType.RaidPoint2, 10d * (int)variation),
+                    // Expert is the main farming quest. Omega raids are challenge quests that are not meant to be farmed,
+                    // so they give the same as Expert.
+                    _ => (RaidEventItemType.RaidPoint3, 50d),
                 };
 
                 yield return new(
