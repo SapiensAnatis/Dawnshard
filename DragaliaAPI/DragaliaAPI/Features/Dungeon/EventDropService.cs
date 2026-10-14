@@ -263,6 +263,7 @@ public class EventDropService(IEventRepository eventRepository)
                 (RaidEventItemType emblemType, double emblemAverage) = variation switch
                 {
                     VariationTypes.Normal => (RaidEventItemType.RaidPoint2, 10d),
+                    // EX is an occasional bonus quest unlocked by clearing other raids, so it gives more than Nightmare.
                     VariationTypes.Extreme => (RaidEventItemType.RaidPoint3, 250d),
                     VariationTypes.Hell => (RaidEventItemType.RaidPoint3, 100d),
                     // Expert is the main farming quest. Omega raids are challenge quests that are not meant to be farmed,
