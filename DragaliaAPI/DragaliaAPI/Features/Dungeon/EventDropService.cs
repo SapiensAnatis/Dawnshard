@@ -74,14 +74,28 @@ public class EventDropService(IEventRepository eventRepository)
         List<int> rare =
             quest.DungeonType is DungeonTypes.Raid
                 ? info.Values.Where(x => x.Rarity == 1).Select(x => x.Id).ToList()
-                : normal;
+                : [];
 
         for (int i = 0; i < amount; i++)
         {
-            int roll = this.rdm.Next(101);
+            bool isRare = this.rdm.Next(101) > 95;
 
-            bool isRare = roll > 95;
-            List<int> table = isRare ? rare : normal;
+            // Fall back to normal boosts if all rare boosts are maxed. Once normal boosts are maxed, the remaining
+            // rare boosts can still only drop on a rare roll.
+            List<int> table;
+
+            if (isRare && rare.Count > 0)
+            {
+                table = rare;
+            }
+            else if (normal.Count > 0)
+            {
+                table = normal;
+            }
+            else
+            {
+                break;
+            }
 
             int drop = this.rdm.Next(table);
 
@@ -93,29 +107,8 @@ public class EventDropService(IEventRepository eventRepository)
             progress[drop]++;
             if (progress[drop] == info[drop].MaxProgress)
             {
-                progress.Remove(drop);
-                info.Remove(drop);
-                if (isRare)
-                {
-                    rare.Remove(drop);
-                    if (rare.Count == 0)
-                    {
-                        rare = normal;
-                    }
-                }
-                else
-                {
-                    normal.Remove(drop);
-                    if (normal.Count == 0)
-                    {
-                        normal = rare;
-                    }
-                }
-
-                if (normal.Count == 0 && rare.Count == 0)
-                {
-                    break;
-                }
+                normal.Remove(drop);
+                rare.Remove(drop);
             }
         }
 
@@ -257,23 +250,27 @@ public class EventDropService(IEventRepository eventRepository)
                 }
 
                 // Beginner-difficulty raid battles are the primary source of Silver Emblems,
-                // while Expert difficulty and above gives Gold Emblems.
+                // while Expert difficulty and above gives mostly Gold Emblems.
                 // Many raid events provide access to an EX Raid that can be accessed with Otherworld Gems after clearing the Expert-difficulty raid battle.
                 // Rewards primarily include a significantly larger amount of Gold Emblems than Expert difficulty offers.
-                (RaidEventItemType emblemType, double emblemAverage) = variation switch
+                (double silverAverage, double goldAverage) = variation switch
                 {
-                    VariationTypes.Normal => (RaidEventItemType.RaidPoint2, 10d),
-                    VariationTypes.Extreme => (RaidEventItemType.RaidPoint3, 250d),
-                    VariationTypes.Hell => (RaidEventItemType.RaidPoint3, 100d),
-                    // Expert is the main farming quest. Omega raids are challenge quests that are not meant to be farmed,
-                    // so they give the same as Expert.
-                    _ => (RaidEventItemType.RaidPoint3, 50d),
+                    VariationTypes.Normal => (50d, 10d),
+                    // EX is an occasional bonus quest unlocked by clearing other raids, so it gives the most.
+                    VariationTypes.Extreme => (10d, 250d),
+                    _ => (10d, 50d),
                 };
 
                 yield return new(
-                    itemDict[emblemType],
+                    itemDict[RaidEventItemType.RaidPoint2],
                     EntityTypes.RaidEventItem,
-                    this.GenerateDropAmount(emblemAverage)
+                    this.GenerateDropAmount(silverAverage)
+                );
+
+                yield return new(
+                    itemDict[RaidEventItemType.RaidPoint3],
+                    EntityTypes.RaidEventItem,
+                    this.GenerateDropAmount(goldAverage)
                 );
 
                 // Exchange item 2 is the rarer treasure trade currency, only present in some events,
