@@ -14,7 +14,7 @@ public class EventDropServiceTest
     [Theory]
     [InlineData(204290301, 50, 10)] // Beginner
     [InlineData(204290302, 10, 50)] // Expert
-    [InlineData(204290401, 0, 250)] // EX
+    [InlineData(204290401, 10, 250)] // EX
     [InlineData(204290501, 10, 50)] // Nightmare
     [InlineData(204290602, 10, 50)] // Omega
     [InlineData(204290606, 10, 50)] // Omega
@@ -52,12 +52,6 @@ public class EventDropServiceTest
 
     private static void AssertEmblemQuantity(List<DropEntity> drops, int emblemId, int average)
     {
-        if (average == 0)
-        {
-            drops.Should().NotContain(x => x.Id == emblemId);
-            return;
-        }
-
         // Drop amounts vary by ±25%
         drops
             .Should()

@@ -257,18 +257,15 @@ public class EventDropService(IEventRepository eventRepository)
                 {
                     VariationTypes.Normal => (50d, 10d),
                     // EX is an occasional bonus quest unlocked by clearing other raids, so it gives the most.
-                    VariationTypes.Extreme => (0d, 250d),
+                    VariationTypes.Extreme => (10d, 250d),
                     _ => (10d, 50d),
                 };
 
-                if (silverAverage > 0)
-                {
-                    yield return new(
-                        itemDict[RaidEventItemType.RaidPoint2],
-                        EntityTypes.RaidEventItem,
-                        this.GenerateDropAmount(silverAverage)
-                    );
-                }
+                yield return new(
+                    itemDict[RaidEventItemType.RaidPoint2],
+                    EntityTypes.RaidEventItem,
+                    this.GenerateDropAmount(silverAverage)
+                );
 
                 yield return new(
                     itemDict[RaidEventItemType.RaidPoint3],
