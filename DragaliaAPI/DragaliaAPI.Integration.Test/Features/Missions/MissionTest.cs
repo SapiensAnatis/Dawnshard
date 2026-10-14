@@ -5,6 +5,7 @@ using DragaliaAPI.Extensions;
 using DragaliaAPI.Infrastructure.Results;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Missions;
 
@@ -794,5 +795,39 @@ public class MissionTest : TestFixture
                         }),
                 }
             );
+    }
+
+    [Fact]
+    public async Task EventMissions_CharacterManaNodeUnlock_UsesUnlockedNodeCount()
+    {
+        int eventId = 20429;
+        int sophie10NodesMission = 11330301;
+
+        await this
+            .ApiContext.PlayerCharaData.Where(x =>
+                x.ViewerId == this.ViewerId && x.CharaId == Charas.Sophie
+            )
+            .ExecuteUpdateAsync(
+                x =>
+                    x.SetProperty(
+                        p => p.ManaNodeUnlockCount,
+                        (ushort)ManaNodesUtil.SetManaCircleNodesFromSet([1, 2, 3, 4, 5, 6])
+                    ),
+                TestContext.Current.CancellationToken
+            );
+
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        DbPlayerMission mission = this
+            .ApiContext.PlayerMissions.AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
+            .First(x => x.Id == sophie10NodesMission && x.Type == MissionType.Period);
+
+        mission.Progress.Should().Be(6);
+        mission.State.Should().Be(MissionState.InProgress);
     }
 }

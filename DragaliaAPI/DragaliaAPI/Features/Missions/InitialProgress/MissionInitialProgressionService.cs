@@ -315,26 +315,25 @@ public partial class MissionInitialProgressionService(
 
     private async Task<int> GetCharacterManaNodeCount(Charas? charaId, UnitElement? element)
     {
-        // FIXME: This should not be using ManaNodeUnlockCount as that's a bit mask, not a literal count of unlocked nodes
+        // ManaNodeUnlockCount is a bit mask, so it must be converted to a set of nodes to count them
         if (charaId != null)
         {
-            return (await unitRepository.FindCharaAsync(charaId.Value))?.ManaNodeUnlockCount ?? 0;
-        }
-
-        if (element != null)
-        {
-            return (
-                    await apiContext
-                        .PlayerCharaData.Select(x => new { x.CharaId, x.ManaNodeUnlockCount })
-                        .ToListAsync()
-                )
-                    .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
-                    .Select(x => (int?)x.ManaNodeUnlockCount)
-                    .Max()
+            return (await unitRepository.FindCharaAsync(charaId.Value))?.ManaCirclePieceIdList.Count
                 ?? 0;
         }
 
-        return await apiContext.PlayerCharaData.Select(x => (int?)x.ManaNodeUnlockCount).MaxAsync()
+        var charaNodes = await apiContext
+            .PlayerCharaData.Select(x => new { x.CharaId, x.ManaNodeUnlockCount })
+            .ToListAsync();
+
+        return charaNodes
+                .Where(x =>
+                    element is null || MasterAsset.CharaData[x.CharaId].ElementalType == element
+                )
+                .Select(x =>
+                    (int?)ManaNodesUtil.GetSetFromManaNodes((ManaNodes)x.ManaNodeUnlockCount).Count
+                )
+                .Max()
             ?? 0;
     }
 
