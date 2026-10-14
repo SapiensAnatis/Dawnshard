@@ -241,17 +241,23 @@ public partial class MissionProgressionService(
     public void OnEventParticipation(int eventId) =>
         EnqueueEvent(MissionCompleteType.EventParticipation, 1, 1, eventId);
 
-    public void OnEventRegularBattleCleared(int eventId, VariationTypes variationType) =>
+    public void OnEventRegularBattleCleared(int eventId, VariationTypes variationType, int count) =>
         EnqueueEvent(
             MissionCompleteType.EventRegularBattleClear,
-            1,
-            1,
+            count,
+            count,
             eventId,
             (int)variationType
         );
 
-    public void OnEventQuestClearedWithCrest(int eventId, AbilityCrestId crest) =>
-        EnqueueEvent(MissionCompleteType.EventQuestClearWithCrest, 1, 1, eventId, (int)crest);
+    public void OnEventQuestClearedWithCrest(int eventId, AbilityCrestId crest, int count) =>
+        EnqueueEvent(
+            MissionCompleteType.EventQuestClearWithCrest,
+            count,
+            count,
+            eventId,
+            (int)crest
+        );
 
     public void OnEventPointCollected(int eventId, VariationTypes variationType, int quantity) =>
         EnqueueEvent(
@@ -288,8 +294,8 @@ public partial class MissionProgressionService(
             questId
         );
 
-    public void OnEventRaidCleared(int eventId) =>
-        EnqueueEvent(MissionCompleteType.EventRaidClear, 1, 1, eventId);
+    public void OnEventRaidCleared(int eventId, int count) =>
+        EnqueueEvent(MissionCompleteType.EventRaidClear, count, count, eventId);
 
     public void EnqueueEvent(
         MissionCompleteType type,

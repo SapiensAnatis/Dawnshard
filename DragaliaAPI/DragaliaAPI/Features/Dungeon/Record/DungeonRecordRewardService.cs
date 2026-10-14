@@ -8,6 +8,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shared.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
@@ -98,6 +99,24 @@ public partial class DungeonRecordRewardService(
         }
 
         entities = entities.Merge().ToList();
+
+        // Blazons (raid summon points) count towards event point collection endeavours
+        int blazonQuantity = entities
+            .Where(x =>
+                x.Type == EntityTypes.RaidEventItem
+                && MasterAsset.RaidEventItem.TryGetValue(x.Id, out RaidEventItem? item)
+                && item.RaidEventItemType == RaidEventItemType.SummonPoint
+            )
+            .Sum(x => x.Quantity);
+
+        if (blazonQuantity > 0)
+        {
+            missionProgressionService.OnEventPointCollected(
+                session.QuestGid,
+                session.QuestVariation,
+                blazonQuantity
+            );
+        }
 
         double coinMultiplier = AbilityLogic.CalculateCoinMultiplier(
             session.RewardBoostingAbilitiesPerUnit

@@ -373,4 +373,45 @@ public class DungeonSkipTest : TestFixture
             .Data.UpdateDataList.MissionNotice.DailyMissionNotice.NewCompleteMissionIdList.Should()
             .Contain(clear5QuestsMission);
     }
+
+    [Fact]
+    public async Task DungeonSkipStart_EventRegularBattle_ProgressesMissionsByPlayCount()
+    {
+        int questId = 204290201; // Caged Desire: Warden Assault
+        int eventId = 20429;
+        int playCount = 3;
+        int clearWardenMission = 10830301;
+
+        await this.Client.PostMsgpack<MemoryEventActivateResponse>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { EventId = eventId },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                ViewerId = ViewerId,
+                QuestId = questId,
+                State = 3,
+            }
+        );
+
+        await this.Client.PostMsgpack<DungeonSkipStartResponse>(
+            $"{Endpoint}/start",
+            new DungeonSkipStartRequest()
+            {
+                PartyNo = 1,
+                PlayCount = playCount,
+                SupportViewerId = 1000,
+                QuestId = questId,
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        this.ApiContext.PlayerMissions.AsNoTracking()
+            .First(x => x.ViewerId == this.ViewerId && x.Id == clearWardenMission)
+            .Progress.Should()
+            .Be(playCount);
+    }
 }

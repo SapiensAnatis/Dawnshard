@@ -73,8 +73,8 @@ public interface IMissionProgressionService
     void OnPartyPowerReached(int might);
     void OnTreasureTrade(int tradeId, EntityTypes type, int id, int count, int total);
     void OnEventParticipation(int eventId);
-    void OnEventRegularBattleCleared(int eventId, VariationTypes variationType);
-    void OnEventQuestClearedWithCrest(int eventId, AbilityCrestId crest);
+    void OnEventRegularBattleCleared(int eventId, VariationTypes variationType, int count);
+    void OnEventQuestClearedWithCrest(int eventId, AbilityCrestId crest, int count);
     void OnEventPointCollected(int eventId, VariationTypes variationType, int quantity);
     void OnEventChallengeBattleCleared(
         int eventId,
@@ -83,7 +83,7 @@ public interface IMissionProgressionService
         int questId
     );
     void OnEventTrialCleared(int eventId, VariationTypes variationType, int questId);
-    void OnEventRaidCleared(int eventId);
+    void OnEventRaidCleared(int eventId, int count);
 
     void EnqueueEvent(
         MissionCompleteType type,
