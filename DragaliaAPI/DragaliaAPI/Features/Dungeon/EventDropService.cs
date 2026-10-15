@@ -62,7 +62,7 @@ public class EventDropService(IEventRepository eventRepository)
             return Enumerable.Empty<AtgenEventPassiveUpList>();
         }
 
-        int amount = this.rdm.Next(progress.Count);
+        int amount = this.rdm.Next(progress.Count + 1);
         if (amount == 0)
         {
             return Enumerable.Empty<AtgenEventPassiveUpList>();
