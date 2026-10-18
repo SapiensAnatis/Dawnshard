@@ -4,7 +4,7 @@
   import { createForm } from 'svelte-form-helper';
 
   import { Select } from '$lib/components/select';
-  import { t } from '$lib/translations';
+  import { get } from '$lib/translations';
   import { formatTypeKey } from '$main/account/save-editor/present/util.ts';
   import { Button } from '$shadcn/components/ui/button/index.js';
   import * as Card from '$shadcn/components/ui/card';
@@ -18,6 +18,8 @@
     type PresentFormSubmission,
     type PresentWidgetData
   } from './presentTypes.ts';
+
+  const { t } = get();
 
   let { widgetData }: { widgetData: PresentWidgetData } = $props();
 
@@ -43,7 +45,7 @@
     widgetData.types
       .map(({ type }) => ({
         value: type,
-        label: $t(`entity.${formatTypeKey(type)}.label`)
+        label: t(`entity.${formatTypeKey(type)}.label`)
       }))
       .sort((a, b) => a.label.localeCompare(b.label))
   );
@@ -62,7 +64,7 @@
     return itemList
       .map(({ id }) => ({
         value: id,
-        label: $t(`entity.${formatTypeKey(typeValue)}.item.${id}`)
+        label: t(`entity.${formatTypeKey(typeValue)}.item.${id}`)
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   });

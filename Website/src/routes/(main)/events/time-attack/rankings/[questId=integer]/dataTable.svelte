@@ -1,22 +1,21 @@
 <script lang="ts">
   import {
-    type ColumnDef,
+    createColumnHelper,
+    createTable,
     type ExpandedState,
-    getCoreRowModel,
-    getPaginationRowModel,
-    type PaginationState
-  } from '@tanstack/table-core';
+    FlexRender,
+    type PaginationState,
+    renderComponent,
+    rowExpandingFeature,
+    rowPaginationFeature,
+    tableFeatures
+  } from '@tanstack/svelte-table';
   import { onMount, tick } from 'svelte';
   import { SvelteURLSearchParams } from 'svelte/reactivity';
   import { slide } from 'svelte/transition';
 
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import {
-    createSvelteTable,
-    FlexRender,
-    renderComponent
-  } from '$lib/shadcn/components/ui/data-table/index.js';
   import {
     getTeam,
     getTeamKeys
@@ -38,86 +37,81 @@
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
   let expanded = $state<ExpandedState>({});
 
-  const columns: ColumnDef<TimeAttackRanking>[] = [
-    {
-      accessorKey: 'rank',
+  const features = tableFeatures({ rowPaginationFeature, rowExpandingFeature });
+  const columnHelper = createColumnHelper<typeof features, TimeAttackRanking>();
+
+  const columns = columnHelper.columns([
+    columnHelper.accessor('rank', {
       header: 'Rank'
-    },
-    {
-      accessorKey: 'players',
+    }),
+    columnHelper.accessor('players', {
       header: () => (coop ? 'Players' : 'Player'),
-      cell: ({ getValue }) => {
-        return getValue<TimeAttackPlayer[]>()
-          .map((p) => p.name)
+      cell: (info) => {
+        return info
+          .getValue()
+          .map((p: TimeAttackPlayer) => p.name)
           .join(', ');
       }
-    },
-    {
-      accessorKey: 'time',
+    }),
+    columnHelper.accessor('time', {
       header: 'Clear Time',
-      cell: ({ getValue }) => {
-        const date = new Date(getValue<number>() * 1000);
+      cell: (info) => {
+        const date = new Date(info.getValue() * 1000);
         return date.toISOString().slice(14, -3);
       }
-    },
-    {
+    }),
+    columnHelper.accessor('players', {
       id: 'team',
-      accessorKey: 'players',
       header: 'Team',
-      cell: ({ getValue }) => {
-        const players = getValue<TimeAttackPlayer[]>();
-        return renderComponent(TeamCell, { team: getTeam(coop, players), expanded: false });
+      cell: (info) => {
+        return renderComponent(TeamCell, {
+          team: getTeam(coop, info.getValue()),
+          expanded: false
+        });
       }
-    },
-    {
+    }),
+    columnHelper.display({
       id: 'expand',
       cell: ({ row }) => {
         return renderComponent(ExpandRow, {
           initialized,
           isExpanded: row.getIsExpanded(),
-          toggleExpanded: row.toggleExpanded
+          toggleExpanded: () => row.toggleExpanded()
         });
       }
-    }
-  ];
-
-  const table = $derived(
-    createSvelteTable({
-      get data() {
-        return data;
-      },
-      columns,
-      state: {
-        get pagination() {
-          return pagination;
-        },
-        get expanded() {
-          return expanded;
-        }
-      },
-      onPaginationChange: (updaterOrValue) => {
-        if (typeof updaterOrValue === 'function') {
-          pagination = updaterOrValue(pagination);
-        } else {
-          pagination = updaterOrValue;
-        }
-
-        handlePageChange(pagination.pageIndex);
-      },
-      onExpandedChange: (updaterOrValue) => {
-        if (typeof updaterOrValue === 'function') {
-          expanded = updaterOrValue(expanded);
-        } else {
-          expanded = expanded;
-        }
-      },
-      getCoreRowModel: getCoreRowModel(),
-      getPaginationRowModel: getPaginationRowModel(),
-      manualPagination: true,
-      rowCount: itemCount,
-      enableExpanding: true
     })
-  );
+  ]);
+
+  const table = createTable({
+    features,
+    columns,
+    get data() {
+      return data;
+    },
+    state: {
+      get pagination() {
+        return pagination;
+      },
+      get expanded() {
+        return expanded;
+      }
+    },
+    onPaginationChange: (updaterOrValue) => {
+      pagination =
+        typeof updaterOrValue === 'function' ? updaterOrValue(pagination) : updaterOrValue;
+
+      handlePageChange(pagination.pageIndex);
+    },
+    onExpandedChange: (updaterOrValue) => {
+      expanded = typeof updaterOrValue === 'function' ? updaterOrValue(expanded) : updaterOrValue;
+    },
+    manualPagination: true,
+    get rowCount() {
+      return itemCount;
+    },
+    getRowCanExpand: () => true,
+    autoResetExpanded: false
+  });
 
   let initialized = $state(false);
   let showExpanded = $state(true);
@@ -166,9 +160,7 @@
           {#each headerGroup.headers as header (header.id)}
             <Table.Head>
               {#if !header.isPlaceholder}
-                <FlexRender
-                  content={header.column.columnDef.header}
-                  context={header.getContext()} />
+                <FlexRender {header} />
               {/if}
             </Table.Head>
           {/each}
@@ -178,7 +170,7 @@
     <Table.Body>
       {#each table.getRowModel().rows as row (row.id)}
         <Table.Row class="flex flex-col md:[display:revert]">
-          {#each row.getVisibleCells() as cell (cell.id)}
+          {#each row.getAllCells() as cell (cell.id)}
             {@const header = cell.column.columnDef.header}
             <Table.Cell class="px-4 py-3">
               <div class="text-muted-foreground md:hidden">
@@ -187,7 +179,7 @@
                 {/if}
               </div>
               <div>
-                <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+                <FlexRender {cell} />
               </div>
             </Table.Cell>
           {/each}

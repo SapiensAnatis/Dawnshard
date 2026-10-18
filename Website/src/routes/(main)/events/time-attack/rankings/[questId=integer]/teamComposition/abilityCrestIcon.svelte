@@ -2,7 +2,7 @@
   import { Image } from '@unpic/svelte';
 
   import { PUBLIC_CDN_URL } from '$env/static/public';
-  import { l, t } from '$lib/translations';
+  import { get } from '$lib/translations';
   import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Popover from '$shadcn/components/ui/popover';
 
@@ -10,6 +10,8 @@
     $props();
 
   import WikiLink from './wikiLink.svelte';
+
+  const { l, t } = get();
 
   type AbilityCrest = NonNullable<TimeAttackUnit['crests'][0]>;
 
@@ -23,10 +25,10 @@
     `entity.wyrmprint.item.${abilityCrest.id}`;
 
   const getAbilityCrestName = (abilityCrest: AbilityCrest) =>
-    $t(getAbilityCrestNameKey(abilityCrest));
+    t(getAbilityCrestNameKey(abilityCrest));
 
   const getAbilityCrestWikiName = (abilityCrest: AbilityCrest) =>
-    $l('en', getAbilityCrestNameKey(abilityCrest));
+    l('en', getAbilityCrestNameKey(abilityCrest));
 
   const emptyIconRarityLookup: Partial<Record<number, string>> = {
     5: 'Icon_Blank_07_A.webp',
