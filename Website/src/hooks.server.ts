@@ -10,6 +10,7 @@ import { PUBLIC_ENABLE_MSW } from '$env/static/public';
 import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 import createLogger from '$lib/server/logger.ts';
+import { handle as handleI18n } from '$lib/translations';
 
 if (!env.DAWNSHARD_API_URL_SSR) {
   throw new Error('Failed to load environment variable DAWNSHARD_API_URL_SSR!');
@@ -120,7 +121,13 @@ const handleIsAdmin: Handle = ({ event, resolve }) => {
   return resolve(event);
 };
 
-export const handle = sequence(handleHeadScript, handleLogger, handleAuth, handleIsAdmin);
+export const handle = sequence(
+  handleHeadScript,
+  handleLogger,
+  handleAuth,
+  handleIsAdmin,
+  handleI18n
+);
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
   if (status === 405 && event.request.method === 'POST') {

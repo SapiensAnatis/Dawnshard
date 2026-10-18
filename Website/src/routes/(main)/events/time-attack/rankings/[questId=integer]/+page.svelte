@@ -2,10 +2,12 @@
   import { resolve } from '$app/paths';
   import Page from '$lib/components/page.svelte';
   import Typography from '$lib/components/typography.svelte';
-  import { t } from '$lib/translations';
+  import { get } from '$lib/translations';
 
   import type { PageProps } from './$types';
   import DataTable from './dataTable.svelte';
+
+  const { t } = get();
 
   let { data, params }: PageProps = $props();
 
@@ -25,7 +27,7 @@
               href={resolve('/(main)/events/time-attack/rankings/[questId=integer]', {
                 questId: questId.toString()
               })}>
-              {$t(`timeAttack.quest.${questId}`)}
+              {t(`timeAttack.quest.${questId}`)}
             </a>
           </li>
         {/each}

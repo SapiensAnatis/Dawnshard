@@ -6,20 +6,22 @@
 
   export let talisman: TimeAttackUnit['talisman'];
 
-  import { t } from '$lib/translations';
+  import { get } from '$lib/translations';
   import * as Popover from '$shadcn/components/ui/popover';
+
+  const { t } = get();
 
   type Talisman = NonNullable<TimeAttackUnit['talisman']>;
 
   const getTalismanImagePath = (talisman: Talisman) =>
     new URL(`images/icon/talisman/m/${talisman.id}.webp`, PUBLIC_CDN_URL).href;
 
-  const getTalismanName = (talisman: Talisman) => $t(`entity.talisman.item.${talisman.id}`);
+  const getTalismanName = (talisman: Talisman) => t(`entity.talisman.item.${talisman.id}`);
 
   const getAbilityName = (abilityId: number, talisman: Talisman) => {
-    const element = $t(`timeAttack.element.${talisman.element}`);
-    const weaponType = $t(`timeAttack.weaponType.${talisman.weaponType}`);
-    return $t(`timeAttack.ability.${abilityId}`, { element, weaponType });
+    const element = t(`timeAttack.element.${talisman.element}`);
+    const weaponType = t(`timeAttack.weaponType.${talisman.weaponType}`);
+    return t(`timeAttack.ability.${abilityId}`, { element, weaponType });
   };
 </script>
 

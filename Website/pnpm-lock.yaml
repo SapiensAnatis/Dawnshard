@@ -33,8 +33,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1(svelte@5.57.1(@typescript-eslint/types@8.71.0))
       sveltekit-i18n:
-        specifier: 2.4.2
-        version: 2.4.2(svelte@5.57.1(@typescript-eslint/types@8.71.0))
+        specifier: 3.4.1
+        version: 3.4.1(svelte@5.57.1(@typescript-eslint/types@8.71.0))
       tailwind-merge:
         specifier: 3.7.0
         version: 3.7.0
@@ -184,6 +184,10 @@ packages:
 
   '@cacheable/utils@2.5.0':
     resolution: {integrity: sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA==}
+
+  '@curly-message/parser@3.1.2':
+    resolution: {integrity: sha512-c10/p5apPCN36S2ydM0C00AkXPh1swssnNFPJKmMYmTn8kq2clKvSXkXiMDepBcMei10/SRHMNWso2Um2+YVJA==}
+    engines: {node: '>=22'}
 
   '@emnapi/runtime@1.11.1':
     resolution: {integrity: sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw==}
@@ -948,13 +952,17 @@ packages:
       svelte: ^5.46.4
       vite: ^8.0.0-beta.7 || ^8.0.0
 
-  '@sveltekit-i18n/base@1.3.8':
-    resolution: {integrity: sha512-XIoQBPYMc6ENNIRoxYUwRdG60+UjvYdRNgBPFSm6FIdSf4FBs60i+WIqtorJvTMC2jycTMe7So9RODPq1HCbiA==}
+  '@sveltekit-i18n/base@3.3.2':
+    resolution: {integrity: sha512-zapliOCwvSEQDzXL86rolW88kwH1AWmKWZB1v4LYzvIfZ/ZlivFuceCYJGJKTCWYPbqByU08nC0fUukXB2pwmA==}
+    engines: {bun: '>=1.2', deno: '>=2', node: '>=22'}
     peerDependencies:
-      svelte: '>=3.49.0'
+      svelte: '>=5'
 
-  '@sveltekit-i18n/parser-default@1.1.1':
-    resolution: {integrity: sha512-/gtzLlqm/sox7EoPKD56BxGZktK/syGc79EbJAPWY5KVitQD9SM0TP8yJCqDxTVPk7Lk0WJhrBGUE2Nn0f5M1w==}
+  '@sveltekit-i18n/parser-curly@3.2.2':
+    resolution: {integrity: sha512-E5i/fGo44qo5uFAPs8Dpvg25K8AjePuT2vn5Qb28iiHY2XeXImphkFnno1J/KMA4yIi73L6tLPNWejOJIhilGQ==}
+    engines: {bun: '>=1.2', deno: '>=2', node: '>=22'}
+    peerDependencies:
+      '@sveltekit-i18n/base': ^3.0.0 || ^3.1.0-next.0
 
   '@swc/helpers@0.5.23':
     resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
@@ -2309,10 +2317,11 @@ packages:
     resolution: {integrity: sha512-Uqj49lWKB+iSSnneuwiYYJ7MZgkB+eXr0LXBhv4uDuAkXqnWmq65Sxflfvp0Lc6MdKjMUxGaeOKWJqz5SNiVIA==}
     engines: {node: '>=18'}
 
-  sveltekit-i18n@2.4.2:
-    resolution: {integrity: sha512-hjRWn4V4DBL8JQKJoJa3MRvn6d32Zo+rWkoSP5bsQ/XIAguPdQUZJ8LMe6Nc1rST8WEVdu9+vZI3aFdKYGR3+Q==}
+  sveltekit-i18n@3.4.1:
+    resolution: {integrity: sha512-XArl1fGAFprabvscDnIhiP90GqYWJqbQXapYseKCUz+llBuUrBk7X7U55mAeRZCHhjuZ7+bWO1qLltnuiMSnBw==}
+    engines: {bun: '>=1.2', deno: '>=2', node: '>=22'}
     peerDependencies:
-      svelte: '>=3.49.0'
+      svelte: '>=5'
 
   tabbable@6.5.0:
     resolution: {integrity: sha512-wieBHXygIm7OyQOu5hQlkk62/WyCFYGlWg7L6/ZCUZwx0o398Zkn4pVmMyfYhfMG8kGrj/Krt8eIk6UKC6VzwA==}
@@ -2599,6 +2608,8 @@ snapshots:
     dependencies:
       hashery: 1.5.1
       keyv: 5.6.0
+
+  '@curly-message/parser@3.1.2': {}
 
   '@emnapi/runtime@1.11.1':
     dependencies:
@@ -3149,11 +3160,14 @@ snapshots:
       vite: 8.3.1(@types/node@26.6.3)(esbuild@0.27.4)(jiti@2.7.0)(yaml@2.6.1)
       vitefu: 1.1.3(vite@8.3.1(@types/node@26.6.3)(esbuild@0.27.4)(jiti@2.7.0)(yaml@2.6.1))
 
-  '@sveltekit-i18n/base@1.3.8(svelte@5.57.1(@typescript-eslint/types@8.71.0))':
+  '@sveltekit-i18n/base@3.3.2(svelte@5.57.1(@typescript-eslint/types@8.71.0))':
     dependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.71.0)
 
-  '@sveltekit-i18n/parser-default@1.1.1': {}
+  '@sveltekit-i18n/parser-curly@3.2.2(@sveltekit-i18n/base@3.3.2(svelte@5.57.1(@typescript-eslint/types@8.71.0)))':
+    dependencies:
+      '@curly-message/parser': 3.1.2
+      '@sveltekit-i18n/base': 3.3.2(svelte@5.57.1(@typescript-eslint/types@8.71.0))
 
   '@swc/helpers@0.5.23':
     dependencies:
@@ -4467,10 +4481,10 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  sveltekit-i18n@2.4.2(svelte@5.57.1(@typescript-eslint/types@8.71.0)):
+  sveltekit-i18n@3.4.1(svelte@5.57.1(@typescript-eslint/types@8.71.0)):
     dependencies:
-      '@sveltekit-i18n/base': 1.3.8(svelte@5.57.1(@typescript-eslint/types@8.71.0))
-      '@sveltekit-i18n/parser-default': 1.1.1
+      '@sveltekit-i18n/base': 3.3.2(svelte@5.57.1(@typescript-eslint/types@8.71.0))
+      '@sveltekit-i18n/parser-curly': 3.2.2(@sveltekit-i18n/base@3.3.2(svelte@5.57.1(@typescript-eslint/types@8.71.0)))
       svelte: 5.57.1(@typescript-eslint/types@8.71.0)
 
   tabbable@6.5.0: {}

@@ -1,20 +1,21 @@
 <script lang="ts">
-  import { invalidate } from '$app/navigation';
-  import { locale, locales, translations } from '$lib/translations';
+  import { get, translations } from '$lib/translations';
+
+  const i18n = get();
 
   function change(e: Event) {
     const next = (e.currentTarget as HTMLSelectElement).value;
     document.cookie = `locale=${next}; path=/; max-age=31536000; SameSite=Lax`;
-    invalidate('app:locale');
+    i18n.locale = next;
   }
 </script>
 
 <select
   aria-label="Language"
-  bind:value={$locale}
+  value={i18n.locale}
   onchange={change}
   class="border-input bg-background rounded-md border px-2 text-sm">
-  {#each $locales as l (l)}
+  {#each i18n.locales as l (l)}
     <option value={l}>{translations[l] ?? l}</option>
   {/each}
 </select>

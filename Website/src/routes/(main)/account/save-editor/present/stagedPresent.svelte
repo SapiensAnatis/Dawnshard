@@ -1,14 +1,16 @@
 <script lang="ts">
   import Gift from '@lucide/svelte/icons/gift';
 
-  import { t } from '$lib/translations';
+  import { get } from '$lib/translations';
   import { formatTypeKey } from '$main/account/save-editor/present/util.ts';
 
   import type { PresentFormSubmission } from './presentTypes.ts';
 
-  export let present: PresentFormSubmission;
+  const { t } = get();
 
-  $: presentLabel = $t(`entity.${formatTypeKey(present.type)}.item.${present.item}`);
+  let { present }: { present: PresentFormSubmission } = $props();
+
+  const presentLabel = $derived(t(`entity.${formatTypeKey(present.type)}.item.${present.item}`));
 </script>
 
 <li class="present">

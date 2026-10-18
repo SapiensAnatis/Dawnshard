@@ -2,11 +2,13 @@
   import { Image } from '@unpic/svelte';
 
   import { PUBLIC_CDN_URL } from '$env/static/public';
-  import { l, t } from '$lib/translations';
+  import { get } from '$lib/translations';
   import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Popover from '$shadcn/components/ui/popover';
 
   import WikiLink from './wikiLink.svelte';
+
+  const { l, t } = get();
 
   let { dragon }: { dragon: TimeAttackUnit['dragon'] } = $props();
 
@@ -18,8 +20,8 @@
     return new URL(`images/icon/dragon/m/${baseId}_${variationId}.webp`, PUBLIC_CDN_URL).href;
   };
 
-  const getDragonName = (dragon: Dragon) => $t(`entity.dragon.item.${dragon.id}`);
-  const getDragonWikiName = (dragon: Dragon) => $l('en', `entity.dragon.item.${dragon.id}`);
+  const getDragonName = (dragon: Dragon) => t(`entity.dragon.item.${dragon.id}`);
+  const getDragonWikiName = (dragon: Dragon) => l('en', `entity.dragon.item.${dragon.id}`);
 </script>
 
 {#if dragon}
