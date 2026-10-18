@@ -62,7 +62,7 @@
   "type": "module",
   "dependencies": {
     "@lucide/svelte": "1.48.0",
-    "@tanstack/table-core": "8.21.3",
+    "@tanstack/svelte-table": "9.3.1",
     "@unpic/svelte": "1.0.1",
     "bunyan": "1.8.15",
     "bunyan-seq": "1.0.0",
