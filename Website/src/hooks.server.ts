@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { createInitialModeExpression } from 'mode-watcher';
+import { HttpNetworkFrame } from 'msw/experimental';
 
 import { env } from '$env/dynamic/private';
 import { PUBLIC_ENABLE_MSW } from '$env/static/public';
@@ -19,9 +20,12 @@ const internalApiUrl = new URL(env.DAWNSHARD_API_URL_SSR);
 if (PUBLIC_ENABLE_MSW === 'true') {
   const { server } = await import('./mocks/node');
   server.listen({
-    onUnhandledRequest: (request, print) => {
-      if (!request.url.includes('baas.lukefz.xyz')) {
-        print.warning();
+    onUnhandledFrame: ({ frame, defaults }) => {
+      if (
+        frame instanceof HttpNetworkFrame &&
+        !frame.data.request.url.includes('baas.lukefz.xyz')
+      ) {
+        defaults.warn();
       }
     }
   });
