@@ -54,6 +54,14 @@ Dawnshard/
 dotnet build DragaliaAPI.slnx
 ```
 
+### Nerdbank.GitVersioning workaround
+
+Nerdbank.GitVersioning can fail to compute a version in shallow clones (e.g. CI or agent checkouts with no merge base against `origin/main`). Check with `git rev-parse --is-shallow-repository`. Work around it by disabling the git engine:
+
+```bash
+dotnet build DragaliaAPI.Linux.slnf -c Release -p:NBGV_GitEngine=Disabled
+```
+
 ### Website
 
 ```bash
