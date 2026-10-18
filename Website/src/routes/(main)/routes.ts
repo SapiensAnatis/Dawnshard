@@ -1,11 +1,10 @@
-import { type IconProps } from '@lucide/svelte';
+import { type LucideIcon } from '@lucide/svelte';
 import ChartBarIncreasing from '@lucide/svelte/icons/chart-bar-increasing';
 import House from '@lucide/svelte/icons/house';
 import Newspaper from '@lucide/svelte/icons/newspaper';
 import Pencil from '@lucide/svelte/icons/pencil';
 import User from '@lucide/svelte/icons/user';
 import VenetianMask from '@lucide/svelte/icons/venetian-mask';
-import type { Component } from 'svelte';
 
 export type RouteGroup = {
   title: string;
@@ -17,7 +16,7 @@ export type RouteGroup = {
 export type Route = {
   title: string;
   href: string;
-  icon: Component<IconProps>;
+  icon: LucideIcon;
 };
 
 export const routeGroups: RouteGroup[] = [
