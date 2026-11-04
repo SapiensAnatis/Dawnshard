@@ -2,11 +2,13 @@
   import { Image } from '@unpic/svelte';
 
   import { PUBLIC_CDN_URL } from '$env/static/public';
-  import { l, t } from '$lib/translations';
+  import { get } from '$lib/translations';
   import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Popover from '$shadcn/components/ui/popover';
 
   import WikiLink from './wikiLink.svelte';
+
+  const { l, t } = get();
 
   const { chara }: { chara: TimeAttackUnit['chara'] } = $props();
 
@@ -17,8 +19,8 @@
   };
 
   const charaNameKey = $derived(`entity.chara.item.${chara.id}`);
-  const charaName = $derived($t(charaNameKey));
-  const charaWikiName = $derived($l('en', charaNameKey));
+  const charaName = $derived(t(charaNameKey));
+  const charaWikiName = $derived(l('en', charaNameKey));
   const charaImagePath = $derived(getCharaImagePath(chara));
 </script>
 

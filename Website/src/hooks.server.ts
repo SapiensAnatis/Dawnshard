@@ -3,12 +3,14 @@ import { randomUUID } from 'node:crypto';
 import type { Handle, HandleFetch, HandleServerError } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { createInitialModeExpression } from 'mode-watcher';
+import { HttpNetworkFrame } from 'msw/experimental';
 
 import { env } from '$env/dynamic/private';
 import { PUBLIC_ENABLE_MSW } from '$env/static/public';
 import Cookies from '$lib/auth/cookies.ts';
 import getJwtMetadata from '$lib/auth/jwt.ts';
 import createLogger from '$lib/server/logger.ts';
+import { handle as handleI18n } from '$lib/translations';
 
 if (!env.DAWNSHARD_API_URL_SSR) {
   throw new Error('Failed to load environment variable DAWNSHARD_API_URL_SSR!');
@@ -19,9 +21,12 @@ const internalApiUrl = new URL(env.DAWNSHARD_API_URL_SSR);
 if (PUBLIC_ENABLE_MSW === 'true') {
   const { server } = await import('./mocks/node');
   server.listen({
-    onUnhandledRequest: (request, print) => {
-      if (!request.url.includes('baas.lukefz.xyz')) {
-        print.warning();
+    onUnhandledFrame: ({ frame, defaults }) => {
+      if (
+        frame instanceof HttpNetworkFrame &&
+        !frame.data.request.url.includes('baas.lukefz.xyz')
+      ) {
+        defaults.warn();
       }
     }
   });
@@ -116,7 +121,13 @@ const handleIsAdmin: Handle = ({ event, resolve }) => {
   return resolve(event);
 };
 
-export const handle = sequence(handleHeadScript, handleLogger, handleAuth, handleIsAdmin);
+export const handle = sequence(
+  handleHeadScript,
+  handleLogger,
+  handleAuth,
+  handleIsAdmin,
+  handleI18n
+);
 
 export const handleError: HandleServerError = ({ error, event, status, message }) => {
   if (status === 405 && event.request.method === 'POST') {

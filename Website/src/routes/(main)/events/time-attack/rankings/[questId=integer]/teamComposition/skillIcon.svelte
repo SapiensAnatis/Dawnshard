@@ -2,11 +2,13 @@
   import { Image } from '@unpic/svelte';
 
   import { PUBLIC_CDN_URL } from '$env/static/public';
-  import { l, t } from '$lib/translations';
+  import { get } from '$lib/translations';
   import type { TimeAttackUnit } from '$main/events/time-attack/rankings/timeAttackTypes.ts';
   import * as Popover from '$shadcn/components/ui/popover';
 
   import WikiLink from './wikiLink.svelte';
+
+  const { l, t } = get();
 
   type Skill = TimeAttackUnit['sharedSkills'][0];
 
@@ -15,8 +17,8 @@
   const getSkillImagePath = (skill: Skill) =>
     new URL(`images/icon/skill/m/${skill.skillLv4IconName}.webp`, PUBLIC_CDN_URL).href;
 
-  const skillName = $derived($t(`timeAttack.skill.${skill.id}`));
-  const skillWikiName = $derived($l('en', `timeAttack.skill.${skill.id}`));
+  const skillName = $derived(t(`timeAttack.skill.${skill.id}`));
+  const skillWikiName = $derived(l('en', `timeAttack.skill.${skill.id}`));
 </script>
 
 <Popover.Root>

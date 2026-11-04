@@ -4,6 +4,11 @@
   import { onMount } from 'svelte';
 
   import { PUBLIC_VERSION } from '$env/static/public';
+  import { use } from '$lib/translations';
+
+  let { data, children } = $props();
+
+  use(() => data);
 
   onMount(() => {
     document.body.classList.add('started');
@@ -14,4 +19,4 @@
   <meta property="version" content={PUBLIC_VERSION} />
 </svelte:head>
 
-<slot />
+{@render children()}
